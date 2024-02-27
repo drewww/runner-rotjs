@@ -8,7 +8,6 @@ export class Enemy extends Being {
         super(x, y, "p", "#f00", "#000", G);
     }
 
-
     act(): void {
         // TODO move around randomly as a first pass
         const dX = Math.floor(ROT.RNG.getUniform() * 3) - 1;

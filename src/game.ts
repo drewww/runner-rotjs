@@ -25,23 +25,32 @@ export class Game {
         document.body.appendChild(<Node>this.display.getContainer());
 
         this._generateMap();
+        this.refreshDisplay();
     }
 
     init() {
         var scheduler = new ROT.Scheduler.Simple();
-
-        scheduler.add(this.enemy, true);
+    
         scheduler.add(this.player, true);
+        scheduler.add(this.enemy, true);
+        scheduler.add({ act: () => {
+            this.refreshDisplay();
+        }}, true);
 
-        // scheduler.add({ act: () => {
-        //     this._drawWholeMap();
-        // }}, true);
+        // TODO Eventually consider doing a dirty refresh, where specific cells are called as needing a refresh.
+        // Performance may not matter here though.
 
         this.engine = new ROT.Engine(scheduler);
-        this._drawWholeMap();
 
         this.engine.start();
         console.log("Engine started.");
+    }
+
+    refreshDisplay() {
+        this.display.clear();
+        this._drawWholeMap();
+        this.player!.draw();
+        this.enemy!.draw();
     }
 
     private _generateMap(): void {

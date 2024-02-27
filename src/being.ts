@@ -13,8 +13,8 @@ export class Being {
     move(dX:number, dY:number): void {
         // TODO get this out of here eventually, we should be asking the map if we can move in this direction
         // or not.
-        const newKey = (this.x + dX) + "," + (this.y + dY);
-        if (!(newKey in this.G.map)) { return; } /* cannot move in this direction */
+
+        if(this.G.map.pointPassable(this.x + dX, this.y + dY) === false) { return; }
 
         this.x += dX;
         this.y += dY;
@@ -25,6 +25,6 @@ export class Being {
     }
 
     act(): void {
-        this.draw();
+        // this.draw();
     }
 }

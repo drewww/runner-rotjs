@@ -14,6 +14,7 @@ type Tile = {
 
 
 export class GameMap {
+    
 
     // going to try to do this as 1d array with a fixed width, since 2d arrays
     // in js seem kinda janky.
@@ -85,4 +86,9 @@ export class GameMap {
     getFreePoints(): Point[] {
         return this.getFreeTiles().map(tile => ({x: tile.x, y: tile.y}));
     } 
+
+    pointPassable(x: number, y: number) {
+        const tile = this.getTile(x, y);
+        return tile && !tile.solid;
+    }
 }

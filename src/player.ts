@@ -32,6 +32,8 @@ export class Player extends Being {
         keyMap[103] = 7;
 
         var code = e.keyCode;
+        
+        console.log(code);
 
         if (!(code in keyMap)) { return; }
 
