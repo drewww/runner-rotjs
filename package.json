@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "rot-js": "^2.2.0",
+    "tsc": "^2.0.4",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
+  }
+}
