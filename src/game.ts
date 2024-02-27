@@ -14,6 +14,8 @@ export class Game {
 
     player: Player | null = null;
 
+    engine: ROT.Engine | null = null;
+
     constructor() {
         console.log("Game created!");
         
@@ -21,6 +23,13 @@ export class Game {
         document.body.appendChild(<Node>this.display.getContainer());
 
         this._generateMap();
+    }
+
+    init() {
+        var scheduler = new ROT.Scheduler.Simple();
+        scheduler.add(this.player, true);
+        this.engine = new ROT.Engine(scheduler);
+        this.engine.start();
     }
 
     private _generateMap(): void {
@@ -40,8 +49,8 @@ export class Game {
 
         const freeCells = Object.keys(this.map).filter(key => this.map[key] === ".");
         
-        this.createPlayer(freeCells);
         this._drawWholeMap();
+        this.createPlayer(freeCells);
     }
 
     private createPlayer(freeCells: string[]): void {
@@ -50,7 +59,7 @@ export class Game {
         const parts = key.split(",");
         const x = parseInt(parts[0]);
         const y = parseInt(parts[1]);
-        this.player = new Player(x, y);
+        this.player = new Player(x, y, this);
     }
 
     private _drawWholeMap(): void {
@@ -66,3 +75,4 @@ export class Game {
 }
 
 export const G = new Game();
+G.init();
