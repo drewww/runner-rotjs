@@ -30,6 +30,7 @@ export class Game {
     init() {
         var scheduler = new ROT.Scheduler.Simple();
         scheduler.add(this.player, true);
+        scheduler.add(this.enemy, true);
         this.engine = new ROT.Engine(scheduler);
         this.engine.start();
     }

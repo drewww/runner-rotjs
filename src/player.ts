@@ -19,8 +19,6 @@ export class Player extends Being {
     }
 
     handleEvent(e: KeyboardEvent): void {
-        console.log(e.keyCode);
-
         const keyMap: { [key: number]: number } = {};
         keyMap[104] = 0;
         keyMap[105] = 1;
@@ -36,16 +34,9 @@ export class Player extends Being {
         if (!(code in keyMap)) { return; }
 
         var diff = ROT.DIRS[8][keyMap[code]];
-        var newX = this.x + diff[0];
-        var newY = this.y + diff[1];
 
-        var newKey = newX + "," + newY;
-        if (!(newKey in this.G.map)) { return; } /* cannot move in this direction */
+        this.move(diff[0], diff[1]);
 
-        this.G.display.draw(this.x, this.y, this.G.map[this.x + "," + this.y], "#fff", "#000");
-        this.x = newX;
-        this.y = newY;
-        this.draw();
         if(this.G.engine) {
             window.removeEventListener("keydown", this);
             this.G.engine.unlock();
