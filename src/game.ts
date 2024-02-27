@@ -1,6 +1,7 @@
 
 import * as ROT from 'rot-js';
 import {Player} from './index'
+import { Enemy } from './enemy';
 
 type GameMap = { [key: string]: string };
 
@@ -15,6 +16,7 @@ export class Game {
     player: Player | null = null;
 
     engine: ROT.Engine | null = null;
+    enemy: Enemy | null = null;
 
     constructor() {
         console.log("Game created!");
@@ -51,6 +53,19 @@ export class Game {
         
         this._drawWholeMap();
         this.createPlayer(freeCells);
+
+        freeCells.splice(freeCells.indexOf(this.player!.getPosition()), 1);
+
+        this.createEnemy(freeCells);
+    }
+
+    private createEnemy(freeCells: string[]) {
+        const index = Math.floor(ROT.RNG.getUniform() * freeCells.length);
+        const key = freeCells[index];
+        const parts = key.split(",");
+        const x = parseInt(parts[0]);
+        const y = parseInt(parts[1]);
+        this.enemy = new Enemy(x, y, this);
     }
 
     private createPlayer(freeCells: string[]): void {
