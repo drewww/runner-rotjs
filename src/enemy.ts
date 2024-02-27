@@ -15,5 +15,7 @@ export class Enemy extends Being {
         const dY = Math.floor(ROT.RNG.getUniform() * 3) - 1;
 
         this.move(dX, dY);
+
+        super.act();
     }
 }

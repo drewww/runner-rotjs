@@ -16,6 +16,8 @@ export class Player extends Being {
         } else {
             console.error("Game object missing engine.");
         }
+
+        super.act();
     }
 
     handleEvent(e: KeyboardEvent): void {

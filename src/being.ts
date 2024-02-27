@@ -1,4 +1,4 @@
-import {Game} from './index.ts';
+import {Game, Point} from './index.ts';
 
 export class Being {
     constructor(protected x:number, protected y:number, protected symbol:string,
@@ -11,17 +11,20 @@ export class Being {
     }
 
     move(dX:number, dY:number): void {
-        // TODO get this out of here eventually
+        // TODO get this out of here eventually, we should be asking the map if we can move in this direction
+        // or not.
         const newKey = (this.x + dX) + "," + (this.y + dY);
         if (!(newKey in this.G.map)) { return; } /* cannot move in this direction */
 
-        this.G.display.draw(this.x, this.y, this.G.map[this.x + "," + this.y], "#fff", "#000");
         this.x += dX;
         this.y += dY;
-        this.draw();
     }
 
-    getPosition(): string {
-        return `${this.x},${this.y}`;
+    getPosition(): Point {
+        return {x: this.x, y: this.y};
+    }
+
+    act(): void {
+        this.draw();
     }
 }

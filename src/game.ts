@@ -1,14 +1,14 @@
 
 import * as ROT from 'rot-js';
+import { GameMap, Point } from './index';
 import {Player} from './index'
-import { Enemy } from './enemy';
+import {Enemy} from './index';
 
-type GameMap = { [key: string]: string };
 
 export class Game {
     display: ROT.Display;
-    
-    map: GameMap = {};
+
+    map!: GameMap;
 
     w: number = 80;
     h: number = 24;
@@ -29,63 +29,51 @@ export class Game {
 
     init() {
         var scheduler = new ROT.Scheduler.Simple();
-        scheduler.add(this.player, true);
+
         scheduler.add(this.enemy, true);
+        scheduler.add(this.player, true);
+
+        // scheduler.add({ act: () => {
+        //     this._drawWholeMap();
+        // }}, true);
+
         this.engine = new ROT.Engine(scheduler);
+        this._drawWholeMap();
+
         this.engine.start();
+        console.log("Engine started.");
     }
 
     private _generateMap(): void {
-        const digger = new ROT.Map.Digger(this.w, this.h);
-
-        const digCallback = (x: number, y: number, value: number): void => {
-            if (value) { return; } // do not store walls (TODO consider if this makes sense for me??)
-
-            const key = `${x},${y}`;
-            this.map[key] = ".";
-
-            // so this map approach is just storing the actual characters. where does color? background? properties? come in
-        }
-
-        // bind causes it to run in the context of the Game object.
-        digger.create(digCallback.bind(this));
-
-        const freeCells = Object.keys(this.map).filter(key => this.map[key] === ".");
+        this.map = new GameMap(this.w, this.h);    
+        this.map.generateDiggerMap();
         
-        this._drawWholeMap();
-        this.createPlayer(freeCells);
+        // this.map.generateTrivialMap();
 
+        this._drawWholeMap();
+
+        const freeCells = this.map.getFreePoints();
+        const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+        this.createPlayer(playerCell);
         freeCells.splice(freeCells.indexOf(this.player!.getPosition()), 1);
 
-        this.createEnemy(freeCells);
+        const enemyCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+        this.createEnemy(enemyCell);
     }
 
-    private createEnemy(freeCells: string[]) {
-        const index = Math.floor(ROT.RNG.getUniform() * freeCells.length);
-        const key = freeCells[index];
-        const parts = key.split(",");
-        const x = parseInt(parts[0]);
-        const y = parseInt(parts[1]);
-        this.enemy = new Enemy(x, y, this);
+    private createEnemy(p: Point): void {        
+        this.enemy = new Enemy(p.x, p.y, this);
     }
 
-    private createPlayer(freeCells: string[]): void {
-        const index = Math.floor(ROT.RNG.getUniform() * freeCells.length);
-        const key = freeCells[index];
-        const parts = key.split(",");
-        const x = parseInt(parts[0]);
-        const y = parseInt(parts[1]);
-        this.player = new Player(x, y, this);
+    private createPlayer(p:Point): void {
+        this.player = new Player(p.x, p.y, this);
     }
 
     private _drawWholeMap(): void {
-        for (const key in this.map) {
-            const parts = key.split(",")
-
-            const x = parseInt(parts[0]);
-            const y = parseInt(parts[1]);
-
-            this.display!.draw(x, y, this.map[key], "#fff", "#000");
+        const tiles = this.map.getAllTiles();
+        for (const tile of tiles) {
+            // TODO make the background color draw from a "light" map that is maintained separately
+            this.display!.draw(tile.x, tile.y, tile.symbol, tile.fg, "#000");
         }
     }
 }
