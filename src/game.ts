@@ -1,15 +1,18 @@
 
 import * as ROT from 'rot-js';
+import {Player} from './index'
 
 type GameMap = { [key: string]: string };
 
-class Game {
+export class Game {
     display: ROT.Display;
     
     map: GameMap = {};
 
     w: number = 80;
     h: number = 24;
+
+    player: Player | null = null;
 
     constructor() {
         console.log("Game created!");
@@ -35,7 +38,19 @@ class Game {
         // bind causes it to run in the context of the Game object.
         digger.create(digCallback.bind(this));
 
+        const freeCells = Object.keys(this.map).filter(key => this.map[key] === ".");
+        
+        this.createPlayer(freeCells);
         this._drawWholeMap();
+    }
+
+    private createPlayer(freeCells: string[]): void {
+        const index = Math.floor(ROT.RNG.getUniform() * freeCells.length);
+        const key = freeCells[index];
+        const parts = key.split(",");
+        const x = parseInt(parts[0]);
+        const y = parseInt(parts[1]);
+        this.player = new Player(x, y);
     }
 
     private _drawWholeMap(): void {
@@ -50,4 +65,4 @@ class Game {
     }
 }
 
-const game = new Game();
+export const G = new Game();
