@@ -1,23 +1,12 @@
 
+import { Being } from './index.ts';
 import {Game} from './index.ts';
 import * as ROT from 'rot-js';
 
-export class Player {
-    private x: number;
-    private y: number;
+export class Player extends Being {
 
-    private G: Game;
-
-    constructor(x:number, y:number, g:Game) {
-        this.x = x;
-        this.y = y;
-
-        this.G = g;
-        this.draw();
-    }
-
-    draw(): void {
-        this.G.display.draw(this.x, this.y, "@", "#ff0", "#000");
+    constructor(x:number, y:number, G:Game) {
+        super(x, y, "@", "#ff0", "#000", G);
     }
 
     act(): void {
