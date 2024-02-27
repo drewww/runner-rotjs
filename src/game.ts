@@ -1,19 +1,27 @@
 
-// const ROT = require("rot-js")
-
-
-import {ROT} from 'rot-js';
-// import { Display } from 'rot-js';
-// import { Map } from 'rot-js';
+import * as ROT from 'rot-js';
 
 type GameMap = { [key: string]: string };
 
 class Game {
-    display: ROT.Display | null = null;
+    display: ROT.Display;
+    
     map: GameMap = {};
 
+    w: number = 80;
+    h: number = 24;
+
+    constructor() {
+        console.log("Game created!");
+        
+        this.display = new ROT.Display({ width: this.w, height: this.h });
+        document.body.appendChild(<Node>this.display.getContainer());
+
+        this._generateMap();
+    }
+
     private _generateMap(): void {
-        const digger = new Map.Digger();
+        const digger = new ROT.Map.Digger(this.w, this.h);
 
         const digCallback = (x: number, y: number, value: number): void => {
             if (value) { return; } // do not store walls (TODO consider if this makes sense for me??)
@@ -37,7 +45,9 @@ class Game {
             const x = parseInt(parts[0]);
             const y = parseInt(parts[1]);
 
-            this.display!.draw(x, y, this.map[key]);
+            this.display!.draw(x, y, this.map[key], "#fff", "#000");
         }
     }
 }
+
+const game = new Game();
