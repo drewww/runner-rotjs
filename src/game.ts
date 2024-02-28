@@ -26,6 +26,8 @@ export class Game implements IGame {
 
     init() {
     
+        // todo clean up the fact that level has to be created before
+        // player.
         const level = new Level(LevelType.CAVE, this.w, this.h);
         // annoyingly, this does more than just make the map since player starting
         // position is in here. eventually pull this out and make map generation

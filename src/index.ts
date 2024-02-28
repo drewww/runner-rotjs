@@ -20,7 +20,7 @@ export enum LevelType {
 }
 
 export interface Drawable {
-    draw(display: ROT.Display): void;
+    draw(display: ROT.Display, xOffset:number, yOffset:number): void;
 }
 
 export interface IGame {

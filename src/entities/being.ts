@@ -7,8 +7,8 @@ export class Being implements Drawable {
         protected fg:string, protected bg:string, protected level:Level) {
     }
 
-    draw(display: ROT.Display): void {
-        display.draw(this.x, this.y, this.symbol, this.fg, this.bg);
+    draw(display: ROT.Display, xOffset:number, yOffset:number): void {
+        display.draw(this.x+xOffset, this.y+yOffset, this.symbol, this.fg, this.bg);
     }
 
     move(dX:number, dY:number): void {

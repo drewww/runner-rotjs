@@ -10,9 +10,13 @@ export class Level implements Drawable {
 
     public scheduler = new ROT.Scheduler.Simple();
 
-    w: number = 80;
-    h: number = 24;
-    player: Player | null = null;
+    protected w: number = 80;
+    protected h: number = 23;
+
+    public xOffset: number = 0;
+    public yOffset: number = 0;
+
+    protected player: Player | null = null;
 
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number) {
@@ -83,14 +87,14 @@ export class Level implements Drawable {
                 color = lightMap[key].color;
             }
 
-            display.draw(tile.x, tile.y, tile.symbol, tile.fg, color);
+            display.draw(tile.x + this.xOffset, tile.y + this.yOffset, tile.symbol, tile.fg, color);
         }
 
         for(let being of this.beings) {
-            being.draw(display);
+            being.draw(display, this.xOffset, this.yOffset);
         }
 
-        this.player!.draw(display);
+        this.player!.draw(display, this.xOffset, this.yOffset);
     }
 
     private mergeLightMaps(): { [key: string]: Light } {

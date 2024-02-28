@@ -13,9 +13,9 @@ export class Screen implements Drawable {
         this.elements = [];
     }
 
-    draw(display: ROT.Display) {
+    draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
         for (const component of this.elements) {
-            component.draw(display);
+            component.draw(display, xOffset, yOffset);
         }
     }
 }
