@@ -19,6 +19,12 @@ export enum LevelType {
     // can also add a sequence of tutorial levels here
 }
 
+export enum GameState {
+    TITLE = "TITLE",
+    GAME = "GAME",
+    KILLSCREEN = "KILLSCREEN"
+}
+
 export interface Drawable {
     draw(display: ROT.Display, xOffset:number, yOffset:number): void;
 }

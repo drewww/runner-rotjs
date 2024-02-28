@@ -1,12 +1,12 @@
-import { Level, TextBox, Screen, Game } from "../../index";
+import { Level, TextBox, Screen, IGame, Player } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 
 export class GameScreen extends Screen {
-    private level: Level;
+    public level: Level;
     private title: any;
-    private game: Game;
+    private game: IGame;
 
-    constructor(level: Level, game: Game) {
+    constructor(level: Level, game: IGame) {
         super();
         this.level = level;
         this.game = game;
@@ -48,5 +48,18 @@ export class GameScreen extends Screen {
             // window.removeEventListener("keydown", this);
             this.game.engine.unlock();
         }
+    }
+
+    setPlayer(player: Player) {
+
+        const freeCells = this.level.map.getFreePoints();
+        if (!freeCells) {
+            console.error("No free cells to place player.");
+            return;
+        }
+        const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+        player.setPosition(playerCell);
+
+        this.level.setPlayer(player);        
     }
 }

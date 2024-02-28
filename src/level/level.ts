@@ -118,7 +118,7 @@ export class Level implements Drawable {
     }
 
     private createEnemy(p: Point): void {        
-        this.addBeing(new Enemy(p.x, p.y, this));
+        this.addBeing(new Enemy(p.x, p.y));
     }
 
     public setPlayer(player: Player): void {
