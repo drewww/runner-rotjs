@@ -16,7 +16,7 @@ export class Level implements Drawable {
     public xOffset: number = 0;
     public yOffset: number = 0;
 
-    protected player: Player | null = null;
+    public player: Player | null = null;
 
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number) {
