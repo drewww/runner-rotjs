@@ -1,10 +1,10 @@
 
 
-import { Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
+import { Drawable, Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
 import { Being } from '../index';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 
-export class Level {
+export class Level implements Drawable {
     public map: GameMap;
     private beings: Being[];
 
@@ -89,6 +89,8 @@ export class Level {
         for(let being of this.beings) {
             being.draw(display);
         }
+
+        this.player!.draw(display);
     }
 
     private mergeLightMaps(): { [key: string]: Light } {

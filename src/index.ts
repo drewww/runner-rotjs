@@ -19,6 +19,10 @@ export enum LevelType {
     // can also add a sequence of tutorial levels here
 }
 
+export interface Drawable {
+    draw(display: ROT.Display): void;
+}
+
 export interface IGame {
     display: ROT.Display;
     engine: ROT.Engine | null;
@@ -36,3 +40,5 @@ export * from './entities/player'
 export * from './entities/enemy'
 export * from './ui/ui-box'
 export * from './ui/text-box'
+export * from './ui/screen'
+export * from './ui/screens/game-screen'
