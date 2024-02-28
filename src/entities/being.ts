@@ -1,17 +1,18 @@
-import {Game, Light, Point} from '../index.ts';
+import * as ROT from 'rot-js'; // Import the 'ROT' module
+
+import {Level, Light, Point} from '../index.ts';
 
 export class Being {
     constructor(protected x:number, protected y:number, protected symbol:string,
-        protected fg:string, protected bg:string, protected G:Game) {
-        this.draw();
+        protected fg:string, protected bg:string, protected level:Level) {
     }
 
-    draw(): void {
-        this.G.display.draw(this.x, this.y, this.symbol, this.fg, this.bg);
+    draw(display: ROT.Display): void {
+        display.draw(this.x, this.y, this.symbol, this.fg, this.bg);
     }
 
     move(dX:number, dY:number): void {
-        if(this.G.map.pointPassable(this.x + dX, this.y + dY) === false) { return; }
+        if(this.level.map.pointPassable(this.x + dX, this.y + dY) === false) { return; }
 
         this.x += dX;
         this.y += dY;

@@ -1,14 +1,13 @@
 
 import * as ROT from 'rot-js';
-import { Being, GameMap, Light, Point } from './index';
-import {Player} from './index'
-import {Enemy} from './index';
+import { LevelType, Player, Level, IGame } from './index';
 
-
-export class Game {
+export class Game implements IGame {
     display: ROT.Display;
 
-    map!: GameMap;
+    // the currently displayed level
+    // contains the map object, as well as the beings being tracked
+    level: Level | null = null;
 
     w: number = 80;
     h: number = 24;
@@ -16,8 +15,6 @@ export class Game {
     player: Player | null = null;
 
     engine: ROT.Engine | null = null;
-
-    beings: Being[] = [];
 
     // I can't figure out how to type this properly
     scheduler = null as any;
@@ -31,19 +28,28 @@ export class Game {
 
     init() {
         
-        this.scheduler = new ROT.Scheduler.Simple();
-    
+        this.level = new Level(LevelType.CAVE, this.w, this.h);
         // annoyingly, this does more than just make the map since player starting
         // position is in here. eventually pull this out and make map generation
         // distinct from populating player + beings.
-        this.generateMap();
+        
+        // do I need to call this anymore? test
+        this.level!.draw(this.display);
 
-        this.scheduler.add(this.player, true);
+
+        const freeCells = this.level!.map.getFreePoints();
+        if (!freeCells) {
+            console.error("No free cells to place player.");
+            return;
+        }
+        const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+        this.player = new Player(playerCell.x, playerCell.y, this.level!, this);
+        this.level.setPlayer(this.player);
 
         // TODO Eventually consider doing a dirty refresh, where specific cells are called as needing a refresh.
         // Performance may not matter here though.
 
-        this.engine = new ROT.Engine(this.scheduler);
+        this.engine = new ROT.Engine(this.level.scheduler);
 
         this.refreshDisplay();
 
@@ -54,83 +60,14 @@ export class Game {
 
     refreshDisplay() {
         this.display.clear();
-        this.drawWholeMap();
-        this.player!.draw();
-        
-        for(let being of this.beings) {
-            being.draw();
-        }
-    }
 
-    private generateMap(): void {
-        this.map = new GameMap(this.w, this.h);
+        this.level!.draw(this.display);
 
-        this.map.generateDiggerMap();        
-        // this.map.generateTrivialMap();
-
-        // do I need to call this anymore? test
-        this.drawWholeMap();
-
-        const freeCells = this.map.getFreePoints();
-        const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
-        this.createPlayer(playerCell);
-        freeCells.splice(freeCells.indexOf(this.player!.getPosition()), 1);
-
-        for(let i = 0; i < 4; i++) {
-            const enemyCell = freeCells[Math.floor(Math.random() * freeCells.length)];
-            this.createEnemy(enemyCell);
-    
-            freeCells.splice(freeCells.indexOf(enemyCell), 1);    
-        }
-    }
-
-    private createEnemy(p: Point): void {        
-        this.addBeing(new Enemy(p.x, p.y, this));
-    }
-
-    private createPlayer(p:Point): void {
-        this.player = new Player(p.x, p.y, this);
-    }
-
-    private mergeLightMaps(): { [key: string]: Light } {
-        // this should eventually iterate through all beings, but for now...
-        // const playerLight = this.player!.getLight();
-        let beingLight: Light[] = [];
-        
-        for(let being of this.beings) {
-           beingLight.push(...being.getLight());
-        }
-
-        const lightMap: { [key: string]: Light } = {};
-
-        // right now this is overwriting multiple lights on the same tile.
-        // TODO fix later
-        for (const light of beingLight) {
-            lightMap[`${light.p.x},${light.p.y}`] = light;
-        }
-        
-        return lightMap;
-    }
-
-    private drawWholeMap(): void {
-        const tiles = this.map.getAllTiles();
-        const lightMap = this.mergeLightMaps();
-        for (const tile of tiles) {
-            // TODO make the background color draw from a "light" map that is maintained separately
-            let color = "#000";
-            const key = `${tile.x},${tile.y}`;
-            if (key in lightMap) {
-                color = lightMap[key].color;
-            }
-
-            this.display!.draw(tile.x, tile.y, tile.symbol, tile.fg, color);
-        }
-    }
-
-    public addBeing(being: Being): void {
-        this.beings.push(being);
-        this.scheduler.add(being, true);
+        // TODO decide if player gets shoved into level and drawing handled there.
+        // probably.
+        this.player!.draw(this.display);
     }
 }
+
 export const G = new Game();
 G.init();

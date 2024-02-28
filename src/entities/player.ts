@@ -1,19 +1,20 @@
 
-import { Being } from '../index.ts';
-import {Game} from '../index.ts';
+import { Being, IGame, Level } from '../index.ts';
 import * as ROT from 'rot-js';
 
 export class Player extends Being {
+    game: IGame;
 
-    constructor(x:number, y:number, G:Game) {
-        super(x, y, "@", "#ff0", "#000", G);
+    constructor(x:number, y:number, level:Level, game:IGame) {
+        super(x, y, "@", "#ff0", "#000", level);
+        this.game = game;
     }
 
     act(): void {
-        this.G.refreshDisplay();
+        this.game.refreshDisplay();
 
-        if (this.G.engine) {
-            this.G.engine.lock();
+        if (this.game.engine) {
+            this.game.engine.lock();
             window.addEventListener("keydown", this);
         } else {
             console.error("Game object missing engine.");
@@ -43,9 +44,9 @@ export class Player extends Being {
 
         this.move(diff[0], diff[1]);
 
-        if(this.G.engine) {
+        if(this.game.engine) {
             window.removeEventListener("keydown", this);
-            this.G.engine.unlock();
+            this.game.engine.unlock();
         }
     }
 }
