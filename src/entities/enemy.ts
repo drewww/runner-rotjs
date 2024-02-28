@@ -26,6 +26,7 @@ export class Enemy extends Being {
         const points: Point[] = [];
 
         // could make this a proper FOV checker, but no need for radius 1.
+        // just make a const list of adjacent points
         for (let dx = -1; dx <= 1; dx++) {
             for (let dy = -1; dy <= 1; dy++) {
                 if (dx === 0 && dy === 0) continue; // Skip the current location
@@ -36,6 +37,7 @@ export class Enemy extends Being {
 
         // now check that none of them are opaque or solid
         // it may be you only want to check for opaque and not solid for things like windows. TBD.
+        // you may not need to do this check at all if you simply reject light on tiles that are solid
         return points.filter(p => this.G.map.pointPassable(p.x, p.y) && this.G.map.pointVisible(p.x, p.y));
     }
 

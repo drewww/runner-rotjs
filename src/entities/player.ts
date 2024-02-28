@@ -10,6 +10,8 @@ export class Player extends Being {
     }
 
     act(): void {
+        this.G.refreshDisplay();
+
         if (this.G.engine) {
             this.G.engine.lock();
             window.addEventListener("keydown", this);
