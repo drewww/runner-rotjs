@@ -34,4 +34,5 @@ export * from './level/game-map'
 export * from './entities/being'
 export * from './entities/player'
 export * from './entities/enemy'
-
+export * from './ui/ui-box'
+export * from './ui/text-box'

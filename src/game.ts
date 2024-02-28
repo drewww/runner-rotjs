@@ -1,9 +1,11 @@
 
 import * as ROT from 'rot-js';
-import { LevelType, Player, Level, IGame } from './index';
+import { LevelType, Player, Level, IGame, TextBox } from './index';
 
 export class Game implements IGame {
     display: ROT.Display;
+
+    title: TextBox;
 
     // the currently displayed level
     // contains the map object, as well as the beings being tracked
@@ -24,10 +26,13 @@ export class Game implements IGame {
         
         this.display = new ROT.Display({ width: this.w, height: this.h });
         document.body.appendChild(<Node>this.display.getContainer());
+
+        this.title = new TextBox(0, 0, 80, 1, "runner -- a cyberpunk escape roguelike", "#fff", "#000");
     }
 
     init() {
         
+
         this.level = new Level(LevelType.CAVE, this.w, this.h);
         // annoyingly, this does more than just make the map since player starting
         // position is in here. eventually pull this out and make map generation
@@ -66,6 +71,8 @@ export class Game implements IGame {
         // TODO decide if player gets shoved into level and drawing handled there.
         // probably.
         this.player!.draw(this.display);
+
+        this.title.draw(this.display);
     }
 }
 
