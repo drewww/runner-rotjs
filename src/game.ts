@@ -32,16 +32,18 @@ export class Game implements IGame {
         // with the engine locking and unlocking. this avoided reacting to keypresses
         // when the engine was simulating versus waiting for player input.
         // will need to bring that back OR sync up the handleEvent logic
-        // to reject events when it's not expecting them.        
+        // to reject events when it's not expecting them
+        window.addEventListener("keydown", this);
     }
 
     init() {
         // this.titleScreen = new TitleScreen();
 
-        // this.gameScreen = new GameScreen(new Level(LevelType.CAVE, 80, 24), this);
+        this.gameScreen = new GameScreen(new Level(LevelType.CAVE, 80, 24), this);
 
-        // this.player = new Player(this);
-        // this.state = GameState.TITLE;
+        this.player = new Player(this);
+        this.gameScreen.setPlayer(this.player);
+        this.state = GameState.TITLE;
 
         // this.screen = this.titleScreen;
 
@@ -54,7 +56,6 @@ export class Game implements IGame {
 
         // this.engine.start();
 
-        // window.addEventListener("keydown", this);
 
         // console.log("Engine started.");
     }
