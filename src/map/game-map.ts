@@ -1,5 +1,5 @@
 import * as ROT from 'rot-js';
-import { Point } from './index';
+import { Point } from '../index';
 
 
 type Tile = {

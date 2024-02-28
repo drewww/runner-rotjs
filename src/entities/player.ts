@@ -1,6 +1,6 @@
 
-import { Being } from './index.ts';
-import {Game} from './index.ts';
+import { Being } from '../index.ts';
+import {Game} from '../index.ts';
 import * as ROT from 'rot-js';
 
 export class Player extends Being {

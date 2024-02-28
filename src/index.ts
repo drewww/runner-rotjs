@@ -5,9 +5,9 @@ export type Point = {
 }
 
 // make a global game object that we can access from anywhere.
-export * from './game-map'
+export * from './map/game-map'
 export * from './game'
-export * from './being'
-export * from './player'
-export * from './enemy'
+export * from './entities/being'
+export * from './entities/player'
+export * from './entities/enemy'
 
