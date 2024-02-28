@@ -1,4 +1,4 @@
-import {Game, Point} from '../index.ts';
+import {Game, Light, Point} from '../index.ts';
 
 export class Being {
     constructor(protected x:number, protected y:number, protected symbol:string,
@@ -23,5 +23,15 @@ export class Being {
 
     act(): void {
         // this.draw();
+    }
+
+    // returns how this being wants to add light around them
+    getLight(): Light[] {
+        return [];
+    }
+
+    // returns what this being can see
+    getVision(): Point[] {
+        return [];
     }
 }

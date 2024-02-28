@@ -1,6 +1,6 @@
 
 import * as ROT from 'rot-js';
-import { GameMap, Point } from './index';
+import { GameMap, Light, Point } from './index';
 import {Player} from './index'
 import {Enemy} from './index';
 
@@ -78,11 +78,34 @@ export class Game {
         this.player = new Player(p.x, p.y, this);
     }
 
+    private mergeLightMaps(): { [key: string]: Light } {
+        // this should eventually iterate through all beings, but for now...
+        // const playerLight = this.player!.getLight();
+        let enemyLight: Light[] = [];
+        if(this.enemy) {
+            enemyLight = this.enemy!.getLight();
+        }
+        const lightMap: { [key: string]: Light } = {};
+
+        for (const light of enemyLight) {
+            lightMap[`${light.p.x},${light.p.y}`] = light;
+        }
+        
+        return lightMap;
+    }
+
     private _drawWholeMap(): void {
         const tiles = this.map.getAllTiles();
+        const lightMap = this.mergeLightMaps();
         for (const tile of tiles) {
             // TODO make the background color draw from a "light" map that is maintained separately
-            this.display!.draw(tile.x, tile.y, tile.symbol, tile.fg, "#000");
+            let color = "#000";
+            const key = `${tile.x},${tile.y}`;
+            if (key in lightMap) {
+                color = lightMap[key].color;
+            }
+
+            this.display!.draw(tile.x, tile.y, tile.symbol, tile.fg, color);
         }
     }
 }

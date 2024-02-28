@@ -91,4 +91,9 @@ export class GameMap {
         const tile = this.getTile(x, y);
         return tile && !tile.solid;
     }
+
+    pointVisible(x:number, y:number) {
+        const tile = this.getTile(x, y);
+        return tile && !tile.opaque;
+    }
 }
