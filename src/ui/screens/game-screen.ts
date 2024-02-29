@@ -25,6 +25,7 @@ export class GameScreen extends Screen {
     }
 
     handleEvent(e: KeyboardEvent): void {
+        // TODO line this up with what's in ROT.KEYS
         const keyMap: { [key: number]: number } = {};
         keyMap[104] = 0;
         keyMap[105] = 1;
@@ -37,13 +38,16 @@ export class GameScreen extends Screen {
 
         var code = e.keyCode;
         
-        if (!(code in keyMap)) { return; }
+        if(e.keyCode==ROT.KEYS.VK_NUMPAD5) {
+            // wait
+            console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
+        } else {
+            if (!(code in keyMap)) { return; }
 
-        var diff = ROT.DIRS[8][keyMap[code]];
-        
-        console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
-        this.level.player!.move(diff[0], diff[1]);
-
+            var diff = ROT.DIRS[8][keyMap[code]];
+            console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
+            this.level.player!.move(diff[0], diff[1]);    
+        }
 
         // this is async so ... start it and see what happens
         this.level.player!.updateVision();
