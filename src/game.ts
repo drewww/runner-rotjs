@@ -85,6 +85,9 @@ export class Game implements IGame {
             case GameState.GAME:
                 break;
             case GameState.KILLSCREEN:
+                // this.switchState(GameState.GAME);
+                // nice idea, but need to fully regenerate the game state
+                // to restart. TBD.
                 break;
         }
 

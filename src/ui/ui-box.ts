@@ -1,6 +1,6 @@
 import * as ROT from 'rot-js'; // Import the 'rot-js' module
 
-export class UIBox {
+export abstract class UIBox {
     public w: number;
     public h: number;
 
@@ -15,7 +15,5 @@ export class UIBox {
         this.y = y;
     }
 
-    draw(display: ROT.Display) {
-        
-    }
+    draw(display: ROT.Display, xOffset:number, yOffset:number): void {}
 }

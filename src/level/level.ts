@@ -11,10 +11,10 @@ export class Level implements Drawable {
     public scheduler = new ROT.Scheduler.Simple();
 
     protected w: number = 80;
-    protected h: number = 24;
+    protected h: number = 23;
 
-    public xOffset: number = 0;
-    public yOffset: number = 0;
+    public x: number = 0;
+    public y: number = 0;
 
     public player: Player | null = null;
 
@@ -88,14 +88,14 @@ export class Level implements Drawable {
                 color = lightMap[key].color;
             }
 
-            display.draw(tile.x + this.xOffset, tile.y + this.yOffset, tile.symbol, tile.fg, color);
+            display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, tile.fg, color);
         }
 
         for(let being of this.beings) {
-            being.draw(display, this.xOffset, this.yOffset);
+            being.draw(display, this.x, this.y);
         }
 
-        this.player!.draw(display, this.xOffset, this.yOffset);
+        this.player!.draw(display, this.x, this.y);
     }
 
     public pointPassable(x: number, y: number) {

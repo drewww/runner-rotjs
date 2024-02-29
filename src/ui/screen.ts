@@ -6,11 +6,14 @@
 import { Drawable } from "..";
 import * as ROT from 'rot-js'; // Import the 'rot-js' module
 
-export class Screen implements Drawable {
+export abstract class Screen implements Drawable {
     protected elements: Drawable[];
 
     protected width: number;
     protected height: number;
+
+    public x: number = 0;
+    public y: number = 0;
 
     constructor(width: number = 80, height: number = 24) {
         this.elements = [];
@@ -20,7 +23,7 @@ export class Screen implements Drawable {
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
         for (const component of this.elements) {
-            component.draw(display, xOffset, yOffset);
+            component.draw(display, xOffset+component.x, yOffset+component.y);
         }
     }
 

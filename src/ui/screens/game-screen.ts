@@ -1,18 +1,20 @@
 import { Level, TextBox, Screen, IGame, Player } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
+import { StatusBar } from "../status-bar";
 
 export class GameScreen extends Screen {
     public level: Level;
     private title: any;
     private game: IGame;
+    statusBar: StatusBar | undefined;
 
     constructor(level: Level, game: IGame) {
         super();
         this.level = level;
         this.game = game;
 
-        level.xOffset = 0;
-        level.yOffset = 0;
+        level.x = 0;
+        level.y = 0;
         
         // this sets the render order, be careful.
         this.elements!.push(this.level);
@@ -58,7 +60,7 @@ export class GameScreen extends Screen {
     }
 
     setPlayer(player: Player) {
-
+        console.log("SETTING PLAYER")
         const freeCells = this.level.getEmptyPoints();
         if (!freeCells) {
             console.error("No free cells to place player.");
@@ -67,6 +69,13 @@ export class GameScreen extends Screen {
         const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
         player.setPosition(playerCell);
 
-        this.level.setPlayer(player);        
+        this.level.setPlayer(player);   
+        
+        if(!this.statusBar) {
+            this.statusBar = new StatusBar(0, this.height - 1, this.width, 1, player!);
+            this.elements!.push(this.statusBar);
+        } else {
+            this.statusBar.player = player;
+        }
     }
 }

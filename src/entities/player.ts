@@ -4,7 +4,7 @@ import { Being, GameState, IGame } from '../index.ts';
 export class Player extends Being {
     game: IGame;
 
-    health: number = 5;
+    public health: number = 5;
 
     constructor(game:IGame) {
         // don't need to have a valid position for the player to make the object

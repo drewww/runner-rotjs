@@ -26,6 +26,9 @@ export enum GameState {
 }
 
 export interface Drawable {
+    x: number;
+    y: number;
+    
     draw(display: ROT.Display, xOffset:number, yOffset:number): void;
 }
 

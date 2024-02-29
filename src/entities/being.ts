@@ -5,7 +5,7 @@ import {Drawable, Level, Light, Point} from '../index.ts';
 export class Being implements Drawable {
     protected level: Level | null = null;
 
-    constructor(protected x:number, protected y:number, protected symbol:string,
+    constructor(public x:number, public y:number, protected symbol:string,
         protected fg:string, protected bg:string) {
     }
 
