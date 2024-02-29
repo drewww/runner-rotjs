@@ -1,5 +1,6 @@
 import * as ROT from 'rot-js';
 import { Point } from '../index';
+import { COLORS } from '../colors';
 
 
 type Tile = {
@@ -36,8 +37,8 @@ export class GameMap {
                     opaque: true,
                     solid: true,
                     symbol: " ",
-                    fg: "#fff",
-                    bg: "#000",
+                    fg: COLORS.WHITE,
+                    bg: COLORS.BLACK,
                     visible: false,
                     discovered: true
                 });
@@ -49,7 +50,7 @@ export class GameMap {
         this.fillMapWithWalls();
         for (let x = 0; x < 5; x++) {
             for (let y = 0; y < 2; y++) {
-                this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: "#fff", bg: "#000", visible:false, discovered:false});
+                this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, visible:false, discovered:false});
             }
         }
     }
@@ -62,7 +63,7 @@ export class GameMap {
         const digCallback = (x: number, y: number, value: number): void => {
             if (value) { return; } // for walls, don't do anything. map is pre-seeded with walls.
 
-            this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: "#fff", bg: "#000", visible:false, discovered:false});
+            this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, visible:false, discovered:false});
         }
 
         // bind causes it to run in the context of the Game object.
@@ -71,7 +72,7 @@ export class GameMap {
         // create an exit
         const freeTiles = this.getFreeTiles();
         const exit = freeTiles[Math.floor(Math.random() * freeTiles.length)];
-        this.setTile({...exit, opaque: false, solid: false, symbol: ">", fg: "#0f0", bg: "#000", discovered: false});
+        this.setTile({...exit, opaque: false, solid: false, symbol: ">", fg: COLORS.GREEN, bg: COLORS.BLACK, discovered: false});
     }
 
     getIndex(x:number, y:number):number {

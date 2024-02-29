@@ -1,4 +1,5 @@
 
+import { COLORS } from '../colors.ts';
 import { Being, GameState, IGame } from '../index.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 
@@ -7,9 +8,9 @@ export class Player extends Being {
 
     public health: number = 10;
 
-    constructor(game:IGame) {
+    constructor(game: IGame) {
         // don't need to have a valid position for the player to make the object
-        super(-1, -1, "@", "#ff0", "#000");
+        super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
         this.game = game;
     }
 

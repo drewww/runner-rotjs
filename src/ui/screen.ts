@@ -5,6 +5,7 @@
 
 import { Drawable } from "..";
 import * as ROT from 'rot-js'; // Import the 'rot-js' module
+import { COLORS } from "../colors";
 
 export abstract class Screen implements Drawable {
     protected elements: Drawable[];
@@ -23,7 +24,7 @@ export abstract class Screen implements Drawable {
         this.height = height;
     }
 
-    draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0, bg: string = "#000") {
+    draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0, bg: string = COLORS.BLACK) {
         for (const component of this.elements) {
             component.draw(display, xOffset+component.x, yOffset+component.y, bg);
         }

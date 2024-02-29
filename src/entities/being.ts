@@ -1,6 +1,7 @@
 import * as ROT from 'rot-js'; // Import the 'ROT' module
 
 import {Drawable, Level, Light, Point} from '../index.ts';
+import { COLORS } from '../colors.ts';
 
 export class Being implements Drawable {
     protected level: Level | null = null;
@@ -9,7 +10,7 @@ export class Being implements Drawable {
         protected fg:string, protected bg:string) {
     }
 
-    draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string="#000"): void {
+    draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string=COLORS.BLACK): void {
         display.draw(this.x+xOffset, this.y+yOffset, this.symbol, this.fg, bg);
     }
 

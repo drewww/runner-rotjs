@@ -1,3 +1,4 @@
+import { COLORS } from '../colors.ts';
 import { Being, Light, Point } from '../index.ts';
 import * as ROT from 'rot-js';
 
@@ -8,7 +9,7 @@ export class Enemy extends Being {
     public range: number = 5;
 
     constructor(x:number, y:number) {
-        super(x, y, "p", "#fff", "#a80d02");
+        super(x, y, "p", COLORS.WHITE, COLORS.LASER_RED);
     }
 
     act(): void {
@@ -50,7 +51,7 @@ export class Enemy extends Being {
         const visionPoints = this.getVision();
         return visionPoints.map(point => ({
             p: { x: point.x, y: point.y },
-            color: "#a80d02",
+            color: COLORS.LASER_RED,
             intensity: 10
         }));
     }

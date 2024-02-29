@@ -1,5 +1,6 @@
 
 
+import { COLORS } from '../colors';
 import { Drawable, Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
 import { Being } from '../index';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
@@ -88,7 +89,7 @@ export class Level implements Drawable {
             }
 
             // TODO make the background color draw from a "light" map that is maintained separately
-            let bg = "#000";
+            let bg = COLORS.BLACK;
             const key = `${tile.x},${tile.y}`;
             if (key in lightMap && tile.visible) {
                 bg = lightMap[key].color;
@@ -100,7 +101,7 @@ export class Level implements Drawable {
                 // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
                 // fgHSL[2] = fgHSL[2]-0.5;  
                 // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
-                fg = "#555";
+                fg = COLORS.INVISIBLE_TILE;
             }
 
             if (tile.opaque) {
@@ -114,7 +115,7 @@ export class Level implements Drawable {
                 const t = this.map.getTile(being.x, being.y);
 
                 if (t.visible) {
-                    let bg = "#000";
+                    let bg = COLORS.BLACK;
                     const key = `${being.x},${being.y}`;
                     if (key in lightMap) {
                         bg = lightMap[key].color;

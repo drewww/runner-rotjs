@@ -1,3 +1,4 @@
+import { COLORS } from "../../colors";
 import {Screen} from "../../index";
 
 export class KillScreen extends Screen {
@@ -7,9 +8,9 @@ export class KillScreen extends Screen {
 
     draw(display: any, xOffset: number = 0, yOffset: number = 0) {
         display.drawText(10+xOffset, Math.floor(this.height/2) + yOffset,
-            "%c{#fff}%b{#a00}RUNNER TERMINATED");
+            `%c{${COLORS.WHITE}}%b{${COLORS.LASER_RED}}RUNNER TERMINATED`);
 
         display.drawText(12+xOffset, Math.floor(this.height/2)+3 + yOffset,
-            "%c{#ccc}%b{#000}press any key to restart");
+            `%c{${COLORS.LIGHT_GREY}%b{${COLORS.BLACK}}press any key to restart`);
     }
 }

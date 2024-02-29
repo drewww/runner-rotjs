@@ -1,5 +1,6 @@
 import ROT from "rot-js"; // Add import statement for 'ROT' module
 import { Drawable, UIBox } from "../index";
+import { COLORS } from "../colors";
 
 export class TextBox extends UIBox implements Drawable {
     protected text: string;
@@ -13,7 +14,7 @@ export class TextBox extends UIBox implements Drawable {
     public disabled: boolean = false;
 
     constructor(x:number, y:number, width:number, height: number,
-        text: string, fg:string="#fff", bg:string="#000", animate:boolean=false, startDelay:number=0, delay:number=100) {
+        text: string, fg:string=COLORS.WHITE, bg:string=COLORS.BLACK, animate:boolean=false, startDelay:number=0, delay:number=100) {
         super(x, y, width, height);
         this.text = text;
 
