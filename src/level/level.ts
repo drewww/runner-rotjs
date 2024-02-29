@@ -90,7 +90,7 @@ export class Level implements Drawable {
             // TODO make the background color draw from a "light" map that is maintained separately
             let bg = "#000";
             const key = `${tile.x},${tile.y}`;
-            if (key in lightMap) {
+            if (key in lightMap && tile.visible) {
                 bg = lightMap[key].color;
             }
 
@@ -107,7 +107,11 @@ export class Level implements Drawable {
         }
 
         for(let being of this.beings) {
-            being.draw(display, this.x, this.y);
+            const t = this.map.getTile(being.x, being.y);
+
+            if(t.visible) {
+                being.draw(display, this.x, this.y);
+            }
         }
 
         this.player!.draw(display, this.x, this.y);
