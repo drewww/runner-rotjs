@@ -23,8 +23,6 @@ export class GameScreen extends Screen {
     }
 
     handleEvent(e: KeyboardEvent): void {
-        console.log("Game screen handling event: " + e.keyCode);
-
         const keyMap: { [key: number]: number } = {};
         keyMap[104] = 0;
         keyMap[105] = 1;
@@ -43,6 +41,16 @@ export class GameScreen extends Screen {
 
         this.level.player!.move(diff[0], diff[1]);
 
+        // check if the player is in the view areas of any enemies
+        // this is a terrible stupid way to do this but it works for now
+        const getEnemyVisiblePoints = this.level.getEnemyVisiblePoints();
+        const pos = this.level.player!.getPosition();
+        const posString = `${pos.x},${pos.y}`;
+
+        if (getEnemyVisiblePoints.includes(posString)) {
+            this.level.player!.takeDamage(1);
+        }
+
         if(this.game.engine) {
             // window.removeEventListener("keydown", this);
             this.game.engine.unlock();
@@ -51,7 +59,7 @@ export class GameScreen extends Screen {
 
     setPlayer(player: Player) {
 
-        const freeCells = this.level.map.getFreePoints();
+        const freeCells = this.level.getEmptyPoints();
         if (!freeCells) {
             console.error("No free cells to place player.");
             return;

@@ -86,14 +86,4 @@ export class GameMap {
     getFreePoints(): Point[] {
         return this.getFreeTiles().map(tile => ({x: tile.x, y: tile.y}));
     } 
-
-    pointPassable(x: number, y: number) {
-        const tile = this.getTile(x, y);
-        return tile && !tile.solid;
-    }
-
-    pointVisible(x:number, y:number) {
-        const tile = this.getTile(x, y);
-        return tile && !tile.opaque;
-    }
 }

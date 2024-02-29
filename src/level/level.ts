@@ -31,7 +31,7 @@ export class Level implements Drawable {
                 this.map.generateDiggerMap();
         
                 for(let i = 0; i < 4; i++) {
-                    const freeCells = this.map.getFreePoints();
+                    const freeCells = this.getEmptyPoints();
                     if (!freeCells) {
                         console.error("No free cells to place enemy.");
                         break;
@@ -98,9 +98,59 @@ export class Level implements Drawable {
         this.player!.draw(display, this.xOffset, this.yOffset);
     }
 
+    public pointPassable(x: number, y: number) {
+        const tile = this.map.getTile(x, y);
+        return tile && !tile.solid && !this.isBeingOccupyingPoint(x, y);
+    }
+
+    private isBeingOccupyingPoint(x: number, y: number): boolean {
+        for (const being of this.beings) {
+            const position = being.getPosition();
+            if (position.x === x && position.y === y) {
+                return true;
+            }
+        }
+
+        // if (this.player) {
+        //     const playerPosition = this.player.getPosition();
+        //     if (playerPosition.x === x && playerPosition.y === y) {
+        //         return true;
+        //     }
+        // }
+
+        return false;
+    }
+
+    pointVisible(x:number, y:number) {
+        const tile = this.map.getTile(x, y);
+        return tile && !tile.opaque;
+    }
+
+    public getEmptyPoints(): Point[] {
+        const tiles = this.map.getFreePoints();
+
+        // now remove from that list all known beings
+        const occupiedTiles = this.getBeingOccupiedTiles();
+        const emptyTiles = tiles.filter(tile => !occupiedTiles.some(occupiedTile => occupiedTile.x === tile.x && occupiedTile.y === tile.y));
+
+        return emptyTiles;
+    }
+
+    private getBeingOccupiedTiles(): Point[] {
+        const occupiedTiles: Point[] = [];
+
+        for (const being of this.beings) {
+            occupiedTiles.push(being.getPosition());
+        }
+
+        if (this.player) {
+            occupiedTiles.push(this.player.getPosition());
+        }
+
+        return occupiedTiles;
+    }
+
     private mergeLightMaps(): { [key: string]: Light } {
-        // this should eventually iterate through all beings, but for now...
-        // const playerLight = this.player!.getLight();
         let beingLight: Light[] = [];
         
         for(let being of this.beings) {
@@ -116,6 +166,14 @@ export class Level implements Drawable {
         }
         
         return lightMap;
+    }
+
+    public getEnemyVisiblePoints(): string[] {
+        // this is assuming lighting is the same thing as vision ... that may 
+        // be a bad assumption.
+
+        const lightMap = Object.values(this.mergeLightMaps());
+        return lightMap.map(light => `${light.p.x},${light.p.y}`);
     }
 
     private createEnemy(p: Point): void {        

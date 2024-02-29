@@ -18,7 +18,7 @@ export class Enemy extends Being {
 
         this.move(dX, dY);
 
-        console.log(`[ENEMY] Moving from (${this.x}, ${this.y}) to (${this.x + dX}, ${this.y + dY})`);
+        // console.log(`[ENEMY] Moving from (${this.x}, ${this.y}) to (${this.x + dX}, ${this.y + dY})`);
 
         super.act();
     }
@@ -41,7 +41,7 @@ export class Enemy extends Being {
         // now check that none of them are opaque or solid
         // it may be you only want to check for opaque and not solid for things like windows. TBD.
         // you may not need to do this check at all if you simply reject light on tiles that are solid
-        return points.filter(p => this.level!.map.pointPassable(p.x, p.y) && this.level!.map.pointVisible(p.x, p.y));
+        return points.filter(p => this.level!.pointPassable(p.x, p.y) && this.level!.pointVisible(p.x, p.y));
     }
 
     getLight(): Light[] {
