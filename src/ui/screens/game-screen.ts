@@ -12,13 +12,10 @@ export class GameScreen extends Screen {
         this.game = game;
 
         level.xOffset = 0;
-        level.yOffset = 1;
-
-        this.title = new TextBox(0, 0, 80, 1, "runner -- a cyberpunk escape roguelike", "#fff", "#000");
+        level.yOffset = 0;
         
         // this sets the render order, be careful.
         this.elements!.push(this.level);
-        this.elements!.push(this.title);
     }
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
@@ -27,7 +24,7 @@ export class GameScreen extends Screen {
 
     handleEvent(e: KeyboardEvent): void {
         console.log("Game screen handling event: " + e.keyCode);
-        
+
         const keyMap: { [key: number]: number } = {};
         keyMap[104] = 0;
         keyMap[105] = 1;
