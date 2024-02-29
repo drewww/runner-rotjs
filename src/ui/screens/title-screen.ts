@@ -12,10 +12,4 @@ export class TitleScreen extends Screen {
     public draw(display: any, xOffset: number = 0, yOffset: number = 0) {
         super.draw(display, xOffset, yOffset);
     }
-
-    public disable(): void {
-        this.elements.forEach((element) => {
-            element.disable();
-        });
-    }
 }

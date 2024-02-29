@@ -2,6 +2,7 @@
 import * as ROT from 'rot-js';
 import { Level, LevelType, Player, IGame, GameScreen, Screen, TitleScreen, GameState} from './index';
 import { KillScreen } from './ui/screens/kill-screen';
+import { WinScreen } from './ui/screens/win-screen';
 
 export class Game implements IGame {
     public display: ROT.Display;
@@ -23,6 +24,7 @@ export class Game implements IGame {
     scheduler = null as any;
     gameScreen!: GameScreen;
     killScreen!: KillScreen;
+    winScreen!: WinScreen;
 
     constructor() {
         console.log("Game created!");
@@ -41,6 +43,7 @@ export class Game implements IGame {
     init() {
         this.killScreen = new KillScreen();
         this.titleScreen = new TitleScreen();
+        this.winScreen = new WinScreen();
         this.screen = this.titleScreen;
 
         this.gameScreen = new GameScreen(new Level(LevelType.CAVE, 80, 24), this);
@@ -115,6 +118,9 @@ export class Game implements IGame {
                 break;
             case GameState.KILLSCREEN:
                 this.screen = this.killScreen;
+                break;
+            case GameState.WINSCREEN:
+                this.screen = this.winScreen;
                 break;
         }
         this.refreshDisplay();

@@ -1,4 +1,4 @@
-import { Level, Screen, IGame, Player } from "../../index";
+import { Level, Screen, IGame, Player, GameState } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../status-bar";
 
@@ -44,8 +44,13 @@ export class GameScreen extends Screen {
         console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
         this.level.player!.move(diff[0], diff[1]);
 
+
         // this is async so ... start it and see what happens
         this.level.player!.updateVision();
+
+        // check if anything happens based on where the player moved
+        // 1. in enemy vision? take damage
+        // 2. on the exit? win
 
         // check if the player is in the view areas of any enemies
         // this is a terrible stupid way to do this but it works for now
@@ -56,6 +61,15 @@ export class GameScreen extends Screen {
         if (getEnemyVisiblePoints.includes(posString)) {
             this.level.player!.takeDamage(1);
         }
+        //-------------------//
+        const curTile = this.level.map.getTile(this.level.player!.x, this.level.player!.y);
+        
+        if (curTile && curTile.symbol === '>') {
+            // later, move to a second level
+            console.log("At the exit for this map!");
+            this.game.switchState(GameState.WINSCREEN);
+        }
+
 
         if(this.game.engine) {
             // window.removeEventListener("keydown", this);
