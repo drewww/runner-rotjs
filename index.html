@@ -4,8 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="src/index.ts"></script>
+
+    <script>
+      function downloadCanvas() {
+        const canvas = document.querySelector('canvas');
+        const image = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'runner-dev-' + Math.floor(Date.now() / 1000) + '.png';
+        link.click();
+      }
+
+      function addDownloadButton(){
+        const button = document.createElement('button');
+        button.innerText = 'Download Canvas';
+        button.style = "color: white; background-color: black; border: 0px";
+        button.addEventListener('click', downloadCanvas);
+        document.body.appendChild(button);
+      };
+
+    </script>
     <title>runner -- a cyberpunk escape roguelike</title>
   </head>
-  <body onload="" style="background-color: black;">
+  <body onload="addDownloadButton()" style="background-color: black;">
   </body>
 </html>
