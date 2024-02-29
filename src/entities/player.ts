@@ -48,7 +48,10 @@ export class Player extends Being {
 
         fov.compute(this.x, this.y, 10, (x, y, r, visibility) => {
             if (visibility > 0) {
+                // case to be made to put this into a method on tile and call
+                // discovered from there ...
                 this.level!.map.getTile(x, y).visible = true;
+                this.level!.map.getTile(x, y).discovered = true;
             }
         });
     }

@@ -81,6 +81,12 @@ export class Level implements Drawable {
         const tiles = this.map.getAllTiles();
         const lightMap = this.mergeLightMaps();
         for (const tile of tiles) {
+
+            // if not discovered, skip it.
+            if (!tile.discovered) {
+                continue;
+            }
+
             // TODO make the background color draw from a "light" map that is maintained separately
             let bg = "#000";
             const key = `${tile.x},${tile.y}`;

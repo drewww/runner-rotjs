@@ -11,9 +11,7 @@ type Tile = {
     fg:string,
 
     visible:boolean,
-
-    // do this next
-    // discovered:boolean
+    discovered:boolean;
 }
 
 
@@ -39,7 +37,7 @@ export class GameMap {
                     symbol: " ",
                     fg: "#fff",
                     visible: false,
-                    // discovered: true
+                    discovered: true
                 });
             }
         }
