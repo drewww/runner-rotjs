@@ -26,4 +26,5 @@ export class StatusBar extends UIBox {
             display.draw(1+xOffset+i, 0+yOffset, " ", "#f00", "#f00");
         }
     }
+
 }

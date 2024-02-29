@@ -1,7 +1,7 @@
 import ROT from "rot-js"; // Add import statement for 'ROT' module
-import { UIBox } from "../index";
+import { Drawable, UIBox } from "../index";
 
-export class TextBox extends UIBox {
+export class TextBox extends UIBox implements Drawable {
     protected text: string;
     protected fg: string;
     protected bg: string;
@@ -9,6 +9,8 @@ export class TextBox extends UIBox {
     protected counter: number;
     protected startDelay: number;
     protected delay: number;
+
+    public disabled: boolean = false;
 
     constructor(x:number, y:number, width:number, height: number,
         text: string, fg:string="#fff", bg:string="#000", animate:boolean=false, startDelay:number=0, delay:number=100) {
@@ -25,7 +27,13 @@ export class TextBox extends UIBox {
         this.delay = delay;
     }
 
+    disable(): void {
+        this.disabled = true;
+    }
+
     draw(display: ROT.Display, xOffset:number, yOffset:number) {
+        if(this.disabled) { return; }   
+
         super.draw(display, xOffset, yOffset);
 
         // TODO -- these animations continue even if the screen is changed.
@@ -33,6 +41,7 @@ export class TextBox extends UIBox {
         if(!this.animate) {
             display.drawText(xOffset, yOffset, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
         } else {
+            // drop out if we've gotten the signal to disable this element
             if(this.startDelay > 0) {
                 setTimeout(this.draw.bind(this), this.startDelay, display, xOffset, yOffset);
                 this.startDelay = 0;

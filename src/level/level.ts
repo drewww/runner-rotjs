@@ -185,4 +185,13 @@ export class Level implements Drawable {
         this.player.setLevel(this);
         this.scheduler.add(player, true);
     }
+
+    public disable(): void {
+        // this is plausible copilot generated code but i'm not actually sure what I need
+        // to do here (if anything).
+        // when I have animations in the main game this is probably where they get stopped. 
+        // for (const being of this.beings) {
+        //     this.scheduler.remove(being);
+        // }
+    }
 }

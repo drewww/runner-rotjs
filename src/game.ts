@@ -97,6 +97,10 @@ export class Game implements IGame {
 
     public switchState(newState: GameState) {
         console.log("Switching to state: " + newState + " FROM " + this.state);
+        this.display.clear();
+
+        // animations can check this to cancel out
+        this.screen.disable();
 
         this.state = newState;
         switch(newState) {

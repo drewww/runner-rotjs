@@ -9,7 +9,13 @@ export class TitleScreen extends Screen {
         this.elements.push(new TextBox(12+this.x, Math.floor(this.height/2)+3, 20, 5, "press any key to begin", "#ccc", "#000", true, 150*6 + 50*28, 25));
     }
 
-    draw(display: any, xOffset: number = 0, yOffset: number = 0) {
+    public draw(display: any, xOffset: number = 0, yOffset: number = 0) {
         super.draw(display, xOffset, yOffset);
+    }
+
+    public disable(): void {
+        this.elements.forEach((element) => {
+            element.disable();
+        });
     }
 }

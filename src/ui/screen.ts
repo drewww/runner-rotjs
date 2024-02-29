@@ -15,6 +15,8 @@ export abstract class Screen implements Drawable {
     public x: number = 0;
     public y: number = 0;
 
+    public disabled: boolean = false;
+
     constructor(width: number = 80, height: number = 24) {
         this.elements = [];
         this.width = width;
@@ -30,5 +32,9 @@ export abstract class Screen implements Drawable {
     handleEvent(event: KeyboardEvent): void {
         // do nothing by default
         
+    }
+
+    public disable(): void {
+        for (const element of this.elements) { element.disable(); }
     }
 }

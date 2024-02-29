@@ -49,4 +49,7 @@ export class Being implements Drawable {
         this.level = level;
     }
 
+    public disable(): void {
+        // do nothing
+    }
 }
