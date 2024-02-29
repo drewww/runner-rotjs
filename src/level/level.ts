@@ -82,13 +82,22 @@ export class Level implements Drawable {
         const lightMap = this.mergeLightMaps();
         for (const tile of tiles) {
             // TODO make the background color draw from a "light" map that is maintained separately
-            let color = "#000";
+            let bg = "#000";
             const key = `${tile.x},${tile.y}`;
             if (key in lightMap) {
-                color = lightMap[key].color;
+                bg = lightMap[key].color;
             }
 
-            display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, tile.fg, color);
+            let fg = tile.fg;
+
+            if(!tile.visible) {
+                // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
+                // fgHSL[2] = fgHSL[2]-0.5;  
+                // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
+                fg = "#555";
+            }
+
+            display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, fg, bg);
         }
 
         for(let being of this.beings) {
@@ -121,7 +130,13 @@ export class Level implements Drawable {
         return false;
     }
 
-    pointVisible(x:number, y:number) {
+    public resetPlayerVisibility() {
+        for (const tile of this.map.getAllTiles()) {
+            tile.visible = false;
+        }
+    }
+
+    public pointTransparent(x:number, y:number) {
         const tile = this.map.getTile(x, y);
         return tile && !tile.opaque;
     }

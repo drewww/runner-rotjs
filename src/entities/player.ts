@@ -1,5 +1,6 @@
 
 import { Being, GameState, IGame } from '../index.ts';
+import * as ROT from 'rot-js'; // Import the 'rot-js' package
 
 export class Player extends Being {
     game: IGame;
@@ -31,5 +32,24 @@ export class Player extends Being {
         if (this.health <= 0) {
             this.game.switchState(GameState.KILLSCREEN);
         }
+    }
+
+    // the way ROT.js wants to do vision is async. That makes me ... uncomfortable? But lets roll
+    // with it and see if I can live with that oddness.
+    updateVision(): void {
+        if(!this.level) { return; }
+
+        let fov = new ROT.FOV.PreciseShadowcasting((x, y) => {
+            return this.level!.pointTransparent(x, y);
+        });
+
+        // set all tiles to not visible
+        this.level!.resetPlayerVisibility();
+
+        fov.compute(this.x, this.y, 10, (x, y, r, visibility) => {
+            if (visibility > 0) {
+                this.level!.map.getTile(x, y).visible = true;
+            }
+        });
     }
 }
