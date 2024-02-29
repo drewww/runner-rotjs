@@ -28,6 +28,8 @@ export class TextBox extends UIBox {
     draw(display: ROT.Display, xOffset:number, yOffset:number) {
         super.draw(display, xOffset, yOffset);
 
+        // TODO -- these animations continue even if the screen is changed.
+        // need to have some way to de-register the animation.
         if(!this.animate) {
             display.drawText(xOffset, yOffset, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
         } else {
