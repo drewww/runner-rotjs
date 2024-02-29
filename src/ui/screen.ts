@@ -26,5 +26,6 @@ export class Screen implements Drawable {
 
     handleEvent(event: KeyboardEvent): void {
         // do nothing by default
+        
     }
 }

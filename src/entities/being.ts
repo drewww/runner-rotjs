@@ -3,8 +3,10 @@ import * as ROT from 'rot-js'; // Import the 'ROT' module
 import {Drawable, Level, Light, Point} from '../index.ts';
 
 export class Being implements Drawable {
+    protected level: Level | null = null;
+
     constructor(protected x:number, protected y:number, protected symbol:string,
-        protected fg:string, protected bg:string, protected level:Level) {
+        protected fg:string, protected bg:string) {
     }
 
     draw(display: ROT.Display, xOffset:number, yOffset:number): void {
@@ -12,6 +14,8 @@ export class Being implements Drawable {
     }
 
     move(dX:number, dY:number): void {
+        if(!this.level) { return; }
+
         if(this.level.map.pointPassable(this.x + dX, this.y + dY) === false) { return; }
 
         this.x += dX;
@@ -20,6 +24,11 @@ export class Being implements Drawable {
 
     getPosition(): Point {
         return {x: this.x, y: this.y};
+    }
+
+    setPosition(p: Point): void {
+        this.x = p.x;
+        this.y = p.y;
     }
 
     act(): void {
@@ -35,4 +44,9 @@ export class Being implements Drawable {
     getVision(): Point[] {
         return [];
     }
+
+    setLevel(level: Level): void {
+        this.level = level;
+    }
+
 }

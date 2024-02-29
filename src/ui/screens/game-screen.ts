@@ -1,24 +1,21 @@
-import { Level, TextBox, Screen, Game } from "../../index";
+import { Level, TextBox, Screen, IGame, Player } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 
 export class GameScreen extends Screen {
-    private level: Level;
+    public level: Level;
     private title: any;
-    private game: Game;
+    private game: IGame;
 
-    constructor(level: Level, game: Game) {
+    constructor(level: Level, game: IGame) {
         super();
         this.level = level;
         this.game = game;
 
         level.xOffset = 0;
-        level.yOffset = 1;
-
-        this.title = new TextBox(0, 0, 80, 1, "runner -- a cyberpunk escape roguelike", "#fff", "#000");
+        level.yOffset = 0;
         
         // this sets the render order, be careful.
         this.elements!.push(this.level);
-        this.elements!.push(this.title);
     }
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
@@ -26,6 +23,8 @@ export class GameScreen extends Screen {
     }
 
     handleEvent(e: KeyboardEvent): void {
+        console.log("Game screen handling event: " + e.keyCode);
+
         const keyMap: { [key: number]: number } = {};
         keyMap[104] = 0;
         keyMap[105] = 1;
@@ -48,5 +47,18 @@ export class GameScreen extends Screen {
             // window.removeEventListener("keydown", this);
             this.game.engine.unlock();
         }
+    }
+
+    setPlayer(player: Player) {
+
+        const freeCells = this.level.map.getFreePoints();
+        if (!freeCells) {
+            console.error("No free cells to place player.");
+            return;
+        }
+        const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+        player.setPosition(playerCell);
+
+        this.level.setPlayer(player);        
     }
 }

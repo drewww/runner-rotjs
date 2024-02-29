@@ -1,11 +1,12 @@
 
-import { Being, IGame, Level } from '../index.ts';
+import { Being, IGame } from '../index.ts';
 
 export class Player extends Being {
     game: IGame;
 
-    constructor(x:number, y:number, level:Level, game:IGame) {
-        super(x, y, "@", "#ff0", "#000", level);
+    constructor(game:IGame) {
+        // don't need to have a valid position for the player to make the object
+        super(-1, -1, "@", "#ff0", "#000");
         this.game = game;
     }
 

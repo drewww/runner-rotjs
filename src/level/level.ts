@@ -11,7 +11,7 @@ export class Level implements Drawable {
     public scheduler = new ROT.Scheduler.Simple();
 
     protected w: number = 80;
-    protected h: number = 23;
+    protected h: number = 24;
 
     public xOffset: number = 0;
     public yOffset: number = 0;
@@ -61,6 +61,7 @@ export class Level implements Drawable {
     // }
 
     public addBeing(being: Being): void {
+        being.setLevel(this);
         this.beings.push(being);
         this.scheduler.add(being, true);
     }
@@ -118,11 +119,12 @@ export class Level implements Drawable {
     }
 
     private createEnemy(p: Point): void {        
-        this.addBeing(new Enemy(p.x, p.y, this));
+        this.addBeing(new Enemy(p.x, p.y));
     }
 
     public setPlayer(player: Player): void {
         this.player = player;
+        this.player.setLevel(this);
         this.scheduler.add(player, true);
     }
 }

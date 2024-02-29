@@ -1,6 +1,6 @@
 
 import * as ROT from 'rot-js';
-import { LevelType, Player, Level, IGame, GameScreen, Screen, TitleScreen} from './index';
+import { Level, LevelType, Player, IGame, GameScreen, Screen, TitleScreen, GameState} from './index';
 
 export class Game implements IGame {
     public display: ROT.Display;
@@ -14,10 +14,13 @@ export class Game implements IGame {
 
     public engine: ROT.Engine | null = null;
 
-    private titleScreen: Screen;
+    private titleScreen!: Screen;
+
+    public state!: GameState;
 
     // I can't figure out how to type this properly
     scheduler = null as any;
+    gameScreen!: GameScreen;
 
     constructor() {
         console.log("Game created!");
@@ -29,51 +32,81 @@ export class Game implements IGame {
         // with the engine locking and unlocking. this avoided reacting to keypresses
         // when the engine was simulating versus waiting for player input.
         // will need to bring that back OR sync up the handleEvent logic
-        // to reject events when it's not expecting them.
+        // to reject events when it's not expecting them
         window.addEventListener("keydown", this);
-        this.titleScreen = new TitleScreen();
     }
 
     init() {
-    
-        // todo clean up the fact that level has to be created before
-        // player.
-        const level = new Level(LevelType.CAVE, this.w, this.h);
-        // annoyingly, this does more than just make the map since player starting
-        // position is in here. eventually pull this out and make map generation
-        // distinct from populating player + beings.
+        this.titleScreen = new TitleScreen();
+        this.screen = this.titleScreen;
 
-        this.screen = new GameScreen(level, this)
+        this.gameScreen = new GameScreen(new Level(LevelType.CAVE, 80, 24), this);
 
-        const freeCells = level.map.getFreePoints();
-        if (!freeCells) {
-            console.error("No free cells to place player.");
-            return;
-        }
-        const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
-        this.player = new Player(playerCell.x, playerCell.y, level!, this);
-        level.setPlayer(this.player);
+        this.player = new Player(this);
+        this.gameScreen.setPlayer(this.player);
+        this.state = GameState.TITLE;
 
-        // TODO Eventually consider doing a dirty refresh, where specific cells are called as needing a refresh.
-        // Performance may not matter here though.
 
-        this.engine = new ROT.Engine(level.scheduler);
+        // // the whole scheduler sitting in the level but the engine staying up here
+        // // ... it's a litte odd. may push engine down into the level itself?
 
-        this.refreshDisplay();
+        this.engine = new ROT.Engine(this.gameScreen.level.scheduler);
 
         this.engine.start();
+        this.engine.lock();
 
-        console.log("Engine started.");
+
+        console.log("Engine started, in locked state for first move.");
     }
 
     refreshDisplay() {
         this.display.clear();
 
-        this.screen.draw(this.display);
+        try {
+            this.screen.draw(this.display);
+        } catch(e) {
+            console.error("Error drawing screen: " + e);
+        }
     }
 
     handleEvent(e: KeyboardEvent) {
+        console.log("Game received event: " + e.keyCode + " in state: " + this.state);
+        
+        // this is a little not right since this.screen should always be 
+        // the current screen
+        switch(this.state) {
+            case GameState.TITLE:
+                // intercept any key to start the game
+                this.switchState(GameState.GAME);
+                break;
+            case GameState.GAME:
+                break;
+            case GameState.KILLSCREEN:
+                break;
+        }
+
+        // regardless, give the screen a chance to deal with it.
         this.screen.handleEvent(e);
+    }
+
+    switchState(newState: GameState) {
+        console.log("Switching to state: " + newState + " FROM " + this.state);
+
+        this.state = newState;
+        switch(newState) {
+            case GameState.TITLE:
+                this.screen = this.titleScreen;
+                break;
+            case GameState.GAME:
+                this.screen = this.gameScreen;
+
+                
+                break;
+            case GameState.KILLSCREEN:
+                break;
+        }
+
+        this.screen.draw(this.display);
     }
 }
 
