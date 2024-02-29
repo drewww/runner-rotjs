@@ -37,7 +37,8 @@ export class Game implements IGame {
     }
 
     init() {
-        // this.titleScreen = new TitleScreen();
+        this.titleScreen = new TitleScreen();
+        this.screen = this.titleScreen;
 
         this.gameScreen = new GameScreen(new Level(LevelType.CAVE, 80, 24), this);
 
@@ -45,7 +46,6 @@ export class Game implements IGame {
         this.gameScreen.setPlayer(this.player);
         this.state = GameState.TITLE;
 
-        // this.screen = this.titleScreen;
 
         // // the whole scheduler sitting in the level but the engine staying up here
         // // ... it's a litte odd. may push engine down into the level itself?
