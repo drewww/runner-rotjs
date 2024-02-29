@@ -1,10 +1,10 @@
-import { Level, TextBox, Screen, IGame, Player } from "../../index";
+import { Level, Screen, IGame, Player } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../status-bar";
 
 export class GameScreen extends Screen {
     public level: Level;
-    private title: any;
+
     private game: IGame;
     statusBar: StatusBar | undefined;
 
@@ -42,6 +42,9 @@ export class GameScreen extends Screen {
         var diff = ROT.DIRS[8][keyMap[code]];
 
         this.level.player!.move(diff[0], diff[1]);
+
+        // this is async so ... start it and see what happens
+        this.level.player!.updateVision();
 
         // check if the player is in the view areas of any enemies
         // this is a terrible stupid way to do this but it works for now
