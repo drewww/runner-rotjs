@@ -9,8 +9,8 @@ export class Being implements Drawable {
         protected fg:string, protected bg:string) {
     }
 
-    draw(display: ROT.Display, xOffset:number, yOffset:number): void {
-        display.draw(this.x+xOffset, this.y+yOffset, this.symbol, this.fg, this.bg);
+    draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string="#000"): void {
+        display.draw(this.x+xOffset, this.y+yOffset, this.symbol, this.fg, bg);
     }
 
     move(dX:number, dY:number): void {

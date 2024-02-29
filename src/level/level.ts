@@ -24,13 +24,13 @@ export class Level implements Drawable {
 
         this.w = w;
         this.h = h;
-        
-        switch(type) {
+
+        switch (type) {
             case LevelType.CAVE:
                 this.map = new GameMap(80, 24);
                 this.map.generateDiggerMap();
-        
-                for(let i = 0; i < 4; i++) {
+
+                for (let i = 0; i < 4; i++) {
                     const freeCells = this.getEmptyPoints();
                     if (!freeCells) {
                         console.error("No free cells to place enemy.");
@@ -38,10 +38,10 @@ export class Level implements Drawable {
                     }
                     const enemyCell = freeCells[Math.floor(Math.random() * freeCells.length)];
                     this.createEnemy(enemyCell);
-            
-                    freeCells.splice(freeCells.indexOf(enemyCell), 1);    
+
+                    freeCells.splice(freeCells.indexOf(enemyCell), 1);
                 }
-        
+
                 break;
             case LevelType.DEBUG:
                 this.map = new GameMap(80, 24);
@@ -96,25 +96,34 @@ export class Level implements Drawable {
 
             let fg = tile.fg;
 
-            if(!tile.visible) {
+            if (!tile.visible) {
                 // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
                 // fgHSL[2] = fgHSL[2]-0.5;  
                 // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
                 fg = "#555";
             }
 
+            if (tile.opaque) {
+                bg = tile.bg;
+            }
+
             display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, fg, bg);
-        }
 
-        for(let being of this.beings) {
-            const t = this.map.getTile(being.x, being.y);
 
-            if(t.visible) {
-                being.draw(display, this.x, this.y);
+            for (let being of this.beings) {
+                const t = this.map.getTile(being.x, being.y);
+
+                if (t.visible) {
+                    let bg = "#000";
+                    const key = `${being.x},${being.y}`;
+                    if (key in lightMap) {
+                        bg = lightMap[key].color;
+                    }
+
+                    being.draw(display, this.x, this.y, bg);
+                }
             }
         }
-
-        this.player!.draw(display, this.x, this.y);
     }
 
     public pointPassable(x: number, y: number) {
@@ -146,7 +155,7 @@ export class Level implements Drawable {
         }
     }
 
-    public pointTransparent(x:number, y:number) {
+    public pointTransparent(x: number, y: number) {
         const tile = this.map.getTile(x, y);
         return tile && !tile.opaque;
     }
@@ -168,18 +177,18 @@ export class Level implements Drawable {
             occupiedTiles.push(being.getPosition());
         }
 
-        if (this.player) {
-            occupiedTiles.push(this.player.getPosition());
-        }
+        // if (this.player) {
+        //     occupiedTiles.push(this.player.getPosition());
+        // }
 
         return occupiedTiles;
     }
 
     private mergeLightMaps(): { [key: string]: Light } {
         let beingLight: Light[] = [];
-        
-        for(let being of this.beings) {
-           beingLight.push(...being.getLight());
+
+        for (let being of this.beings) {
+            beingLight.push(...being.getLight());
         }
 
         const lightMap: { [key: string]: Light } = {};
@@ -189,7 +198,7 @@ export class Level implements Drawable {
         for (const light of beingLight) {
             lightMap[`${light.p.x},${light.p.y}`] = light;
         }
-        
+
         return lightMap;
     }
 
@@ -201,7 +210,7 @@ export class Level implements Drawable {
         return lightMap.map(light => `${light.p.x},${light.p.y}`);
     }
 
-    private createEnemy(p: Point): void {        
+    private createEnemy(p: Point): void {
         this.addBeing(new Enemy(p.x, p.y));
     }
 
@@ -209,6 +218,7 @@ export class Level implements Drawable {
         this.player = player;
         this.player.setLevel(this);
         this.scheduler.add(player, true);
+        this.beings.push(player);
     }
 
     public disable(): void {

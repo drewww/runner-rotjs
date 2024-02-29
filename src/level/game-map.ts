@@ -9,6 +9,7 @@ type Tile = {
     solid:boolean,
     symbol:string,
     fg:string,
+    bg:string,
 
     visible:boolean,
     discovered:boolean;
@@ -36,6 +37,7 @@ export class GameMap {
                     solid: true,
                     symbol: " ",
                     fg: "#fff",
+                    bg: "#000",
                     visible: false,
                     discovered: true
                 });
@@ -47,7 +49,7 @@ export class GameMap {
         this.fillMapWithWalls();
         for (let x = 0; x < 5; x++) {
             for (let y = 0; y < 2; y++) {
-                this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: "#fff", visible:false, discovered:false});
+                this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: "#fff", bg: "#000", visible:false, discovered:false});
             }
         }
     }
@@ -60,7 +62,7 @@ export class GameMap {
         const digCallback = (x: number, y: number, value: number): void => {
             if (value) { return; } // for walls, don't do anything. map is pre-seeded with walls.
 
-            this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: "#fff", visible:false, discovered:false});
+            this.setTile({x, y, opaque: false, solid: false, symbol: ".", fg: "#fff", bg: "#000", visible:false, discovered:false});
         }
 
         // bind causes it to run in the context of the Game object.

@@ -23,9 +23,9 @@ export abstract class Screen implements Drawable {
         this.height = height;
     }
 
-    draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
+    draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0, bg: string = "#000") {
         for (const component of this.elements) {
-            component.draw(display, xOffset+component.x, yOffset+component.y);
+            component.draw(display, xOffset+component.x, yOffset+component.y, bg);
         }
     }
 

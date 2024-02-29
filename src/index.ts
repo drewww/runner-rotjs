@@ -29,7 +29,7 @@ export interface Drawable {
     x: number;
     y: number;
 
-    draw(display: ROT.Display, xOffset:number, yOffset:number): void;
+    draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string): void;
     disable(): void;
 }
 
