@@ -50,20 +50,23 @@ export class Game implements IGame {
         // // the whole scheduler sitting in the level but the engine staying up here
         // // ... it's a litte odd. may push engine down into the level itself?
 
-        // this.engine = new ROT.Engine(this.gameScreen.level.scheduler);
+        this.engine = new ROT.Engine(this.gameScreen.level.scheduler);
 
-        // this.refreshDisplay();
+        this.engine.start();
+        this.engine.lock();
 
-        // this.engine.start();
 
-
-        // console.log("Engine started.");
+        console.log("Engine started, in locked state for first move.");
     }
 
     refreshDisplay() {
         this.display.clear();
 
-        this.screen.draw(this.display);
+        try {
+            this.screen.draw(this.display);
+        } catch(e) {
+            console.error("Error drawing screen: " + e);
+        }
     }
 
     handleEvent(e: KeyboardEvent) {

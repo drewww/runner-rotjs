@@ -26,6 +26,8 @@ export class GameScreen extends Screen {
     }
 
     handleEvent(e: KeyboardEvent): void {
+        console.log("Game screen handling event: " + e.keyCode);
+        
         const keyMap: { [key: number]: number } = {};
         keyMap[104] = 0;
         keyMap[105] = 1;

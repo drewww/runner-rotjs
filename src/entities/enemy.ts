@@ -18,6 +18,8 @@ export class Enemy extends Being {
 
         this.move(dX, dY);
 
+        console.log(`[ENEMY] Moving from (${this.x}, ${this.y}) to (${this.x + dX}, ${this.y + dY})`);
+
         super.act();
     }
 

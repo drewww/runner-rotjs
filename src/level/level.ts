@@ -61,6 +61,7 @@ export class Level implements Drawable {
     // }
 
     public addBeing(being: Being): void {
+        being.setLevel(this);
         this.beings.push(being);
         this.scheduler.add(being, true);
     }
@@ -123,6 +124,7 @@ export class Level implements Drawable {
 
     public setPlayer(player: Player): void {
         this.player = player;
+        this.player.setLevel(this);
         this.scheduler.add(player, true);
     }
 }
