@@ -34,6 +34,7 @@ export interface IGame {
     engine: ROT.Engine | null;
 
     refreshDisplay(): void;
+    switchState(state: GameState): void;
 }
 
 // make a global game object that we can access from anywhere.

@@ -1,6 +1,7 @@
 
 import * as ROT from 'rot-js';
 import { Level, LevelType, Player, IGame, GameScreen, Screen, TitleScreen, GameState} from './index';
+import { KillScreen } from './ui/screens/kill-screen';
 
 export class Game implements IGame {
     public display: ROT.Display;
@@ -21,6 +22,7 @@ export class Game implements IGame {
     // I can't figure out how to type this properly
     scheduler = null as any;
     gameScreen!: GameScreen;
+    killScreen!: KillScreen;
 
     constructor() {
         console.log("Game created!");
@@ -37,6 +39,7 @@ export class Game implements IGame {
     }
 
     init() {
+        this.killScreen = new KillScreen();
         this.titleScreen = new TitleScreen();
         this.screen = this.titleScreen;
 
@@ -70,7 +73,7 @@ export class Game implements IGame {
     }
 
     handleEvent(e: KeyboardEvent) {
-        console.log("Game received event: " + e.keyCode + " in state: " + this.state);
+        // console.log("Game received event: " + e.keyCode + " in state: " + this.state);
         
         // this is a little not right since this.screen should always be 
         // the current screen
@@ -89,7 +92,7 @@ export class Game implements IGame {
         this.screen.handleEvent(e);
     }
 
-    switchState(newState: GameState) {
+    public switchState(newState: GameState) {
         console.log("Switching to state: " + newState + " FROM " + this.state);
 
         this.state = newState;
@@ -103,6 +106,7 @@ export class Game implements IGame {
                 
                 break;
             case GameState.KILLSCREEN:
+                this.screen = this.killScreen;
                 break;
         }
 

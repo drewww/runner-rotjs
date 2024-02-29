@@ -111,12 +111,12 @@ export class Level implements Drawable {
             }
         }
 
-        if (this.player) {
-            const playerPosition = this.player.getPosition();
-            if (playerPosition.x === x && playerPosition.y === y) {
-                return true;
-            }
-        }
+        // if (this.player) {
+        //     const playerPosition = this.player.getPosition();
+        //     if (playerPosition.x === x && playerPosition.y === y) {
+        //         return true;
+        //     }
+        // }
 
         return false;
     }
@@ -151,8 +151,6 @@ export class Level implements Drawable {
     }
 
     private mergeLightMaps(): { [key: string]: Light } {
-        // this should eventually iterate through all beings, but for now...
-        // const playerLight = this.player!.getLight();
         let beingLight: Light[] = [];
         
         for(let being of this.beings) {
@@ -168,6 +166,14 @@ export class Level implements Drawable {
         }
         
         return lightMap;
+    }
+
+    public getEnemyVisiblePoints(): string[] {
+        // this is assuming lighting is the same thing as vision ... that may 
+        // be a bad assumption.
+
+        const lightMap = Object.values(this.mergeLightMaps());
+        return lightMap.map(light => `${light.p.x},${light.p.y}`);
     }
 
     private createEnemy(p: Point): void {        
