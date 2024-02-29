@@ -40,7 +40,8 @@ export class GameScreen extends Screen {
         if (!(code in keyMap)) { return; }
 
         var diff = ROT.DIRS[8][keyMap[code]];
-
+        
+        console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
         this.level.player!.move(diff[0], diff[1]);
 
         // this is async so ... start it and see what happens
@@ -60,6 +61,13 @@ export class GameScreen extends Screen {
             // window.removeEventListener("keydown", this);
             this.game.engine.unlock();
         }
+
+        // moving refresh here seems to deal with the "first move" disappearing issue
+        // seems okay to have this be our big refresh moment, but we'll see. the timing
+        // issues on the FOV calculation still have me concerned and refreshing at the last moment
+        // before acting seems nice. I'm also a little sure about whether this means
+        // enemes will be shown in their "correct" place.
+        this.game.refreshDisplay();
     }
 
     setPlayer(player: Player) {

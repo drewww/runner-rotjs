@@ -58,6 +58,7 @@ export class Game implements IGame {
         this.engine.start();
         this.engine.lock();
 
+        this.refreshDisplay();
 
         console.log("Engine started, in locked state for first move.");
     }
@@ -73,7 +74,7 @@ export class Game implements IGame {
     }
 
     handleEvent(e: KeyboardEvent) {
-        // console.log("Game received event: " + e.keyCode + " in state: " + this.state);
+        console.log("Game received event: " + e.keyCode + " in state: " + this.state);
         
         // this is a little not right since this.screen should always be 
         // the current screen
@@ -81,7 +82,8 @@ export class Game implements IGame {
             case GameState.TITLE:
                 // intercept any key to start the game
                 this.switchState(GameState.GAME);
-                break;
+                // break out; event is handled. don't pass it to the screen.
+                return;
             case GameState.GAME:
                 break;
             case GameState.KILLSCREEN:
@@ -108,16 +110,14 @@ export class Game implements IGame {
                 this.screen = this.titleScreen;
                 break;
             case GameState.GAME:
-                this.screen = this.gameScreen;
-
-                
+                this.player!.updateVision();
+                this.screen = this.gameScreen;                
                 break;
             case GameState.KILLSCREEN:
                 this.screen = this.killScreen;
                 break;
         }
-
-        this.screen.draw(this.display);
+        this.refreshDisplay();
     }
 }
 

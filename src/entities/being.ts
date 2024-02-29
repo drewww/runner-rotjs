@@ -42,6 +42,10 @@ export class Being implements Drawable {
 
     // returns what this being can see
     getVision(): Point[] {
+        // this is out of date relative to updateVision() method
+        // on Player. The enemies have a simple procedural method
+        // for computing this, but the player is doing an async callback.
+        // that difference may not matter but it's worth noting.
         return [];
     }
 

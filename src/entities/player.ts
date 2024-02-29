@@ -14,9 +14,8 @@ export class Player extends Being {
     }
 
     act(): void {
-        this.game.refreshDisplay();
-
         if (this.game.engine) {
+            console.log("Locking for input.");
             this.game.engine.lock();
         } else {
             console.error("Game object missing engine.");
