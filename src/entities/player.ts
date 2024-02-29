@@ -5,7 +5,7 @@ import * as ROT from 'rot-js'; // Import the 'rot-js' package
 export class Player extends Being {
     game: IGame;
 
-    public health: number = 5;
+    public health: number = 10;
 
     constructor(game:IGame) {
         // don't need to have a valid position for the player to make the object

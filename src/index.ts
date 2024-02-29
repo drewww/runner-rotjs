@@ -22,7 +22,8 @@ export enum LevelType {
 export enum GameState {
     TITLE = "TITLE",
     GAME = "GAME",
-    KILLSCREEN = "KILLSCREEN"
+    KILLSCREEN = "KILLSCREEN",
+    WINSCREEN = "WINSCREEN"
 }
 
 export interface Drawable {
