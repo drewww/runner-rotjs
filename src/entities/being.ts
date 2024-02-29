@@ -16,7 +16,7 @@ export class Being implements Drawable {
     move(dX:number, dY:number): void {
         if(!this.level) { return; }
 
-        if(this.level.map.pointPassable(this.x + dX, this.y + dY) === false) { return; }
+        if(this.level.pointPassable(this.x + dX, this.y + dY) === false) { return; }
 
         this.x += dX;
         this.y += dY;

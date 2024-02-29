@@ -98,6 +98,34 @@ export class Level implements Drawable {
         this.player!.draw(display, this.xOffset, this.yOffset);
     }
 
+    public pointPassable(x: number, y: number) {
+        const tile = this.map.getTile(x, y);
+        return tile && !tile.solid && !this.isBeingOccupyingPoint(x, y);
+    }
+
+    private isBeingOccupyingPoint(x: number, y: number): boolean {
+        for (const being of this.beings) {
+            const position = being.getPosition();
+            if (position.x === x && position.y === y) {
+                return true;
+            }
+        }
+
+        if (this.player) {
+            const playerPosition = this.player.getPosition();
+            if (playerPosition.x === x && playerPosition.y === y) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    pointVisible(x:number, y:number) {
+        const tile = this.map.getTile(x, y);
+        return tile && !tile.opaque;
+    }
+
     public getEmptyPoints(): Point[] {
         const tiles = this.map.getFreePoints();
 
