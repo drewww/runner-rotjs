@@ -67,6 +67,11 @@ export class GameMap {
 
         // bind causes it to run in the context of the Game object.
         digger.create(digCallback.bind(this));
+
+        // create an exit
+        const freeTiles = this.getFreeTiles();
+        const exit = freeTiles[Math.floor(Math.random() * freeTiles.length)];
+        this.setTile({...exit, opaque: false, solid: false, symbol: ">", fg: "#0f0", bg: "#000", discovered: false});
     }
 
     getIndex(x:number, y:number):number {
