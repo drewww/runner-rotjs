@@ -31,7 +31,7 @@ export class Level implements Drawable {
                 this.map.generateDiggerMap();
         
                 for(let i = 0; i < 4; i++) {
-                    const freeCells = this.map.getFreePoints();
+                    const freeCells = this.getEmptyPoints();
                     if (!freeCells) {
                         console.error("No free cells to place enemy.");
                         break;
@@ -96,6 +96,30 @@ export class Level implements Drawable {
         }
 
         this.player!.draw(display, this.xOffset, this.yOffset);
+    }
+
+    public getEmptyPoints(): Point[] {
+        const tiles = this.map.getFreePoints();
+
+        // now remove from that list all known beings
+        const occupiedTiles = this.getBeingOccupiedTiles();
+        const emptyTiles = tiles.filter(tile => !occupiedTiles.some(occupiedTile => occupiedTile.x === tile.x && occupiedTile.y === tile.y));
+
+        return emptyTiles;
+    }
+
+    private getBeingOccupiedTiles(): Point[] {
+        const occupiedTiles: Point[] = [];
+
+        for (const being of this.beings) {
+            occupiedTiles.push(being.getPosition());
+        }
+
+        if (this.player) {
+            occupiedTiles.push(this.player.getPosition());
+        }
+
+        return occupiedTiles;
     }
 
     private mergeLightMaps(): { [key: string]: Light } {

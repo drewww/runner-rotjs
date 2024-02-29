@@ -51,7 +51,7 @@ export class GameScreen extends Screen {
 
     setPlayer(player: Player) {
 
-        const freeCells = this.level.map.getFreePoints();
+        const freeCells = this.level.getEmptyPoints();
         if (!freeCells) {
             console.error("No free cells to place player.");
             return;
