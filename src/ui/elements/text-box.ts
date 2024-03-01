@@ -37,7 +37,7 @@ export class TextBox extends UIBox implements Drawable {
         if(this.disabled) { return; }   
 
         super.draw(display, xOffset, yOffset);
-        console.log("Position:" + this.x + "," +  this.y + " Offsets: " + xOffset + ", " + yOffset);
+        // console.log("Position:" + this.x + "," +  this.y + " Offsets: " + xOffset + ", " + yOffset);
         // TODO -- these animations continue even if the screen is changed.
         // need to have some way to de-register the animation.
         if(!this.animate) {

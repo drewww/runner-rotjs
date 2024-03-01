@@ -27,6 +27,7 @@ export class StatusBar extends UIBox {
         for(let i = 0; i < health-1; i++) {
             display.draw(1+xOffset+i + this.x, 0+yOffset + this.y, " ", COLORS.HEALTH_RED, COLORS.HEALTH_RED);
         }
-    }
 
+        display.drawText(this.w-3 + xOffset + this.x, 0 + yOffset + this.y, `%c{${COLORS.WHITE}}%b{${COLORS.DARK_GREY}}L${this.player.depth}`)
+    }
 }

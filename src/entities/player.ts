@@ -9,6 +9,8 @@ export class Player extends Being {
 
     public health: number = 10;
 
+    public depth: number = -3;
+
     constructor(game: IGame) {
         // don't need to have a valid position for the player to make the object
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);

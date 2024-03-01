@@ -82,7 +82,7 @@ export class Game implements IGame {
     }
 
     handleEvent(e: KeyboardEvent) {
-        console.log("Game received event: " + e.keyCode + " in state: " + this.state);
+        // console.log("Game received event: " + e.keyCode + " in state: " + this.state);
         
         // this is a little not right since this.screen should always be 
         // the current screen
