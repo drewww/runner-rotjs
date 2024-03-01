@@ -41,9 +41,18 @@ export class GameScreen extends Screen {
         keyMap[100] = 6;
         keyMap[103] = 7;
 
+        keyMap[ROT.KEYS.VK_W] = 0;
+        keyMap[ROT.KEYS.VK_E] = 1;
+        keyMap[ROT.KEYS.VK_D] = 2;
+        keyMap[ROT.KEYS.VK_C] = 3;
+        keyMap[ROT.KEYS.VK_X] = 4;
+        keyMap[ROT.KEYS.VK_Z] = 5;
+        keyMap[ROT.KEYS.VK_A] = 6;
+        keyMap[ROT.KEYS.VK_Q] = 7;
+
         var code = e.keyCode;
         
-        if(e.keyCode==ROT.KEYS.VK_NUMPAD5) {
+        if(e.keyCode==ROT.KEYS.VK_NUMPAD5 || e.keyCode==ROT.KEYS.VK_S) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
             // check for adjacent interactables. 
