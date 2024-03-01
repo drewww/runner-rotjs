@@ -1,4 +1,4 @@
-import { Level, Screen, IGame, Player, GameState } from "../../index";
+import { Level, Screen, IGame, Player, GameState, Interactable } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../status-bar";
 
@@ -41,6 +41,24 @@ export class GameScreen extends Screen {
         if(e.keyCode==ROT.KEYS.VK_NUMPAD5) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
+            // check for adjacent interactables. 
+            const playerPos = this.level.player!.getPosition();
+
+            for (let xOffset = -1; xOffset <= 1; xOffset++) {
+                for (let yOffset = -1; yOffset <= 1; yOffset++) {
+                    if (xOffset === 0 && yOffset === 0) {
+                        continue; // Skip the player's position
+                    }
+
+                    // TODO does this fail if you're adjacent to a map edge? maybe.
+                    const adjacentTile = this.level.map.getTile(playerPos.x + xOffset, playerPos.y + yOffset);
+                    if (adjacentTile && 'interact' in adjacentTile) {
+                        (<Interactable>adjacentTile).interact(this.level.player!);
+                    }
+                }
+            }
+        
+
         } else {
             if (!(code in keyMap)) { return; }
 

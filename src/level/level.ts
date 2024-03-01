@@ -1,7 +1,7 @@
 
 
 import { COLORS } from '../colors';
-import { Drawable, Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
+import { Door, Button, Drawable, Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
 import { Being } from '../index';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 
@@ -41,6 +41,28 @@ export class Level implements Drawable {
                     this.createEnemy(enemyCell);
 
                     freeCells.splice(freeCells.indexOf(enemyCell), 1);
+                }
+
+                for(let i=0; i<2; i++) {
+                    const freeCells = this.getEmptyPoints();
+                    if (!freeCells) {
+                        console.error("No free cells to place button.");
+                        break;
+                    }
+
+                    const buttonCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                    this.map.setTile(new Button(buttonCell.x, buttonCell.y));
+                }
+
+                for(let i=0; i<4; i++) {
+                    const freeCells = this.getEmptyPoints();
+                    if (!freeCells) {
+                        console.error("No free cells to place door.");
+                        break;
+                    }
+
+                    const doorCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                    this.map.setTile(new Door(doorCell.x, doorCell.y));
                 }
 
                 break;
