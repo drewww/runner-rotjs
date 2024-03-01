@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vite-plugin-singlefile": "^2.0.0"
   },
   "dependencies": {
     "rot-js": "^2.2.0"
