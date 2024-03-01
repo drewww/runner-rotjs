@@ -30,16 +30,17 @@ export class GameScreen extends Screen {
     }
 
     handleEvent(e: KeyboardEvent): void {
-        // TODO line this up with what's in ROT.KEYS
+
+        // this map operates with 0 being "up" and then rotates clockwise around from there.
         const keyMap: { [key: number]: number } = {};
-        keyMap[104] = 0;
-        keyMap[105] = 1;
-        keyMap[102] = 2;
-        keyMap[99] = 3;
-        keyMap[98] = 4;
-        keyMap[97] = 5;
-        keyMap[100] = 6;
-        keyMap[103] = 7;
+        keyMap[ROT.KEYS.VK_NUMPAD8] = 0;
+        keyMap[ROT.KEYS.VK_NUMPAD9] = 1;
+        keyMap[ROT.KEYS.VK_NUMPAD6] = 2;
+        keyMap[ROT.KEYS.VK_NUMPAD3] = 3;
+        keyMap[ROT.KEYS.VK_NUMPAD2] = 4;
+        keyMap[ROT.KEYS.VK_NUMPAD1] = 5;
+        keyMap[ROT.KEYS.VK_NUMPAD4] = 6;
+        keyMap[ROT.KEYS.VK_NUMPAD7] = 7;
 
         keyMap[ROT.KEYS.VK_W] = 0;
         keyMap[ROT.KEYS.VK_E] = 1;
