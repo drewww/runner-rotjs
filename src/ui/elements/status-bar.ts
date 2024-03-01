@@ -17,15 +17,15 @@ export class StatusBar extends UIBox {
 
         //fill entire background first
         for(let x = 0; x < this.w; x++) {
-            display.draw(xOffset+x, yOffset, ' ', COLORS.DARK_GREY, COLORS.DARK_GREY);
+            display.draw(xOffset+x + this.x, yOffset + this.y, ' ', COLORS.DARK_GREY, COLORS.DARK_GREY);
         }
 
         // display.drawText(0+xOffset, 0+yOffset, `%c{#f00}%b{$333}HEALTH: ${health}`);
-        display.drawText(0+xOffset, 0+yOffset, `%c{${COLORS.WHITE}}%b{${COLORS.HEALTH_RED}}H`);
+        display.drawText(0+xOffset + this.x, 0+yOffset + this.y, `%c{${COLORS.WHITE}}%b{${COLORS.HEALTH_RED}}H`);
 
         // -1 beacuse the H indicator takes up one space
         for(let i = 0; i < health-1; i++) {
-            display.draw(1+xOffset+i, 0+yOffset, " ", COLORS.HEALTH_RED, COLORS.HEALTH_RED);
+            display.draw(1+xOffset+i + this.x, 0+yOffset + this.y, " ", COLORS.HEALTH_RED, COLORS.HEALTH_RED);
         }
     }
 
