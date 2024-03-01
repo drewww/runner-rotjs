@@ -47,6 +47,8 @@ export interface IGame {
 export * from './game'
 
 export * from './level/tile'
+export * from './level/button'
+export * from './level/door'
 export * from './level/level'
 export * from './level/game-map'
 export * from './entities/being'
