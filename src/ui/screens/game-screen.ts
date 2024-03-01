@@ -1,6 +1,11 @@
-import { Level, Screen, IGame, Player, GameState, Interactable } from "../../index";
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../status-bar";
+import { IGame, GameState } from "../..";
+import { Player } from "../../entities/player";
+import { Level } from "../../level/level";
+import { Interactable } from "../../level/tile";
+import { Screen } from "../screen";
+
 
 export class GameScreen extends Screen {
     public level: Level;

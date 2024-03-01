@@ -1,6 +1,7 @@
 import { COLORS } from '../colors';
-import { UIBox, Player } from '../index';
 import ROT from 'rot-js'; // Import the 'rot-js' package
+import { UIBox } from './ui-box';
+import { Player } from '../entities/player';
 
 
 export class StatusBar extends UIBox {

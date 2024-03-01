@@ -1,5 +1,6 @@
 import { COLORS } from "../colors";
-import { Interactable, Player, Tile } from "../index";
+import { Player } from "../entities/player";
+import { Interactable, Tile } from "./tile";
 
 export class Door extends Tile implements Interactable {
     public activated:boolean;

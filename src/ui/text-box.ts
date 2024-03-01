@@ -1,6 +1,7 @@
 import ROT from "rot-js"; // Add import statement for 'ROT' module
-import { Drawable, UIBox } from "../index";
 import { COLORS } from "../colors";
+import { UIBox } from "./ui-box";
+import { Drawable } from "..";
 
 export class TextBox extends UIBox implements Drawable {
     protected text: string;

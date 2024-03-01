@@ -1,4 +1,5 @@
-import { Interactable, Player, Tile } from "../index";
+import { Player } from "../entities/player";
+import { Interactable, Tile } from "./tile";
 
 export class Button extends Tile implements Interactable {
     public activated:boolean;

@@ -1,7 +1,8 @@
 import * as ROT from 'rot-js'; // Import the 'ROT' module
 
-import {Drawable, Level, Light, Point} from '../index.ts';
 import { COLORS } from '../colors.ts';
+import { Drawable, Point, Light } from '../index.ts';
+import { Level } from '../level/level.ts';
 
 export class Being implements Drawable {
     protected level: Level | null = null;

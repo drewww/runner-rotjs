@@ -1,5 +1,6 @@
 import { COLORS } from "../../colors";
-import {Screen, TextBox} from "../../index";
+import { TextBox } from "../text-box";
+import { Screen } from "../screen";
 
 export class TitleScreen extends Screen {
     constructor() {

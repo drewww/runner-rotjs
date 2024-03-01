@@ -41,21 +41,3 @@ export interface IGame {
     refreshDisplay(): void;
     switchState(state: GameState): void;
 }
-
-
-// make a global game object that we can access from anywhere.
-export * from './game'
-
-export * from './level/tile'
-export * from './level/button'
-export * from './level/door'
-export * from './level/level'
-export * from './level/game-map'
-export * from './entities/being'
-export * from './entities/player'
-export * from './entities/enemy'
-export * from './ui/ui-box'
-export * from './ui/text-box'
-export * from './ui/screen'
-export * from './ui/screens/game-screen'
-export * from './ui/screens/title-screen'

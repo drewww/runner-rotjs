@@ -1,6 +1,7 @@
 import { COLORS } from '../colors.ts';
-import { Being, Light, Point } from '../index.ts';
 import * as ROT from 'rot-js';
+import { Point, Light } from '../index.ts';
+import { Being } from './being.ts';
 
 export class Enemy extends Being {
 

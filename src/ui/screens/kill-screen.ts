@@ -1,5 +1,6 @@
 import { COLORS } from "../../colors";
-import {Screen} from "../../index";
+import { Screen } from "../screen";
+
 
 export class KillScreen extends Screen {
     constructor() {

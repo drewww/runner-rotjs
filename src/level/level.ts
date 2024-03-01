@@ -1,9 +1,14 @@
 
 
+import { Drawable, LevelType, Point, Light } from '..';
 import { COLORS } from '../colors';
-import { Door, Button, Drawable, Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
-import { Being } from '../index';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
+import { Being } from '../entities/being';
+import { Enemy } from '../entities/enemy';
+import { Player } from '../entities/player';
+import { Button } from './button';
+import { Door } from './door';
+import { GameMap } from './game-map';
 
 export class Level implements Drawable {
     public map: GameMap;

@@ -1,8 +1,13 @@
 
 import * as ROT from 'rot-js';
-import { Level, LevelType, Player, IGame, GameScreen, Screen, TitleScreen, GameState} from './index';
+import { Screen } from './ui/screen';
 import { KillScreen } from './ui/screens/kill-screen';
 import { WinScreen } from './ui/screens/win-screen';
+import { GameState, IGame, LevelType } from '.';
+import { Player } from './entities/player';
+import { Level } from './level/level';
+import { GameScreen } from './ui/screens/game-screen';
+import { TitleScreen } from './ui/screens/title-screen';
 
 export class Game implements IGame {
     public display: ROT.Display;

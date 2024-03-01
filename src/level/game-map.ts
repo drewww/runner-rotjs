@@ -1,6 +1,7 @@
 import * as ROT from 'rot-js';
-import { Point, Tile } from '../index';
 import { COLORS } from '../colors';
+import { Tile } from './tile';
+import { Point } from '..';
 
 export class GameMap {
     

@@ -1,5 +1,5 @@
-import { Player } from "../index";
 import { COLORS } from "../colors";
+import { Player } from "../entities/player";
 
 
 export const TILE_TYPES = {

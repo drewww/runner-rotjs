@@ -1,7 +1,8 @@
 
 import { COLORS } from '../colors.ts';
-import { Being, GameState, IGame } from '../index.ts';
+import {GameState, IGame } from '../index.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
+import { Being } from './being.ts';
 
 export class Player extends Being {
     game: IGame;
