@@ -19,8 +19,8 @@ export class InstructionBox extends UIBox {
         ];
 
         // Draw keypad
-        const directionalXOffset = 1;   
-        const directionalYOffset = 0     
+        let directionalXOffset = 1;   
+        let directionalYOffset = 0;     
 
         display.drawText(this.x + xOffset + directionalXOffset, this.y + yOffset + directionalYOffset, "8-Directional Movement");
         display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+1,
@@ -42,5 +42,28 @@ export class InstructionBox extends UIBox {
             }
             directional++;
         }
+
+
+        directionalXOffset = 45;   
+
+        // add instructions about doors, buttons, enemeies, health, etc.
+        display.drawText(this.x + xOffset + directionalXOffset, this.y + yOffset + directionalYOffset, "Enemies");
+        display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+1,
+            ` %b{${COLORS.LASER_RED}}%c{${COLORS.WHITE}}p%b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREY}}atrol bot - [behavior]`);
+
+
+        directionalYOffset = 4;
+        display.drawText(this.x + xOffset + directionalXOffset, this.y + yOffset + directionalYOffset, "Environment");
+        display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+1,
+            ` %b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREEN}}%%b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREY}} exit here`);
+        display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+3,
+                ` %b{${COLORS.WHITE}}%c{${COLORS.BLACK}}b%b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREY}} un-pressed button`);
+        display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+4,
+                ` %b{${COLORS.WHITE}}%c{${COLORS.BLACK}}B%b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREY}} pressed button`);
+        display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+5,
+                    ` %b{${COLORS.WHITE}}%c{${COLORS.BLACK}}-%b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREY}} closed door`);
+        display.drawText(this.x + xOffset + directionalXOffset+1, this.y + yOffset + directionalYOffset+6,
+                    ` %b{${COLORS.WHITE}}%c{${COLORS.BLACK}}_%b{${COLORS.BLACK}}%c{${COLORS.LIGHT_GREY}} open door`);
+            
     }
 }
