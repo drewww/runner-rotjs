@@ -4,6 +4,7 @@ import { COLORS } from '../colors';
 import { Drawable, Enemy, GameMap, LevelType, Light, Player, Point } from '../index';
 import { Being } from '../index';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
+import { Button } from './button';
 
 export class Level implements Drawable {
     public map: GameMap;
@@ -41,6 +42,17 @@ export class Level implements Drawable {
                     this.createEnemy(enemyCell);
 
                     freeCells.splice(freeCells.indexOf(enemyCell), 1);
+                }
+
+                for(let i=0; i<2; i++) {
+                    const freeCells = this.getEmptyPoints();
+                    if (!freeCells) {
+                        console.error("No free cells to place enemy.");
+                        break;
+                    }
+
+                    const buttonCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                    this.map.setTile(new Button(buttonCell.x, buttonCell.y));
                 }
 
                 break;

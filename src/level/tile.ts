@@ -6,7 +6,7 @@ export const TILE_TYPES = {
     "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false},
     "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.BLACK, opaque: true, solid: true},
     "EXIT": {symbol: ">", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false},
-    "BUTTON": {symbol: "◯", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: false, solid: true}
+    "BUTTON": {symbol: "◯", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: true, solid: true}
 }
 
 export interface Interactable {
