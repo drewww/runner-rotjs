@@ -47,6 +47,7 @@ export * from './game'
 
 export * from './level/level'
 export * from './level/game-map'
+export * from './level/tile'
 export * from './entities/being'
 export * from './entities/player'
 export * from './entities/enemy'
