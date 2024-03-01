@@ -1,7 +1,7 @@
 import ROT from "rot-js"; // Add import statement for 'ROT' module
-import { COLORS } from "../colors";
+import { COLORS } from "../../colors";
 import { UIBox } from "./ui-box";
-import { Drawable } from "..";
+import { Drawable } from "../..";
 
 export class TextBox extends UIBox implements Drawable {
     protected text: string;
@@ -37,18 +37,18 @@ export class TextBox extends UIBox implements Drawable {
         if(this.disabled) { return; }   
 
         super.draw(display, xOffset, yOffset);
-
+        console.log("Position:" + this.x + "," +  this.y + " Offsets: " + xOffset + ", " + yOffset);
         // TODO -- these animations continue even if the screen is changed.
         // need to have some way to de-register the animation.
         if(!this.animate) {
-            display.drawText(xOffset, yOffset, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
+            display.drawText(xOffset+this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
         } else {
             // drop out if we've gotten the signal to disable this element
             if(this.startDelay > 0) {
                 setTimeout(this.draw.bind(this), this.startDelay, display, xOffset, yOffset);
                 this.startDelay = 0;
             } else {
-                display.drawText(xOffset, yOffset, `%c{${this.fg}}%b{${this.bg}}${this.text.substring(0, this.counter+1)}`);
+                display.drawText(xOffset + this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text.substring(0, this.counter+1)}`);
 
                 this.counter++;
                 if(this.counter<this.text.length) {

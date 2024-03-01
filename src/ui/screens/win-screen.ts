@@ -1,5 +1,5 @@
 import { COLORS } from "../../colors";
-import { TextBox } from "../text-box";
+import { TextBox } from "../elements/text-box";
 import { Screen } from "../screen";
 
 

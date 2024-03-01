@@ -89,9 +89,15 @@ export class Game implements IGame {
         switch(this.state) {
             case GameState.TITLE:
                 // intercept any key to start the game
-                this.switchState(GameState.GAME);
-                // break out; event is handled. don't pass it to the screen.
-                return;
+                if(e.keyCode != ROT.KEYS.VK_I) { 
+                    this.switchState(GameState.GAME);
+                    
+                    // event is handled, don't pass it to the screen
+                    return;
+                } else {
+                    // a little weird the screen can't ASK for a refresh.
+                }
+                break;
             case GameState.GAME:
                 break;
             case GameState.KILLSCREEN:
@@ -103,6 +109,7 @@ export class Game implements IGame {
 
         // regardless, give the screen a chance to deal with it.
         this.screen.handleEvent(e);
+        this.refreshDisplay();
     }
 
     public switchState(newState: GameState) {
