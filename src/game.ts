@@ -3,9 +3,8 @@ import * as ROT from 'rot-js';
 import { Screen } from './ui/screen';
 import { KillScreen } from './ui/screens/kill-screen';
 import { WinScreen } from './ui/screens/win-screen';
-import { GameState, IGame, LevelType } from '.';
+import { GameState, IGame } from '.';
 import { Player } from './entities/player';
-import { Level } from './level/level';
 import { GameScreen } from './ui/screens/game-screen';
 import { TitleScreen } from './ui/screens/title-screen';
 
