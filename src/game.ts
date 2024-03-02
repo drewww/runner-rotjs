@@ -19,8 +19,6 @@ export class Game implements IGame {
 
     player: Player | null = null;
 
-    public engine: ROT.Engine | null = null;
-
     private titleScreen!: Screen;
 
     public state!: GameState;
@@ -51,20 +49,11 @@ export class Game implements IGame {
         this.winScreen = new WinScreen();
         this.screen = this.titleScreen;
 
-        this.gameScreen = new GameScreen(new Level(LevelType.CAVE, 80, 24), this);
+        this.gameScreen = new GameScreen(this);
 
-        this.player = new Player(this);
+        this.player = new Player();
         this.gameScreen.setPlayer(this.player);
         this.state = GameState.TITLE;
-
-
-        // // the whole scheduler sitting in the level but the engine staying up here
-        // // ... it's a litte odd. may push engine down into the level itself?
-
-        this.engine = new ROT.Engine(this.gameScreen.level.scheduler);
-
-        this.engine.start();
-        this.engine.lock();
 
         this.refreshDisplay();
 

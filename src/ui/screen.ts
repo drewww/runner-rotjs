@@ -10,8 +10,8 @@ import { COLORS } from "../colors";
 export abstract class Screen implements Drawable {
     protected elements: Drawable[];
 
-    protected width: number;
-    protected height: number;
+    protected width: number=80;
+    protected height: number=24;
 
     public x: number = 0;
     public y: number = 0;

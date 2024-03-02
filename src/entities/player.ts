@@ -1,31 +1,43 @@
 
 import { COLORS } from '../colors.ts';
-import {GameState, IGame } from '../index.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
 
 export class Player extends Being {
-    game: IGame;
-
     public health: number = 10;
 
     public depth: number = -3;
+    private callbacks: {
+        [key:string]: Function[]
+    } = {};
+    
 
-    constructor(game: IGame) {
+    constructor() {
         // don't need to have a valid position for the player to make the object
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
-        this.game = game;
+    }
+
+    addListener(type: string, callback: Function): void {
+        let values = this.callbacks[type];
+        
+        if(!values) {
+            values = [];
+        }
+
+        values.push(callback);
+        this.callbacks[type] = values;
+    }
+
+    private fireListeners(type: string): void {
+        const values = this.callbacks[type];
+        if(values) {
+            values.forEach(callback => callback(this));
+        }
     }
 
     act(): void {
-        if (this.game.engine) {
-            console.log("Locking for input.");
-            this.game.engine.lock();
-        } else {
-            console.error("Game object missing engine.");
-        }
-
         super.act();
+        this.fireListeners("act");
     }
 
     takeDamage(amount: number): void {
@@ -33,7 +45,7 @@ export class Player extends Being {
         console.log("[PLAYER] took damage, health now " + this.health);
         
         if (this.health <= 0) {
-            this.game.switchState(GameState.KILLSCREEN);
+            this.fireListeners("death");
         }
     }
 

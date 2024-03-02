@@ -1,6 +1,6 @@
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../elements/status-bar";
-import { IGame, GameState } from "../..";
+import { IGame, GameState, LevelType } from "../..";
 import { Player } from "../../entities/player";
 import { Level } from "../../level/level";
 import { Interactable } from "../../level/tile";
@@ -12,18 +12,26 @@ export class GameScreen extends Screen {
 
     private game: IGame;
     statusBar: StatusBar | undefined;
+    player: Player | undefined;
 
-    constructor(level: Level, game: IGame) {
+    engine: ROT.Engine;
+
+    constructor(game: IGame) {
         super();
-        this.level = level;
+
+        // starter level. eventually this should be the "intro" level, but for now use the tutorial cave.
         this.game = game;
 
-        level.x = 0;
-        level.y = 0;
-        
+        // careful, the height here relates to the screen height.
+        this.level = new Level(LevelType.CAVE, 80, this.height-1);
+        this.level.x = 0;
+        this.level.y = 0;
         // this sets the render order, be careful.
         this.elements!.push(this.level);
+
+        this.engine = new ROT.Engine(this.level.scheduler);
     }
+    
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
         super.draw(display, xOffset, yOffset);
@@ -101,16 +109,14 @@ export class GameScreen extends Screen {
         //-------------------//
         const curTile = this.level.map.getTile(this.level.player!.x, this.level.player!.y);
         
-        if (curTile && curTile.symbol === '>') {
-            // later, move to a second level
-            console.log("At the exit for this map!");
-            this.game.switchState(GameState.WINSCREEN);
+        // stupid that this depends on a specific character
+        if (curTile && curTile.symbol === '%') {
+            this.advanceDepth();
         }
 
-
-        if(this.game.engine) {
+        if(this.engine) {
             // window.removeEventListener("keydown", this);
-            this.game.engine.unlock();
+            this.engine.unlock();
         }
 
         // moving refresh here seems to deal with the "first move" disappearing issue
@@ -121,8 +127,43 @@ export class GameScreen extends Screen {
         this.game.refreshDisplay();
     }
 
+    advanceDepth(): void {
+        this.level.player!.depth++;
+        if(this.level.player!.depth >= 0) {
+            this.game.switchState(GameState.WINSCREEN);
+        } else {
+            // prepare another level.
+            const newLevel = new Level(LevelType.CAVE, 80, this.height-1);
+
+            this.level = newLevel;
+            
+            // does this prepend? tbd.
+            this.elements = [this.level, this.statusBar!];
+
+            // why do I keep rewriting this code -- abstract this at some point
+            const freeCells = this.level.getEmptyPoints();
+            if (!freeCells) {
+                console.error("No free cells to place player.");
+                return;
+            } else {
+                this.player!.setPosition(freeCells[Math.floor(Math.random() * freeCells.length)]);
+            }
+            
+            this.level.setPlayer(this.player!);
+            this.player!.updateVision();
+    
+            this.game.refreshDisplay();
+
+            this.engine = new ROT.Engine(this.level.scheduler);
+            this.engine.start();
+            this.engine.lock();
+        }
+    }
+
     setPlayer(player: Player) {
-        console.log("SETTING PLAYER")
+        console.log("SETTING PLAYER");
+
+        this.player = player;
         const freeCells = this.level.getEmptyPoints();
         if (!freeCells) {
             console.error("No free cells to place player.");
@@ -139,5 +180,13 @@ export class GameScreen extends Screen {
         } else {
             this.statusBar.player = player;
         }
+
+        this.player.addListener("act", (player:Player) => {
+            this.engine.lock();
+        });
+
+        this.player.addListener("death", (player:Player) => {
+            this.game.switchState(GameState.KILLSCREEN);
+        });
     }
 }

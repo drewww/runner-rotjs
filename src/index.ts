@@ -36,7 +36,7 @@ export interface Drawable {
 
 export interface IGame {
     display: ROT.Display;
-    engine: ROT.Engine | null;
+    
 
     refreshDisplay(): void;
     switchState(state: GameState): void;
