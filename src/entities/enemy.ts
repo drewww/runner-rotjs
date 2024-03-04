@@ -6,7 +6,7 @@ export abstract class Enemy extends Being {
 
     // angle in radians
     public facing: number = 0;
-    public range: number = 5;
+    public range: number = 12;
 
     constructor(x:number, y:number) {
         super(x, y, "p", COLORS.WHITE, COLORS.LASER_RED);
@@ -19,12 +19,27 @@ export abstract class Enemy extends Being {
 
         // could make this a proper FOV checker, but no need for radius 1.
         // just make a const list of adjacent points
-        for (let dx = -2; dx <= 2; dx++) {
-            for (let dy = -2; dy <= 2; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+            for (let dy = -1; dy <= 1; dy++) {
                 // if (dx === 0 && dy === 0) continue; // Skip the current location
                 const point: Point = { x: this.x + dx, y: this.y + dy };
                 points.push(point);
             }
+        }
+
+        // iterate "forward" in the direction we're facing until you hit a solid tile
+        // or you hit the max range.
+
+        for(let i = 1; i <= this.range; i++) {
+            const dX = Math.round(Math.cos(this.facing) * i);
+            const dY = Math.round(Math.sin(this.facing) * i);
+            const point: Point = { x: this.x + dX, y: this.y + dY };
+
+            if(this.level!.pointTransparent(point.x, point.y) === false) {
+                break;
+            }
+
+            points.push(point);
         }
 
         // now check that none of them are opaque or solid
