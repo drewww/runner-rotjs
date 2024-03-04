@@ -63,8 +63,13 @@ export class GameScreen extends Screen {
         keyMap[ROT.KEYS.VK_Q] = 7;
 
         var code = e.keyCode;
+        console.log("CODE: " + code);
         
-        if(e.keyCode==ROT.KEYS.VK_NUMPAD5 || e.keyCode==ROT.KEYS.VK_S) {
+        const moveKeys = [ROT.KEYS.VK_1, ROT.KEYS.VK_2, ROT.KEYS.VK_3,
+            ROT.KEYS.VK_4, ROT.KEYS.VK_5, ROT.KEYS.VK_6, ROT.KEYS.VK_7,
+            ROT.KEYS.VK_8, ROT.KEYS.VK_9];
+
+        if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
             // check for adjacent interactables. 
@@ -83,14 +88,18 @@ export class GameScreen extends Screen {
                     }
                 }
             }
-        
-
-        } else {
-            if (!(code in keyMap)) { return; }
+        } else if (code in keyMap) {
 
             var diff = ROT.DIRS[8][keyMap[code]];
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
-            this.level.player!.move(diff[0], diff[1]);    
+            this.level.player!.move(diff[0], diff[1]);  
+        } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9){
+            console.log("move key pressed");
+            this.level.player!.selectMove(code - ROT.KEYS.VK_1);
+            
+            // if this is the same as a move already selected, it will execute it.
+        } else if (code == ROT.KEYS.VK_ESCAPE) {
+            this.level.player!.cancelMove();
         }
 
         // this is async so ... start it and see what happens

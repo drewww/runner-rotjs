@@ -18,9 +18,9 @@ export class Player extends Being {
         // don't need to have a valid position for the player to make the object
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
 
-        this.moves.push({name: "(J)ump", template:JUMP, cooldown: 0});
-        this.moves.push({name: "(W)all run", template:WALL_RUN_R, cooldown: 0});
-        this.moves.push({name: "(L)ong wall jump", template:LONG_WALL_JUMP, cooldown: 0});
+        this.moves.push({name: "(1) Jump", template:JUMP, cooldown: 0, selected:false});
+        this.moves.push({name: "(2) Wall run", template:WALL_RUN_R, cooldown: 0, selected:false});
+        this.moves.push({name: "(3) Long wall jump", template:LONG_WALL_JUMP, cooldown: 0, selected:false});
     }
 
 
@@ -39,6 +39,29 @@ export class Player extends Being {
         const values = this.callbacks[type];
         if(values) {
             values.forEach(callback => callback(this));
+        }
+    }
+
+    selectMove(index: number): void {
+        const selectedMove = this.moves.find(move => move.selected);
+        if(selectedMove && selectedMove == this.moves[index]) {
+            console.log("move confirmed: " + selectedMove.name);
+
+            // TODO execute code here
+            // then cancel moove
+            this.cancelMove();
+        } else {
+            this.cancelMove();
+            this.moves[index].selected = true;
+            console.log("move selected: " + this.moves[index].name);
+        }
+
+    }
+
+    cancelMove() {
+        const selectedMove = this.moves.find(move => move.selected);
+        if(selectedMove) {
+            selectedMove.selected = false;
         }
     }
 

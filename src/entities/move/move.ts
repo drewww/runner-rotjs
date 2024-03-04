@@ -6,6 +6,7 @@ export type Move = {
     name: string;
     template: MoveTemplate;
     cooldown: number;
+    selected: boolean;
 }
 
 export class MoveManager {

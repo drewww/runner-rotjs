@@ -1,5 +1,4 @@
 import { COLORS } from "../../colors";
-import { Move } from "../../entities/move/move";
 import { Player } from "../../entities/player";
 import { TextBox } from "../elements/text-box";
 import { Screen } from "../screen";
