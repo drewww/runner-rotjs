@@ -85,7 +85,7 @@ export class Level implements Drawable {
                         break;
                     }
                     const enemyCell = freeCells[Math.floor(Math.random() * freeCells.length)];
-                    const enemy = new PatrolBot(enemyCell.x, enemyCell.y);
+                    const enemy = new PatrolBot(enemyCell.x, enemyCell.y, "random");
                     this.addBeing(enemy);
                 }
 

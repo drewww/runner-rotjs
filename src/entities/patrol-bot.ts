@@ -3,8 +3,17 @@ import { Enemy } from "./enemy";
 
 
 export class PatrolBot extends Enemy {
-    constructor(x:number, y:number) {
-        super(x, y);;
+
+    public behavior: string = "rotate";
+
+    constructor(x:number, y:number, behavior: string = "rotate") {
+        super(x, y);
+        
+        if(behavior== "random") {
+            behavior = Math.random() > 0.5 ? "rotate" : "flip";
+        }
+
+        this.behavior = behavior;
     }
 
     act() :void {
@@ -14,13 +23,20 @@ export class PatrolBot extends Enemy {
 
         const didMove:boolean = this.move(dX, dY);
 
-        if(!didMove) {
-            console.log("hit a wall, turning from ", this.facing/Math.PI + " to " +
-                ((this.facing + (Math.PI / 2) % (Math.PI * 2))/Math.PI));
-            this.facing += Math.PI / 2;
-            this.facing = this.facing % (Math.PI * 2);
+            if(!didMove) {
+                console.log("hit a wall, turning from ", this.facing/Math.PI + " to " +
+                    ((this.facing + (Math.PI / 2) % (Math.PI * 2))/Math.PI));
+
+                if(this.behavior == "rotate") {
+                    this.facing += Math.PI / 2;
+                } else if(this.behavior == "flip"){
+                    // return 180
+                    this.facing += Math.PI;
+                }
+
+                this.facing = this.facing % (Math.PI * 2);
+            }
         }
-    }
 
     getVision(): Point[] {
         if(!this.level) { return []; }
