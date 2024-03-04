@@ -4,12 +4,11 @@ import { Drawable, LevelType, Point, Light } from '..';
 import { COLORS } from '../colors';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from '../entities/being';
-import { Enemy } from '../entities/enemy';
 import { Player } from '../entities/player';
 import { Button } from './button';
 import { Door } from './door';
 import { GameMap } from './game-map';
-import { Tile } from './tile';
+import { PatrolBot } from '../entities/patrol-bot';
 
 export class Level implements Drawable {
     public map: GameMap;
@@ -76,11 +75,17 @@ export class Level implements Drawable {
                 this.map = new GameMap(this.w, this.h);
                 this.map.generateTrivialMap();
 
-                // now put some random walls in it
-                for (let i = 0; i < 100; i++) {
-                    const x = Math.floor(Math.random() * this.w);
-                    const y = Math.floor(Math.random() * this.h);
-                    this.map.setTile(new Tile(x, y, "WALL"));
+              
+                // generate a bunch of enemies
+                for (let i = 0; i < 8; i++) {
+                    const freeCells = this.map.getFreePoints();
+                    if (!freeCells) {
+                        console.error("No free cells to place enemy.");
+                        break;
+                    }
+                    const enemyCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                    const enemy = new PatrolBot(enemyCell.x, enemyCell.y);
+                    this.addBeing(enemy);
                 }
 
                 break;
@@ -248,7 +253,7 @@ export class Level implements Drawable {
     }
 
     private createEnemy(p: Point): void {
-        this.addBeing(new Enemy(p.x, p.y));
+        this.addBeing(new PatrolBot(p.x, p.y));
     }
 
     public setPlayer(player: Player): void {

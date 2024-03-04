@@ -1,9 +1,8 @@
 import { COLORS } from '../colors.ts';
-import * as ROT from 'rot-js';
 import { Point, Light } from '../index.ts';
 import { Being } from './being.ts';
 
-export class Enemy extends Being {
+export abstract class Enemy extends Being {
 
     // angle in radians
     public facing: number = 0;
@@ -11,18 +10,6 @@ export class Enemy extends Being {
 
     constructor(x:number, y:number) {
         super(x, y, "p", COLORS.WHITE, COLORS.LASER_RED);
-    }
-
-    act(): void {
-        // TODO move around randomly as a first pass
-        const dX = Math.floor(ROT.RNG.getUniform() * 3) - 1;
-        const dY = Math.floor(ROT.RNG.getUniform() * 3) - 1;
-
-        this.move(dX, dY);
-
-        // console.log(`[ENEMY] Moving from (${this.x}, ${this.y}) to (${this.x + dX}, ${this.y + dY})`);
-
-        super.act();
     }
 
     getVision(): Point[] {

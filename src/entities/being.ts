@@ -4,7 +4,7 @@ import { COLORS } from '../colors.ts';
 import { Drawable, Point, Light } from '../index.ts';
 import { Level } from '../level/level.ts';
 
-export class Being implements Drawable {
+export abstract class Being implements Drawable {
     protected level: Level | null = null;
 
     constructor(public x:number, public y:number, protected symbol:string,
@@ -15,13 +15,15 @@ export class Being implements Drawable {
         display.draw(this.x+xOffset, this.y+yOffset, this.symbol, this.fg, bg);
     }
 
-    move(dX:number, dY:number): void {
-        if(!this.level) { return; }
+    move(dX:number, dY:number): boolean {
+        if(!this.level) { return false; }
 
-        if(this.level.pointPassable(this.x + dX, this.y + dY) === false) { return; }
+        if(this.level.pointPassable(this.x + dX, this.y + dY) === false) { return false; }
 
         this.x += dX;
         this.y += dY;
+
+        return true;
     }
 
     getPosition(): Point {

@@ -1,5 +1,4 @@
 import * as ROT from 'rot-js';
-import { COLORS } from '../colors';
 import { Tile } from './tile';
 import { Point } from '..';
 
@@ -28,6 +27,14 @@ export class GameMap {
                 this.setTile(new Tile(x, y, "FLOOR"));
             }
         }
+
+        // now put some random walls in it
+        for (let i = 0; i < 100; i++) {
+            const x = Math.floor(Math.random() * this.w);
+            const y = Math.floor(Math.random() * this.h);
+            this.setTile(new Tile(x, y, "WALL"));
+        }
+
     }
 
     generateDiggerMap(): void {
