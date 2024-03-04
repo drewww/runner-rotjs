@@ -1,7 +1,6 @@
 import { Point } from "..";
 import { Enemy } from "./enemy";
 
-
 export class PatrolBot extends Enemy {
 
     public behavior: string = "rotate";

@@ -2,6 +2,7 @@
 import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
+import { JUMP, LONG_WALL_JUMP, Move, WALL_RUN_R } from './move/move.ts';
 
 export class Player extends Being {
     public health: number = 10;
@@ -11,11 +12,17 @@ export class Player extends Being {
         [key:string]: Function[]
     } = {};
     
+    public moves: Move[] = []; 
 
     constructor() {
         // don't need to have a valid position for the player to make the object
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
+
+        this.moves.push({name: "(J)ump", template:JUMP, cooldown: 0});
+        this.moves.push({name: "(W)all run", template:WALL_RUN_R, cooldown: 0});
+        this.moves.push({name: "(L)ong wall jump", template:LONG_WALL_JUMP, cooldown: 0});
     }
+
 
     addListener(type: string, callback: Function): void {
         let values = this.callbacks[type];
