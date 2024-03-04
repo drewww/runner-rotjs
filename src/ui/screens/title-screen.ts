@@ -12,7 +12,7 @@ export class TitleScreen extends Screen {
         this.elements.push(new TextBox(4, 3, 20, 5, "------", COLORS.WHITE, COLORS.WHITE, true, 0, 50));
 
         this.elements.push(new TextBox(4, 5, 20, 5, "a cyberpunk escape roguelike", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
-        this.elements.push(new TextBox(4, 6, 20, 5, "by ", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
+        // this.elements.push(new TextBox(4, 6, 20, 5, "by ", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
 
         this.elements.push(new TextBox(4, this.height -3, 20, 5, "  press any key to begin", COLORS.LIGHT_GREY, COLORS.BLACK, true, 50*6, 25));
         this.elements.push(new TextBox(4, this.height -2, 20, 5, "  press [i] for instructions", COLORS.LIGHT_GREY, COLORS.BLACK, true, 50*6, 25));
