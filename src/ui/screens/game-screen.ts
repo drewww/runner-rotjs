@@ -65,10 +65,6 @@ export class GameScreen extends Screen {
         var code = e.keyCode;
         console.log("CODE: " + code);
         
-        const moveKeys = [ROT.KEYS.VK_1, ROT.KEYS.VK_2, ROT.KEYS.VK_3,
-            ROT.KEYS.VK_4, ROT.KEYS.VK_5, ROT.KEYS.VK_6, ROT.KEYS.VK_7,
-            ROT.KEYS.VK_8, ROT.KEYS.VK_9];
-
         if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
