@@ -5,7 +5,7 @@ import { Player } from "../../entities/player";
 import { Level } from "../../level/level";
 import { Interactable } from "../../level/tile";
 import { Screen } from "../screen";
-
+import { MoveMenuScreen } from './move-menu-screen';
 
 export class GameScreen extends Screen {
     public level: Level;
@@ -15,6 +15,7 @@ export class GameScreen extends Screen {
     player: Player | undefined;
 
     engine: ROT.Engine;
+    moveMenu: any;
 
     constructor(game: IGame) {
         super();
@@ -181,6 +182,15 @@ export class GameScreen extends Screen {
             this.elements!.push(this.statusBar);
         } else {
             this.statusBar.player = player;
+        }
+
+        if(!this.moveMenu) {
+            this.moveMenu = new MoveMenuScreen(0, 0, player);
+            this.moveMenu.x = this.width - this.moveMenu.width;
+            this.moveMenu.y = this.height - this.moveMenu.height;
+            this.elements!.push(this.moveMenu);
+        } else {
+            this.moveMenu.setPlayer(player);
         }
 
         this.player.addListener("act", (player:Player) => {

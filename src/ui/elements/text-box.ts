@@ -41,7 +41,9 @@ export class TextBox extends UIBox implements Drawable {
         // TODO -- these animations continue even if the screen is changed.
         // need to have some way to de-register the animation.
         if(!this.animate) {
-            display.drawText(xOffset+this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
+            let padding = `%c{${this.bg}}%b{${this.bg}}`;
+            padding += "-".repeat(this.w - this.text.length);
+            display.drawText(xOffset+this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text + padding}`);
         } else {
             // drop out if we've gotten the signal to disable this element
             if(this.startDelay > 0) {
