@@ -30,7 +30,7 @@ export abstract class Enemy extends Being {
         // iterate "forward" in the direction we're facing until you hit a solid tile
         // or you hit the max range.
 
-        for(let i = 1; i <= this.range; i++) {
+        for(let i = 2; i <= this.range; i++) {
             const dX = Math.round(Math.cos(this.facing) * i);
             const dY = Math.round(Math.sin(this.facing) * i);
             const point: Point = { x: this.x + dX, y: this.y + dY };

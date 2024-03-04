@@ -267,7 +267,7 @@ export class Level implements Drawable {
                     if (finalTileColor === EMPTY_COLOR) {
                         finalTileColor = ROT.Color.fromString(tileLightSource.color);
                     } else {
-                        finalTileColor = ROT.Color.multiply(finalTileColor, ROT.Color.fromString(tileLightSource.color));
+                        finalTileColor = ROT.Color.add(finalTileColor, ROT.Color.fromString(tileLightSource.color));
                     }
                 }
     
