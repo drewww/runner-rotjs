@@ -15,4 +15,6 @@ export const COLORS = {
     LASER_RED: "#a80d02",
     INVISIBLE_TILE: "#555555",
     HEALTH_RED: "#ff0000",
+
+    MOVE_BLUE: "#4444ff",
 };
