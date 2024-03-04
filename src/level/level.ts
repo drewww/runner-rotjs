@@ -9,6 +9,7 @@ import { Button } from './button';
 import { Door } from './door';
 import { GameMap } from './game-map';
 import { PatrolBot } from '../entities/patrol-bot';
+import { Color } from 'rot-js/lib/color';
 
 export class Level implements Drawable {
     public map: GameMap;
@@ -117,28 +118,30 @@ export class Level implements Drawable {
 
     public getBeings(): Being[] {
         return this.beings;
-    }
+    } 
 
     public draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string): void {
         const tiles = this.map.getAllTiles();
         const lightMap = this.mergeLightMaps();
-        for (const tile of tiles) {
+        for (const tile of tiles) {            
 
             // if not discovered, skip it.
             if (!tile.discovered) {
                 continue;
             }
 
-            // TODO make the background color draw from a "light" map that is maintained separately
-            let bg = COLORS.BLACK;
-            const key = `${tile.x},${tile.y}`;
-            if (key in lightMap && tile.visible) {
-                bg = lightMap[key].color;
-            }
 
             let fg = tile.fg;
+            let bg = tile.bg;
 
-            if (!tile.visible) {
+            if(tile.visible) {
+                const key = `${tile.x},${tile.y}`;
+                if(key in lightMap) {
+                    bg = lightMap[`${tile.x},${tile.y}`].color;
+                } else {
+                    bg = COLORS.BLACK;
+                }
+            } else {
                 // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
                 // fgHSL[2] = fgHSL[2]-0.5;  
                 // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
@@ -233,13 +236,47 @@ export class Level implements Drawable {
             beingLight.push(...being.getLight());
         }
 
-        const lightMap: { [key: string]: Light } = {};
+        const lightMapSources: { [key: string]: Light[] } = {};
 
         // right now this is overwriting multiple lights on the same tile.
         // TODO fix later
         for (const light of beingLight) {
-            lightMap[`${light.p.x},${light.p.y}`] = light;
+            var existing = lightMapSources[`${light.p.x},${light.p.y}`];
+
+            if(existing) {
+                existing.push(light);
+            } else {
+                existing = [light];
+            }
+            lightMapSources[`${light.p.x},${light.p.y}`] = existing;
         }
+
+        // so first we produce the lightmap, which has a list of lights for each tile
+        // then do another pass which computes a single color per tile.
+        const lightMap: { [key: string]: Light } = {};
+
+        for (let key in lightMapSources) {
+            let bg = COLORS.BLACK;
+
+            if (key in lightMapSources) {
+                const EMPTY_COLOR: Color = [-1, -1, -1];
+                let finalTileColor: Color = EMPTY_COLOR;
+                const tileLightSources: Light[] = lightMapSources[key];
+    
+                for (let tileLightSource of tileLightSources) {
+                    if (finalTileColor === EMPTY_COLOR) {
+                        finalTileColor = ROT.Color.fromString(tileLightSource.color);
+                    } else {
+                        finalTileColor = ROT.Color.multiply(finalTileColor, ROT.Color.fromString(tileLightSource.color));
+                    }
+                }
+    
+                bg = ROT.Color.toHex(finalTileColor).toString();
+            }
+    
+            lightMap[key] = { p: { x: parseInt(key.split(",")[0]), y: parseInt(key.split(",")[1]) },
+                intensity: 10, color: bg};
+        }       
 
         return lightMap;
     }
