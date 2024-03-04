@@ -23,9 +23,11 @@ export class GameScreen extends Screen {
         this.game = game;
 
         // careful, the height here relates to the screen height.
-        this.level = new Level(LevelType.CAVE, 80, this.height-1);
+        this.level = new Level(LevelType.DEBUG, 80, this.height-1);
         this.level.x = 0;
         this.level.y = 0;
+        this.x = 0;
+        this.y = 0;
         // this sets the render order, be careful.
         this.elements!.push(this.level);
 

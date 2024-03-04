@@ -16,26 +16,16 @@ export class GameMap {
     fillMapWithWalls(): void {
         for (let y = 0; y < this.h; y++) {
             for (let x = 0; x < this.w; x++) {
-                this.tiles.push({
-                    x: x,
-                    y: y,
-                    opaque: true,
-                    solid: true,
-                    symbol: " ",
-                    fg: COLORS.WHITE,
-                    bg: COLORS.BLACK,
-                    visible: false,
-                    discovered: true
-                });
+                this.tiles.push(new Tile(x, y, "WALL"));
             }
         }
     }
 
     generateTrivialMap(): void {
         this.fillMapWithWalls();
-        for (let x = 0; x < 5; x++) {
-            for (let y = 0; y < 2; y++) {
-                this.setTile(new Tile(x, y, "WALL"));
+        for (let x = 1; x < this.w-1; x++) {
+            for (let y = 1; y < this.h-1; y++) {
+                this.setTile(new Tile(x, y, "FLOOR"));
             }
         }
     }

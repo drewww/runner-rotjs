@@ -9,6 +9,7 @@ import { Player } from '../entities/player';
 import { Button } from './button';
 import { Door } from './door';
 import { GameMap } from './game-map';
+import { Tile } from './tile';
 
 export class Level implements Drawable {
     public map: GameMap;
@@ -33,7 +34,7 @@ export class Level implements Drawable {
 
         switch (type) {
             case LevelType.CAVE:
-                this.map = new GameMap(80, 24);
+                this.map = new GameMap(this.w, this.h);
                 this.map.generateDiggerMap();
 
                 for (let i = 0; i < 4; i++) {
@@ -72,8 +73,16 @@ export class Level implements Drawable {
 
                 break;
             case LevelType.DEBUG:
-                this.map = new GameMap(80, 24);
+                this.map = new GameMap(this.w, this.h);
                 this.map.generateTrivialMap();
+
+                // now put some random walls in it
+                for (let i = 0; i < 100; i++) {
+                    const x = Math.floor(Math.random() * this.w);
+                    const y = Math.floor(Math.random() * this.h);
+                    this.map.setTile(new Tile(x, y, "WALL"));
+                }
+
                 break;
         }
     }
@@ -105,7 +114,7 @@ export class Level implements Drawable {
         return this.beings;
     }
 
-    public draw(display: ROT.Display): void {
+    public draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string): void {
         const tiles = this.map.getAllTiles();
         const lightMap = this.mergeLightMaps();
         for (const tile of tiles) {

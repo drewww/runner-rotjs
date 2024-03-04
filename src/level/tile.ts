@@ -4,7 +4,7 @@ import { Player } from "../entities/player";
 
 export const TILE_TYPES = {
     "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false},
-    "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.BLACK, opaque: true, solid: true},
+    "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
     "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false},
     "BUTTON": {symbol: "b", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
     "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true}

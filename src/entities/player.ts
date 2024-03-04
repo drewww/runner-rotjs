@@ -65,8 +65,12 @@ export class Player extends Being {
             if (visibility > 0) {
                 // case to be made to put this into a method on tile and call
                 // discovered from there ...
-                this.level!.map.getTile(x, y).visible = true;
-                this.level!.map.getTile(x, y).discovered = true;
+                const tile = this.level!.map.getTile(x, y);
+
+                if(tile) {
+                    tile.visible = true;
+                    tile.discovered = true;
+                }
             }
         });
     }
