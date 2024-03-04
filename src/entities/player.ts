@@ -2,7 +2,7 @@
 import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
-import { JUMP, LONG_WALL_JUMP, Move, WALL_RUN_R } from './move/move.ts';
+import { JUMP, LONG_WALL_JUMP, Move, MoveManager, WALL_RUN_R } from './move/move.ts';
 
 export class Player extends Being {
     public health: number = 10;
@@ -47,18 +47,27 @@ export class Player extends Being {
         if(selectedMove && selectedMove == this.moves[index]) {
             console.log("move confirmed: " + selectedMove.name);
 
+            // eventually I will need to select a move VARIANT which will be numbered as well. for now,
+            // we're just going to accept the move as is.
+
+            const moveResults = MoveManager.moveResults(this.level!, selectedMove.template);
+            this.move(moveResults[0].x, moveResults[0].y);
+
             // TODO execute code here
             // then cancel moove
-            this.cancelMove();
+            this.deselectMoves();
         } else {
-            this.cancelMove();
+            this.deselectMoves();
             this.moves[index].selected = true;
             console.log("move selected: " + this.moves[index].name);
+
+            const moveResults = MoveManager.moveResults(this.level!, this.moves[index].template);   
+            console.log(moveResults);
         }
 
     }
 
-    cancelMove() {
+    deselectMoves() {
         const selectedMove = this.moves.find(move => move.selected);
         if(selectedMove) {
             selectedMove.selected = false;

@@ -1,6 +1,5 @@
 import { Point } from "../..";
 import { Level } from "../../level/level";
-import * as Array2D from 'array2d'
 
 export type Move = {
     name: string;
@@ -16,12 +15,48 @@ export class MoveManager {
         // this method will a list of points that this moveTemplate would
         // 
 
-        return [];
+        // first, just return the max number
+        const maxMoveNumber = MoveManager.getMaxDigitInTemplate(template); 
+        // console.log("max move number: " + maxMoveNumber);
+
+        const playerLocation = MoveManager.getLocationInTemplate(template, '@');
+        const destinationLocation = MoveManager.getLocationInTemplate(template, maxMoveNumber.toString());
+
+        // console.log("player location: " + playerLocation.x + ", " + playerLocation.y);
+        // console.log("destination location: " + destinationLocation.x + ", " + destinationLocation.y);
+
+        return [{x: (destinationLocation.x - playerLocation.x),
+                 y: (destinationLocation.y - playerLocation.y)}];
     }
 
     // public rotateTemplate(): string[][] {
     //     return [][];
     // }
+
+    static getLocationInTemplate(template:MoveTemplate, symbol:string): Point {
+        for(let y = 0; y < template.length; y++) {
+            for(let x = 0; x < template[y].length; x++) {
+                if(template[y][x] === symbol) {
+                    return {x, y};
+                }
+            }
+        }
+
+        throw new Error(`No ${symbol} location found in template`);
+    }
+
+    static getMaxDigitInTemplate(template:MoveTemplate) {
+        let max = 0;
+        for(let y = 0; y < template.length; y++) {
+            for(let x = 0; x < template[y].length; x++) {
+                if(!isNaN(parseInt(template[y][x]))) {
+                    max = Math.max(max, parseInt(template[y][x]));
+                }
+            }
+        }
+
+        return max;
+    }
 }
 
 type MoveTemplate = string[];
@@ -53,4 +88,13 @@ export const LONG_WALL_JUMP: MoveTemplate = [
     '*',
     '@',
     'W'
+]
+
+export const RUNNING_JUMP: MoveTemplate = [
+    '3',
+    '*',
+    '*',
+    '2',
+    '1',
+    '@'
 ]

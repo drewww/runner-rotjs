@@ -95,7 +95,7 @@ export class GameScreen extends Screen {
             
             // if this is the same as a move already selected, it will execute it.
         } else if (code == ROT.KEYS.VK_ESCAPE) {
-            this.level.player!.cancelMove();
+            this.level.player!.deselectMoves();
         }
 
         // this is async so ... start it and see what happens
