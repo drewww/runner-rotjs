@@ -46,8 +46,13 @@ export class Player extends Being {
         }
     }
 
+    getSelectedMove(): Move | undefined {
+        return this.moves.find(move => move.selected);
+    }
+
     selectMove(index: number): void {
-        const selectedMove = this.moves.find(move => move.selected);
+        const selectedMove = this.getSelectedMove();
+        
         if(selectedMove && selectedMove == this.moves[index]) {
             console.log("move confirmed: " + selectedMove.name);
 

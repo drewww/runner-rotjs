@@ -28,7 +28,15 @@ export class MoveMenuScreen extends Screen {
             const moveName = move.name;
             const moveX = 1;
             const moveY = i + 1;
-            display.drawText(moveX + xOffset + this.x, moveY + yOffset + this.y, moveName, COLORS.BLACK, COLORS.LIGHT_GREY);
+
+            let bg = COLORS.BLACK;
+            let fg = COLORS.LIGHT_GREY;
+            if(move==this.player.getSelectedMove()) {
+                bg = COLORS.MOVE_BLUE;
+                fg = COLORS.WHITE;
+            }
+
+            display.drawText(moveX + xOffset + this.x, moveY + yOffset + this.y, `%c{${fg}}%b{${bg}}${moveName}`);
             i++;
         }
         
