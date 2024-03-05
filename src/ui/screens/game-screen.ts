@@ -89,6 +89,8 @@ export class GameScreen extends Screen {
             var diff = ROT.DIRS[8][keyMap[code]];
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
             this.level.player!.move(diff[0], diff[1]);  
+            this.level.player!.deselectMoves();
+            
         } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9){
             console.log("move key pressed");
             this.level.player!.selectMove(code - ROT.KEYS.VK_1);

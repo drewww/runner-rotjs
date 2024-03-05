@@ -13,7 +13,7 @@ export class MoveManager {
     
     public static moveResults(level:Level, template:MoveTemplate): Point[] {
         // this method will a list of points that this moveTemplate would
-        // 
+        // move the player to. expressed in player-relative vector locations.
 
         // first, just return the max number
         const maxMoveNumber = MoveManager.getMaxDigitInTemplate(template); 
@@ -25,8 +25,20 @@ export class MoveManager {
         // console.log("player location: " + playerLocation.x + ", " + playerLocation.y);
         // console.log("destination location: " + destinationLocation.x + ", " + destinationLocation.y);
 
-        return [{x: (destinationLocation.x - playerLocation.x),
-                 y: (destinationLocation.y - playerLocation.y)}];
+        const moveVector = {x: (destinationLocation.x - playerLocation.x),
+                            y: (destinationLocation.y - playerLocation.y)};
+
+        const output: Point[] = [];
+
+        for (let i = 0; i < 4; i++) {
+            const rotatedVector = {
+                x: moveVector.x * Math.cos((Math.PI/2 * i)) - moveVector.y * Math.sin((Math.PI/2 * i)),
+                y: moveVector.x * Math.sin((Math.PI/2 * i)) + moveVector.y * Math.cos((Math.PI/2 * i))
+            };
+            output.push(rotatedVector);
+        }
+
+        return output;
     }
 
     // public rotateTemplate(): string[][] {
