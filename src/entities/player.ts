@@ -54,15 +54,16 @@ export class Player extends Being {
     selectMove(index: number): void {
         const selectedMove = this.getSelectedMove();
 
-        if(selectedMove && selectedMove == this.moves[index]) {
+        if(selectedMove) {
+            // we're double-using the numbers here. there's move selection number,
+            // then rotation number. 
             console.log("move confirmed: " + selectedMove.name);
+            console.log("with rotation: " + index);
 
             // eventually I will need to select a move VARIANT which will be numbered as well. for now,
             // we're just going to accept the move as is.
 
-            const moveOptions = MoveManager.moveResults(this.level!, selectedMove.template);
-
-            const selectedMoveSteps = moveOptions[0];
+            const selectedMoveSteps = this.selectedMoveOptions[index];
 
             // step through the moves
             for(let i = 0; i < selectedMoveSteps.length; i++) {
