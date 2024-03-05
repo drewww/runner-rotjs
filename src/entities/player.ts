@@ -2,7 +2,7 @@
 import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
-import { JUMP, LONG_WALL_JUMP, Move, MoveManager, WALL_RUN_R } from './move/move.ts';
+import { JUMP, LONG_WALL_JUMP, Move, MoveManager, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
 import { Light, Point } from '../index.ts';
 
 export class Player extends Being {
@@ -14,7 +14,7 @@ export class Player extends Being {
     } = {};
     
     public moves: Move[] = []; 
-    selectedMoveResults: Point[];
+    selectedMoveOptions: Point[][];
 
     constructor() {
         // don't need to have a valid position for the player to make the object
@@ -23,8 +23,9 @@ export class Player extends Being {
         this.moves.push({name: "(1) Jump", template:JUMP, cooldown: 0, selected:false});
         this.moves.push({name: "(2) Wall run", template:WALL_RUN_R, cooldown: 0, selected:false});
         this.moves.push({name: "(3) Long wall jump", template:LONG_WALL_JUMP, cooldown: 0, selected:false});
+        this.moves.push({name: "(4) Running jump", template:RUNNING_JUMP, cooldown: 0, selected:false})
     
-        this.selectedMoveResults = [];
+        this.selectedMoveOptions = [];
     }
 
 
@@ -52,15 +53,21 @@ export class Player extends Being {
 
     selectMove(index: number): void {
         const selectedMove = this.getSelectedMove();
-        
+
         if(selectedMove && selectedMove == this.moves[index]) {
             console.log("move confirmed: " + selectedMove.name);
 
             // eventually I will need to select a move VARIANT which will be numbered as well. for now,
             // we're just going to accept the move as is.
 
-            const moveResults = MoveManager.moveResults(this.level!, selectedMove.template);
-            this.move(moveResults[0].x, moveResults[0].y);
+            const moveOptions = MoveManager.moveResults(this.level!, selectedMove.template);
+
+            const selectedMoveSteps = moveOptions[0];
+
+            // step through the moves
+            for(let i = 0; i < selectedMoveSteps.length; i++) {
+                this.move(selectedMoveSteps[i].x, selectedMoveSteps[i].y);
+            }
 
             // TODO execute code here
             // then cancel moove
@@ -71,13 +78,13 @@ export class Player extends Being {
             console.log("move selected: " + this.moves[index].name);
 
             const moveResults = MoveManager.moveResults(this.level!, this.moves[index].template);   
-            this.selectedMoveResults = moveResults;
+            this.selectedMoveOptions = moveResults;
         }
     }
 
     deselectMoves() {
         const selectedMove = this.moves.find(move => move.selected);
-        this.selectedMoveResults = [];
+        this.selectedMoveOptions = [];
         if(selectedMove) {
             selectedMove.selected = false;
         }
@@ -127,13 +134,17 @@ export class Player extends Being {
     getLight(): Light[] {
         // iterate through the selectedMoveResults list, and make a light for each.
         const lights: Light[] = [];
-        this.selectedMoveResults.forEach(point => {
-            const light: Light = {
-            p: {x: this.x + point.x, y: this.y + point.y},
-            intensity: 1,
-            color: COLORS.MOVE_BLUE
-            };
-            lights.push(light);
+        this.selectedMoveOptions.forEach(rotation => {
+
+            // TODO make last step brighter
+            for (let step of rotation) {
+                const light: Light = {
+                    p: {x: this.x + step.x, y: this.y + step.y},
+                    intensity: 1,
+                    color: COLORS.MOVE_BLUE
+                };
+                lights.push(light);
+            }
         });
         return lights;
     }

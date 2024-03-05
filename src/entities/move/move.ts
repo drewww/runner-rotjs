@@ -11,39 +11,40 @@ export type Move = {
 export class MoveManager {
 
     
-    public static moveResults(level:Level, template:MoveTemplate): Point[] {
+    public static moveResults(level:Level, template:MoveTemplate): Point[][] {
         // this method will a list of points that this moveTemplate would
         // move the player to. expressed in player-relative vector locations.
 
+        // return a list of lists
+        // each list is a rotation of the first one
+        // and the list of moves in order that the player will pass through
+
         // first, just return the max number
-        const maxMoveNumber = MoveManager.getMaxDigitInTemplate(template); 
-        // console.log("max move number: " + maxMoveNumber);
+        
+        const stepsInMove : Point[] = MoveManager.getAllPointsInMove(template);
 
-        const playerLocation = MoveManager.getLocationInTemplate(template, '@');
-        const destinationLocation = MoveManager.getLocationInTemplate(template, maxMoveNumber.toString());
-
-        // console.log("player location: " + playerLocation.x + ", " + playerLocation.y);
-        // console.log("destination location: " + destinationLocation.x + ", " + destinationLocation.y);
-
-        const moveVector = {x: (destinationLocation.x - playerLocation.x),
-                            y: (destinationLocation.y - playerLocation.y)};
-
-        const output: Point[] = [];
+        const output: Point[][] = [];
 
         for (let i = 0; i < 4; i++) {
-            const rotatedVector = {
-                x: moveVector.x * Math.cos((Math.PI/2 * i)) - moveVector.y * Math.sin((Math.PI/2 * i)),
-                y: moveVector.x * Math.sin((Math.PI/2 * i)) + moveVector.y * Math.cos((Math.PI/2 * i))
-            };
-            output.push(rotatedVector);
+            let thisRotation = [];
+            for (let step of stepsInMove) {
+                step = MoveManager.rotateVector(step, i);
+                thisRotation.push(step);
+            }
+
+            output.push(thisRotation);
         }
 
         return output;
     }
 
-    // public rotateTemplate(): string[][] {
-    //     return [][];
-    // }
+    // could do this ... better but it works.
+    static rotateVector(vector: Point, times: number): Point {
+        for (let i = 0; i < times; i++) {
+            vector = {x: vector.y, y: -vector.x};
+        }
+        return vector;
+    }
 
     static getLocationInTemplate(template:MoveTemplate, symbol:string): Point {
         for(let y = 0; y < template.length; y++) {
@@ -57,7 +58,26 @@ export class MoveManager {
         throw new Error(`No ${symbol} location found in template`);
     }
 
-    static getMaxDigitInTemplate(template:MoveTemplate) {
+    static getAllPointsInMove(template: MoveTemplate): Point[] {
+        const steps = MoveManager.getMaxDigitInTemplate(template);
+        const playerLocation = MoveManager.getLocationInTemplate(template, '@');
+
+        let points: Point[] = [];
+
+        for (let step = 1; step <= steps; step++) {
+            for (let y = 0; y < template.length; y++) {
+                for (let x = 0; x < template[y].length; x++) {
+                    if (template[y][x] === step.toString()) {
+                        points.push({ x: x-playerLocation.x, y: y - playerLocation.y});
+                    }
+                }
+            }
+        }
+
+        return points;
+    }
+
+    static getMaxDigitInTemplate(template:MoveTemplate) : number {
         let max = 0;
         for(let y = 0; y < template.length; y++) {
             for(let x = 0; x < template[y].length; x++) {
@@ -70,6 +90,7 @@ export class MoveManager {
         return max;
     }
 }
+
 
 type MoveTemplate = string[];
 
