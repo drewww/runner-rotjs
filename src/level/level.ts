@@ -152,6 +152,9 @@ export class Level implements Drawable {
                 bg = tile.bg;
             }
 
+            // TODO check in on the offset math here
+            // I think this might need xOffset and we're just getting lucky that it's 0 in the current
+            // UI design
             display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, fg, bg);
 
 
@@ -167,6 +170,17 @@ export class Level implements Drawable {
 
                     being.draw(display, this.x, this.y, bg);
                 }
+            }
+
+            // render destination moves
+            const selectedMoveOptions: Point[][] = this.player?.selectedMoveOptions ?? [];
+            
+            // should be length 0 or length 4
+            let i=1;
+            for (const selectedMove of selectedMoveOptions) {
+                const lastStep = selectedMove[selectedMove.length - 1];
+                display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, i.toString(), COLORS.WHITE, COLORS.MOVE_BLUE);
+                i++;
             }
         }
     }

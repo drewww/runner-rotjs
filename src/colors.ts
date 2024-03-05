@@ -17,4 +17,5 @@ export const COLORS = {
     HEALTH_RED: "#ff0000",
 
     MOVE_BLUE: "#4444ff",
+    MOVE_LIGHT_BLUE: "#8888ff",
 };

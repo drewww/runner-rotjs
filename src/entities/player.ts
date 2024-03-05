@@ -14,7 +14,7 @@ export class Player extends Being {
     } = {};
     
     public moves: Move[] = []; 
-    selectedMoveOptions: Point[][];
+    public selectedMoveOptions: Point[][];
 
     constructor() {
         // don't need to have a valid position for the player to make the object
@@ -141,7 +141,7 @@ export class Player extends Being {
                 const light: Light = {
                     p: {x: this.x + step.x, y: this.y + step.y},
                     intensity: 1,
-                    color: COLORS.MOVE_BLUE
+                    color: COLORS.MOVE_LIGHT_BLUE
                 };
                 lights.push(light);
             }

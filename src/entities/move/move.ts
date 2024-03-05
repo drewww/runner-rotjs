@@ -41,7 +41,7 @@ export class MoveManager {
     // could do this ... better but it works.
     static rotateVector(vector: Point, times: number): Point {
         for (let i = 0; i < times; i++) {
-            vector = {x: vector.y, y: -vector.x};
+            vector = {x: -vector.y, y: vector.x};
         }
         return vector;
     }
