@@ -41,6 +41,7 @@ export class GameScreen extends Screen {
     }
 
     handleEvent(e: KeyboardEvent): void {
+        var releaseLockAfterHandling = true;
 
         // this map operates with 0 being "up" and then rotates clockwise around from there.
         const keyMap: { [key: number]: number } = {};
@@ -79,7 +80,16 @@ export class GameScreen extends Screen {
             } else if (code in keyMap) {
                 // call select move again, but we need to pass the string version of the key character.
                 // this has gotten VERY stupid but we're going to see it through to finish up for the night.
-                this.level.player!.selectMove(String.fromCharCode(code));
+                const didMove = this.level.player!.selectMove(String.fromCharCode(code));
+
+                releaseLockAfterHandling = didMove;
+
+                // gross repetition here. should refactor this whole block eventually.
+                if(this.engine && releaseLockAfterHandling) {
+                    console.log("releasing lock");
+                    this.engine.unlock();
+                }
+    
                 return;
             }
         } 
@@ -109,9 +119,14 @@ export class GameScreen extends Screen {
 
             // TODO refactor this, it's a mess that we're passing in numbers as strings sometimes
             // and strings as strings others. Should be two methods, probably.
-            this.level.player!.selectMove((code - ROT.KEYS.VK_1).toString());
-            
             // if this is the same as a move already selected, it will execute it.
+
+            const didMove = this.level.player!.selectMove((code - ROT.KEYS.VK_1).toString());
+            
+            // if a move was executed, release the lock so it "counts" as a move and lets other
+            // entities act. otherwise, hold the lock because it was just a UI manipulation.            
+            releaseLockAfterHandling = didMove;
+
         } else if (code in keyMap) {
 
             var diff = ROT.DIRS[8][keyMap[code]];
@@ -121,6 +136,8 @@ export class GameScreen extends Screen {
 
         } else if (code == ROT.KEYS.VK_ESCAPE) {
             this.level.player!.deselectMoves();
+
+            releaseLockAfterHandling = false;
         }
 
         // this is async so ... start it and see what happens
@@ -147,9 +164,11 @@ export class GameScreen extends Screen {
             this.advanceDepth();
         }
 
-        if(this.engine) {
-            // window.removeEventListener("keydown", this);
+        if(this.engine && releaseLockAfterHandling) {
+            console.log("releasing lock");
             this.engine.unlock();
+        } else {
+            console.log("holding lock");
         }
 
         // moving refresh here seems to deal with the "first move" disappearing issue

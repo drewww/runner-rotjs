@@ -55,7 +55,7 @@ export class Player extends Being {
 
     // this method is overloaded in a way. it can receive numbers (if it's selecting a move index)
     // or it can receive letters (if it's selecting a move rotation) or it can receive numpad keys (TODO)
-    selectMove(symbol: string): void {
+    selectMove(symbol: string): boolean {
         const selectedMove = this.getSelectedMove();
 
         // if the player already has a move selected, then there are two options -- if they select a valid
@@ -73,7 +73,7 @@ export class Player extends Being {
             if(!selectedMoveOption) {
                 console.log ("Not a valid move option symbol. Resetting move selection.");
                 this.deselectMoves();
-                return;
+                return false;
             }
 
             // otherwise, if the key matches one oft he valid move options, execute the move.
@@ -99,6 +99,7 @@ export class Player extends Being {
             // TODO execute code here
             // then cancel moove
             this.deselectMoves();
+            return true;
         } else {
             this.deselectMoves();
             const index = parseInt(symbol);
@@ -108,6 +109,8 @@ export class Player extends Being {
 
             const moveResults = MoveManager.moveResults(this.level!, this.moves[index].template);   
             this.selectedMoveOptions = moveResults;
+            
+            return false;
         }
     }
 

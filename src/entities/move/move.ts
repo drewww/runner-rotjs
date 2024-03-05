@@ -93,14 +93,15 @@ export class MoveManager {
         // (consider a version of this that shows where the templates are failing... people
         // may find it weird not knowing what are the options. or it may be that we end up
         // showing all valid moves all at once, rather than having to pick the move style first.
+        var basePlayerLocation = MoveManager.getLocationInTemplate(template, '@');
 
         let output = [];
 
         const asymmetric = template[0].length > 1 &&
             (template[0].length % 2 == 0 ||
-            (template[0].length % 2 == 1 && playerLocation.x != Math.floor(template[0].length / 2)));
+            (template[0].length % 2 == 1 && basePlayerLocation.x != Math.floor(template[0].length / 2)));
 
-        console.log("ASYMMETRIC: " + asymmetric);
+        // console.log("ASYMMETRIC: " + asymmetric);
 
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
@@ -113,14 +114,14 @@ export class MoveManager {
             for (let flip = 0; flip < (asymmetric ? 2 : 1); flip++) {
                 var validFlip = true;
 
-                console.log(`Evaluating rotation: ${i} and flip: ${flip} (validRotation: false, validFlip: true)`);
+                // console.log(`Evaluating rotation: ${i} and flip: ${flip} (validRotation: false, validFlip: true)`);
 
                 if(flip===1) {
                     curTemplate = MoveManager.flipTemplate(template);
                 }
 
+                // console.log("template: " + curTemplate);
                 const playerLocation = MoveManager.getLocationInTemplate(curTemplate, '@');
-                console.log("template: " + curTemplate);
 
                 for (let y = 0; y < curTemplate.length; y++) {
                     for (let x = 0; x < curTemplate[y].length; x++) {
@@ -184,11 +185,11 @@ export class MoveManager {
                 // if both loops through are not valid, this will (false || false) || false = false
                 // if one of them is valid, this will be (false || true) || false = true
 
-                console.log(`validRotation: ${validRotation} validFlip: ${validFlip} NEW validRotation: ${validFlip || validRotation}`);
+                // console.log(`validRotation: ${validRotation} validFlip: ${validFlip} NEW validRotation: ${validFlip || validRotation}`);
                 validRotation = validFlip || validRotation;
             }
             if (validRotation) {
-                console.log("VALID ROTATION: " + i + " for template " + curTemplate + " on level " + level);
+                // console.log("VALID ROTATION: " + i + " for template " + curTemplate + " on level " + level);
                 output.push(i);
             }
         }
