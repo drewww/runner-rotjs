@@ -49,6 +49,16 @@ export class Player extends Being {
         }
     }
 
+    move(dX: number, dY: number): boolean {
+        const superDidMove = super.move(dX, dY);
+
+        if(superDidMove) {
+            this.fireListeners("move");
+        }
+
+        return superDidMove;
+    }
+
     getSelectedMove(): Move | undefined {
         return this.moves.find(move => move.selected);
     }
@@ -94,6 +104,7 @@ export class Player extends Being {
                     move = {x: selectedMoveOption.moves[i].x - selectedMoveOption.moves[i-1].x, y: selectedMoveOption.moves[i].y - selectedMoveOption.moves[i-1].y};
                 }
                 this.move(move.x, move.y);
+
             }
 
             // TODO execute code here
