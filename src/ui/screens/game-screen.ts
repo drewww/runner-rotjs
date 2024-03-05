@@ -65,6 +65,26 @@ export class GameScreen extends Screen {
         var code = e.keyCode;
         console.log("CODE: " + code);
         
+
+        // first, short circuit other detection. if we have a move selected, there are different options.
+        if(this.player?.getSelectedMove()) {
+            if(e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
+                this.level.player!.deselectMoves();
+                return;
+
+            } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9) {
+                // this behavior is the same regardless of mode, actually. So, skip it here. next block will catch it
+                // and handle it correctly.
+                                
+            } else if (code in keyMap) {
+                // call select move again, but we need to pass the string version of the key character.
+                // this has gotten VERY stupid but we're going to see it through to finish up for the night.
+                this.level.player!.selectMove(String.fromCharCode(code));
+                return;
+            }
+        } 
+
+
         if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
@@ -84,18 +104,21 @@ export class GameScreen extends Screen {
                     }
                 }
             }
+        } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9){
+            console.log("move key pressed");
+
+            // TODO refactor this, it's a mess that we're passing in numbers as strings sometimes
+            // and strings as strings others. Should be two methods, probably.
+            this.level.player!.selectMove((code - ROT.KEYS.VK_1).toString());
+            
+            // if this is the same as a move already selected, it will execute it.
         } else if (code in keyMap) {
 
             var diff = ROT.DIRS[8][keyMap[code]];
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
             this.level.player!.move(diff[0], diff[1]);  
             this.level.player!.deselectMoves();
-            
-        } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9){
-            console.log("move key pressed");
-            this.level.player!.selectMove(code - ROT.KEYS.VK_1);
-            
-            // if this is the same as a move already selected, it will execute it.
+
         } else if (code == ROT.KEYS.VK_ESCAPE) {
             this.level.player!.deselectMoves();
         }

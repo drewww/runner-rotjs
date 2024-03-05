@@ -8,10 +8,15 @@ export type Move = {
     selected: boolean;
 }
 
+export type MoveOption = {
+    symbol: string,
+    moves: Point[]
+}
+
 export class MoveManager {
 
 
-    public static moveResults(level: Level, template: MoveTemplate): Point[][] {
+    public static moveResults(level: Level, template: MoveTemplate): MoveOption[] {
         // this method will a list of points that this moveTemplate would
         // move the player to. expressed in player-relative vector locations.
 
@@ -22,7 +27,11 @@ export class MoveManager {
         const stepsInMove: Point[] = MoveManager.getAllPointsInMoves(template);
         const validRotations: number[] = MoveManager.getValidRotationsForTemplate(level, template);
 
-        const output: Point[][] = [];
+        const output: MoveOption[] = [];
+
+        // TODO swap between keypad and keyboard symbols dynamically based
+        // on what player used last. For now, just use keyboard.
+        const symbol_map = ["W", "D", "X", "A"];
 
         for (let i of validRotations) {
             let thisRotation = [];
@@ -31,7 +40,7 @@ export class MoveManager {
                 thisRotation.push(step);
             }
 
-            output.push(thisRotation);
+            output.push({symbol: symbol_map[i], moves:thisRotation});
         }
 
         return output;

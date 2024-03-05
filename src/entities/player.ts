@@ -2,7 +2,7 @@
 import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
-import { JUMP, LONG_WALL_JUMP, Move, MoveManager, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
+import { JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
 import { Light, Point } from '../index.ts';
 
 export class Player extends Being {
@@ -16,7 +16,7 @@ export class Player extends Being {
     public moves: Move[] = []; 
 
     // this is relative to the players location
-    public selectedMoveOptions: Point[][];
+    public selectedMoveOptions: MoveOption[];
 
     constructor() {
         // don't need to have a valid position for the player to make the object
@@ -53,19 +53,30 @@ export class Player extends Being {
         return this.moves.find(move => move.selected);
     }
 
-    selectMove(index: number): void {
+    // this method is overloaded in a way. it can receive numbers (if it's selecting a move index)
+    // or it can receive letters (if it's selecting a move rotation) or it can receive numpad keys (TODO)
+    selectMove(symbol: string): void {
         const selectedMove = this.getSelectedMove();
 
+        // if the player already has a move selected, then there are two options -- if they select a valid
+        // directional symbol, execute the move. if they select anything else, abort the move.
         if(selectedMove) {
             // we're double-using the numbers here. there's move selection number,
             // then rotation number. 
-            console.log("move confirmed: " + selectedMove.name);
-            console.log("with rotation: " + index);
+            console.log("trying to move: " + selectedMove.name + "with rotation: " + symbol);
 
             // eventually I will need to select a move VARIANT which will be numbered as well. for now,
             // we're just going to accept the move as is.
 
-            const selectedMoveSteps = this.selectedMoveOptions[index];
+            const selectedMoveOption = this.selectedMoveOptions.find(move => move.symbol == symbol);
+
+            if(!selectedMoveOption) {
+                console.log ("Not a valid move option symbol. Resetting move selection.");
+                this.deselectMoves();
+                return;
+            }
+
+            // otherwise, if the key matches one oft he valid move options, execute the move.
 
             // step through the moves
             // the trick here is that in multi step moves, what's stored in selectedMoveSteps
@@ -77,11 +88,10 @@ export class Player extends Being {
             // that should get recomputed to be [(1,0), (2,0)]
             // because after the first move completes, the correct RELATIVE move is only two more steps. not three.
             
-            
-            for(let i = 0; i < selectedMoveSteps.length; i++) {
-                let move = selectedMoveSteps[i];
+            for(let i = 0; i < selectedMoveOption.moves.length; i++) {
+                let move = selectedMoveOption.moves[i];
                 if(i>0) {
-                    move = {x: selectedMoveSteps[i].x - selectedMoveSteps[i-1].x, y: selectedMoveSteps[i].y - selectedMoveSteps[i-1].y};
+                    move = {x: selectedMoveOption.moves[i].x - selectedMoveOption.moves[i-1].x, y: selectedMoveOption.moves[i].y - selectedMoveOption.moves[i-1].y};
                 }
                 this.move(move.x, move.y);
             }
@@ -91,6 +101,8 @@ export class Player extends Being {
             this.deselectMoves();
         } else {
             this.deselectMoves();
+            const index = parseInt(symbol);
+
             this.moves[index].selected = true;
             console.log("move selected: " + this.moves[index].name);
 
@@ -151,10 +163,10 @@ export class Player extends Being {
     getLight(): Light[] {
         // iterate through the selectedMoveResults list, and make a light for each.
         const lights: Light[] = [];
-        this.selectedMoveOptions.forEach(rotation => {
+        this.selectedMoveOptions.forEach(option => {
 
             // TODO make last step brighter
-            for (let step of rotation) {
+            for (let step of option.moves) {
                 const light: Light = {
                     p: {x: this.x + step.x, y: this.y + step.y},
                     intensity: 1,

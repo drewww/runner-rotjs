@@ -10,6 +10,7 @@ import { Door } from './door';
 import { GameMap } from './game-map';
 import { PatrolBot } from '../entities/patrol-bot';
 import { Color } from 'rot-js/lib/color';
+import { MoveOption } from '../entities/move/move';
 
 export class Level implements Drawable {
     public map: GameMap;
@@ -173,13 +174,13 @@ export class Level implements Drawable {
             }
 
             // render destination moves
-            const selectedMoveOptions: Point[][] = this.player?.selectedMoveOptions ?? [];
+            const selectedMoveOptions: MoveOption[] = this.player?.selectedMoveOptions ?? [];
             
             // should be length 0 or length 4
             let i=1;
             for (const selectedMove of selectedMoveOptions) {
-                const lastStep = selectedMove[selectedMove.length - 1];
-                display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, i.toString(), COLORS.WHITE, COLORS.MOVE_BLUE);
+                const lastStep = selectedMove.moves[selectedMove.moves.length - 1];
+                display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, selectedMove.symbol, COLORS.WHITE, COLORS.MOVE_BLUE);
                 i++;
             }
         }
