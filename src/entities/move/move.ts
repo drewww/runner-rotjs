@@ -95,7 +95,6 @@ export class MoveManager {
         // showing all valid moves all at once, rather than having to pick the move style first.
 
         let output = [];
-        const playerLocation = MoveManager.getLocationInTemplate(template, '@');
 
         const asymmetric = template[0].length > 1 &&
             (template[0].length % 2 == 0 ||
@@ -106,6 +105,7 @@ export class MoveManager {
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
             var validRotation = false;
+            var curTemplate: MoveTemplate = template;
 
             // for a given rotation, if it is asymmetric, then test the flip.
             // asymmetric means -- there is greater than one column AND
@@ -116,12 +116,15 @@ export class MoveManager {
                 console.log(`Evaluating rotation: ${i} and flip: ${flip} (validRotation: false, validFlip: true)`);
 
                 if(flip===1) {
-                    template = MoveManager.flipTemplate(template);
+                    curTemplate = MoveManager.flipTemplate(template);
                 }
 
-                for (let y = 0; y < template.length; y++) {
-                    for (let x = 0; x < template[y].length; x++) {
-                        const symbol = template[y][x];
+                const playerLocation = MoveManager.getLocationInTemplate(curTemplate, '@');
+                console.log("template: " + curTemplate);
+
+                for (let y = 0; y < curTemplate.length; y++) {
+                    for (let x = 0; x < curTemplate[y].length; x++) {
+                        const symbol = curTemplate[y][x];
 
                         // so, get the symbol from the "normal" template. but rotate the vector
                         // when you go to get it out of the level.map object. so calculate the player-relative
@@ -185,7 +188,7 @@ export class MoveManager {
                 validRotation = validFlip || validRotation;
             }
             if (validRotation) {
-                console.log("VALID ROTATION: " + i + " for template " + template + " on level " + level);
+                console.log("VALID ROTATION: " + i + " for template " + curTemplate + " on level " + level);
                 output.push(i);
             }
         }
@@ -207,8 +210,15 @@ export class MoveManager {
     }
 
     static flipTemplate(template: MoveTemplate): MoveTemplate {
-        // 
-        return template;
+        const flippedTemplate: MoveTemplate = [];
+
+        for (let y = 0; y < template.length; y++) {
+            const row = template[y];
+            const flippedRow = row.split('').reverse().join('');
+            flippedTemplate.push(flippedRow);
+        }
+
+        return flippedTemplate;
     }
 }
 
