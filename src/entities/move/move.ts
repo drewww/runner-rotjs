@@ -40,7 +40,7 @@ export class MoveManager {
                 thisRotation.push(step);
             }
 
-            output.push({symbol: symbol_map[i], moves:thisRotation});
+            output.push({ symbol: symbol_map[i], moves: thisRotation });
         }
 
         return output;
@@ -97,74 +97,92 @@ export class MoveManager {
         let output = [];
         const playerLocation = MoveManager.getLocationInTemplate(template, '@');
 
+        const asymmetric = template[0].length > 1 &&
+            (template[0].length % 2 == 0 ||
+            (template[0].length % 2 == 1 && playerLocation.x != Math.floor(template[0].length / 2)));
+    console.log("ASYMMETRIC: " + asymmetric);
 
         // so, for each rotation check every template square against the world and its constraint. 
-        for(let i = 0; i < 4; i++) {
-            let valid = true;            
+        for (let i = 0; i < 4; i++) {
+            let validRotation = false;
 
-            for (let y = 0; y < template.length; y++) {
-                for (let x = 0; x < template[y].length; x++) {
-                    const symbol = template[y][x];
+            // for a given rotation, if it is asymmetric, then test the flip.
+            // asymmetric means -- there is greater than one column AND
+            //    (column count is even OR column count is odd and player is not in the "center" column)
+            for (let flip = 0; flip < (asymmetric ? 2 : 1); flip++) {
+                let validFlip = true;
 
-                    // so, get the symbol from the "normal" template. but rotate the vector
-                    // when you go to get it out of the level.map object. so calculate the player-relative
-                    // vector first (that's the x-playerLocation.x part) and then rotate normally around 0,0.
-                    // the vector that comes out will be player relative still.
-                    const vectorToTile = MoveManager.rotateVector({x:x-playerLocation.x, y:y-playerLocation.y}, i);
-
-                    // the template x/y coordinates need to be transformed to be player-relative
-                    // in other words, find the @ symbol in the template and make sure we are getting
-                    // a vector back that is the player to the current tile, not the absolute location
-                    // in the template vectors.
-                    const tile = level.map.getTile(vectorToTile.x + level.player!.x,
-                                                   (vectorToTile.y) + level.player!.y);
-
-                    // we may not get a valid tile back from the map, in which case the move is touching
-                    // an out of bound space and is invalid.
-                    if(!tile) {
-                        valid = false;
-                        break;
-                    }
-
-                    switch(symbol) {
-                        case '@':
-                        case '*':
-                            // any tile is valid here
-                            continue;
-                        case '1':   // these are all the numbered move tiles that the player
-                        case '2':   // will "touch" as they move to the highest number, which
-                        case '3':   // is the destination.
-                        case '4':
-                        case '5':
-                        case '6':
-                        case '7':
-                        case '8':
-                        case '9':
-                        case '0':   // this is the symbol for moving "through" but not counting
-                                    // as a move step. the i-frames essentially. but you can't phase
-                                    // through a wall.
-                            
-                            // check that it's passable
-                            if(!tile.solid) { continue; }
-                            else { valid = false; break;}
-
-                        case 'W':
-                            // must be a wall or other impassable tile
-                            // notably we are not asking the level to check against
-                            // the "passable" checker, which also looks at beings. 
-                            // you can't jump off a bot currently. but you could!
-                            if(tile.solid) { continue; }
-                            else { valid = false; break; }
-                    }
-
-                    console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
+                if(flip===1) {
+                    template = MoveManager.flipTemplate(template);
                 }
-           }
 
-           if(valid) {
-            console.log("VALID ROTATION: " + i + " for template " + template + " on level " + level);
-            output.push(i);
-           }
+                for (let y = 0; y < template.length; y++) {
+                    for (let x = 0; x < template[y].length; x++) {
+                        const symbol = template[y][x];
+
+                        // so, get the symbol from the "normal" template. but rotate the vector
+                        // when you go to get it out of the level.map object. so calculate the player-relative
+                        // vector first (that's the x-playerLocation.x part) and then rotate normally around 0,0.
+                        // the vector that comes out will be player relative still.
+                        const vectorToTile = MoveManager.rotateVector({ x: x - playerLocation.x, y: y - playerLocation.y }, i);
+
+                        // the template x/y coordinates need to be transformed to be player-relative
+                        // in other words, find the @ symbol in the template and make sure we are getting
+                        // a vector back that is the player to the current tile, not the absolute location
+                        // in the template vectors.
+                        const tile = level.map.getTile(vectorToTile.x + level.player!.x,
+                            (vectorToTile.y) + level.player!.y);
+
+                        // we may not get a valid tile back from the map, in which case the move is touching
+                        // an out of bound space and is invalid.
+                        if (!tile) {
+                            validFlip = false;
+                            break;
+                        }
+
+                        switch (symbol) {
+                            case '@':
+                            case '*':
+                                // any tile is valid here
+                                break;
+                            case '1':   // these are all the numbered move tiles that the player
+                            case '2':   // will "touch" as they move to the highest number, which
+                            case '3':   // is the destination.
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                            case '0':   // this is the symbol for moving "through" but not counting
+                                // as a move step. the i-frames essentially. but you can't phase
+                                // through a wall.
+
+                                // check that it's passable
+                                if (!tile.solid) { break; }
+                                else { validFlip = false; break; }
+
+                            case 'W':
+                                // must be a wall or other impassable tile
+                                // notably we are not asking the level to check against
+                                // the "passable" checker, which also looks at beings. 
+                                // you can't jump off a bot currently. but you could!
+                                if (tile.solid) { break; }
+                                else { validFlip = false; break; }
+                        }
+
+                        // console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
+                        // if both loops through are not valid, this will (false || false) || false = false
+                        // if one of them is valid, this will be (false || true) || false = true
+                        console.log(`flip ${flip} valid: ${validFlip}`);
+                        validRotation = validFlip || validRotation;
+                    }
+                }
+            }
+            if (validRotation) {
+                console.log("VALID ROTATION: " + i + " for template " + template + " on level " + level);
+                output.push(i);
+            }
         }
 
         return output;
@@ -181,6 +199,11 @@ export class MoveManager {
         }
 
         return max;
+    }
+
+    static flipTemplate(template: MoveTemplate): MoveTemplate {
+        // 
+        return template;
     }
 }
 
@@ -219,6 +242,7 @@ export const LONG_WALL_JUMP: MoveTemplate = [
 ]
 
 export const RUNNING_JUMP: MoveTemplate = [
+    '0',
     '3',
     '0',
     '0',

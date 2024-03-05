@@ -23,10 +23,10 @@ export class Player extends Being {
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
 
         this.moves.push({name: "(1) Jump", template:JUMP, cooldown: 0, selected:false});
-        this.moves.push({name: "(2) Wall run", template:WALL_RUN_R, cooldown: 0, selected:false});
-        this.moves.push({name: "(3) Long wall jump", template:LONG_WALL_JUMP, cooldown: 0, selected:false});
-        this.moves.push({name: "(4) Running jump", template:RUNNING_JUMP, cooldown: 0, selected:false})
-    
+        this.moves.push({name: "(2) Wall Run", template:WALL_RUN_R, cooldown: 0, selected:false});
+        this.moves.push({name: "(3) Wall Jump", template:LONG_WALL_JUMP, cooldown: 0, selected:false});
+        this.moves.push({name: "(4) Running Jump", template:RUNNING_JUMP, cooldown: 0, selected:false})
+
         this.selectedMoveOptions = [];
     }
 
