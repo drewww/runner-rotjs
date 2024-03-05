@@ -3,7 +3,7 @@ import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
 import { JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
-import { Light, Point } from '../index.ts';
+import { Light } from '../index.ts';
 
 export class Player extends Being {
     public health: number = 10;

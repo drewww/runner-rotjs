@@ -220,8 +220,8 @@ export const LONG_WALL_JUMP: MoveTemplate = [
 
 export const RUNNING_JUMP: MoveTemplate = [
     '3',
-    '*',
-    '*',
+    '0',
+    '0',
     '2',
     '1',
     '@'
