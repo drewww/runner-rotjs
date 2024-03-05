@@ -100,17 +100,20 @@ export class MoveManager {
         const asymmetric = template[0].length > 1 &&
             (template[0].length % 2 == 0 ||
             (template[0].length % 2 == 1 && playerLocation.x != Math.floor(template[0].length / 2)));
-    console.log("ASYMMETRIC: " + asymmetric);
+
+        console.log("ASYMMETRIC: " + asymmetric);
 
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
-            let validRotation = false;
+            var validRotation = false;
 
             // for a given rotation, if it is asymmetric, then test the flip.
             // asymmetric means -- there is greater than one column AND
             //    (column count is even OR column count is odd and player is not in the "center" column)
             for (let flip = 0; flip < (asymmetric ? 2 : 1); flip++) {
-                let validFlip = true;
+                var validFlip = true;
+
+                console.log(`Evaluating rotation: ${i} and flip: ${flip} (validRotation: false, validFlip: true)`);
 
                 if(flip===1) {
                     template = MoveManager.flipTemplate(template);
@@ -171,12 +174,13 @@ export class MoveManager {
                                 else { validFlip = false; break; }
                         }
 
-                        // console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
-                        // if both loops through are not valid, this will (false || false) || false = false
-                        // if one of them is valid, this will be (false || true) || false = true
-                        console.log(`flip ${flip} valid: ${validFlip}`);
-                        validRotation = validFlip || validRotation;
                     }
+                    // console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
+                    // if both loops through are not valid, this will (false || false) || false = false
+                    // if one of them is valid, this will be (false || true) || false = true
+
+                    console.log(`validRotation: ${validRotation} valid: ${validFlip} NEW validRotation: ${validFlip || validRotation}`);
+                    validRotation = validFlip || validRotation;
                 }
             }
             if (validRotation) {
