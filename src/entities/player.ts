@@ -14,6 +14,8 @@ export class Player extends Being {
     } = {};
     
     public moves: Move[] = []; 
+
+    // this is relative to the players location
     public selectedMoveOptions: Point[][];
 
     constructor() {
@@ -66,8 +68,22 @@ export class Player extends Being {
             const selectedMoveSteps = this.selectedMoveOptions[index];
 
             // step through the moves
+            // the trick here is that in multi step moves, what's stored in selectedMoveSteps
+            // is relative to the ORIGINAL location. Not the "latest" location.
+            // so lets say you have the following steps:
+            // (1,0)
+            // (3,0)
+            //
+            // that should get recomputed to be [(1,0), (2,0)]
+            // because after the first move completes, the correct RELATIVE move is only two more steps. not three.
+            
+            
             for(let i = 0; i < selectedMoveSteps.length; i++) {
-                this.move(selectedMoveSteps[i].x, selectedMoveSteps[i].y);
+                let move = selectedMoveSteps[i];
+                if(i>0) {
+                    move = {x: selectedMoveSteps[i].x - selectedMoveSteps[i-1].x, y: selectedMoveSteps[i].y - selectedMoveSteps[i-1].y};
+                }
+                this.move(move.x, move.y);
             }
 
             // TODO execute code here
