@@ -175,13 +175,14 @@ export class MoveManager {
                         }
 
                     }
-                    // console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
-                    // if both loops through are not valid, this will (false || false) || false = false
-                    // if one of them is valid, this will be (false || true) || false = true
-
-                    console.log(`validRotation: ${validRotation} valid: ${validFlip} NEW validRotation: ${validFlip || validRotation}`);
-                    validRotation = validFlip || validRotation;
+                   
                 }
+                // console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
+                // if both loops through are not valid, this will (false || false) || false = false
+                // if one of them is valid, this will be (false || true) || false = true
+
+                console.log(`validRotation: ${validRotation} validFlip: ${validFlip} NEW validRotation: ${validFlip || validRotation}`);
+                validRotation = validFlip || validRotation;
             }
             if (validRotation) {
                 console.log("VALID ROTATION: " + i + " for template " + template + " on level " + level);
