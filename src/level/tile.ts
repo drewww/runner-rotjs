@@ -3,13 +3,13 @@ import { Player } from "../entities/player";
 
 
 export const TILE_TYPES = {
-    "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false},
-    "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
-    "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false},
-    "BUTTON": {symbol: "b", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
-    "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
-    "FORCE_FIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true},
-    "BOUNDARY": {symbol: "X", fg: COLORS.WHITE, bg: COLORS.WHITE, opaque: true, solid: true},
+    "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
+    "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
+    "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
+    "BUTTON": {symbol: "b", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
+    "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
+    "FORCE_FIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},
+    "BOUNDARY": {symbol: "X", fg: COLORS.WHITE, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: true},
 }
 
 export interface Interactable {
@@ -28,6 +28,7 @@ export class Tile {
 
     public visible:boolean;
     public discovered:boolean;
+    public indestructable: boolean;
 
     constructor(x:number, y:number, type:string) {
         this.x = x;
