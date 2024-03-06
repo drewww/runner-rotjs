@@ -86,7 +86,10 @@ export class GameMap {
     getAllTiles(): Tile[] {
         return this.tiles;
     }
-
+    
+    getBeings(): Being[] {
+        return this.beings;
+    }
 
     getFreePoints(): Point[] {
         return this.getFreeTiles().map(tile => ({x: tile.x, y: tile.y}));

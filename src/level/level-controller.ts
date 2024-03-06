@@ -82,6 +82,10 @@ export class LevelController implements Drawable {
                     tile.discovered = true;
                 });
 
+                this.map.getBeings().forEach(being => {
+                    this.addBeing(being);
+                });
+
                 break;
             case LevelType.RANDOM:
                 this.map = new GameMap(this.w, this.h);
@@ -175,9 +179,14 @@ export class LevelController implements Drawable {
 
 
             for (let being of this.beings) {
+                // ah this is failing sometimes when beings get created OUTSIDE the boundaries.
                 const t = this.map.getTile(being.x, being.y);
 
-                if (t.visible) {
+                if(!t) {
+                    console.error("being at invalid location", being.x, being.y, being);
+                }
+
+                if (t && t.visible) {
                     let bg = COLORS.BLACK;
                     const key = `${being.x},${being.y}`;
                     if (key in lightMap) {
