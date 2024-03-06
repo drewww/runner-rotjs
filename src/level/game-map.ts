@@ -152,9 +152,10 @@ export class GameMap {
         let count = 0;
         while (!placed && count < 20) {
             const randomIndex = Math.floor(Math.random() * freeCells.length);
+            const rotation = Math.floor(Math.random() * 4);
 
-            if(this.templateFitsAtPoint(template, freeCells[randomIndex])) {
-                this.placeTemplateAtPoint(template, freeCells[randomIndex]);
+            if(this.templateFitsAtPoint(template, freeCells[randomIndex], rotation)) {
+                this.placeTemplateAtPoint(template, freeCells[randomIndex], rotation);
                 placed = true;
             }
 
@@ -164,11 +165,8 @@ export class GameMap {
         console.log("finishing place: " + placed + " " + count);
     }
 
-    protected placeTemplateAtPoint(template: MapTemplate, point: {x: number, y: number}): void {
+    protected placeTemplateAtPoint(template: MapTemplate, point: {x: number, y: number}, rotation: number): void {
         const dimensions = this.getTemplateDimensions(template);
-
-        // pick a random rotation to test
-        const rotation = Math.floor(Math.random() * 4);
 
         for (let y = 0; y < dimensions.h; y++) {
             for (let x = 0; x < dimensions.w; x++) {
@@ -207,13 +205,36 @@ export class GameMap {
         }
     }
 
-    protected templateFitsAtPoint(template: MapTemplate, point: {x: number, y: number}, rotation: number = 0): boolean {
+    protected templateFitsAtPoint(template: MapTemplate, point: {x: number, y: number}, rotation: number = -1): boolean {
         const dimensions = this.getTemplateDimensions(template);
+
+        console.log("--------------------");
+
+        for (let y = -2; y < dimensions.h+4; y++) {
+            var mapRow = [];
+            for (let x = -2; x < dimensions.w+4; x++) {
+                const rotatedPoint = rotateVector({x, y}, 0);
+
+                if(x==0 && y==0) {
+                    mapRow.push("X");
+                    continue;
+                }
+                const t = this.getTile(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
+                
+                if(t) {
+                    mapRow.push(t.symbol);
+                }
+            }
+            console.log(mapRow.join(""));
+        }
+
+
         
         // check if the template fits at the point
         for (let y = 0; y < dimensions.h; y++) {
             for (let x = 0; x < dimensions.w; x++) {
                 const rotatedPoint = rotateVector({x, y}, rotation);
+
                 const levelTile = this.getTile(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
 
                 // make sure none of the space the template might take up is solid. 
