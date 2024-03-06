@@ -7,7 +7,7 @@ export class MoveMenuScreen extends Screen {
     player: Player;
 
     constructor (x:number, y:number, player:Player) {
-        super(0,0); // passing 0,0 knowing that setPlayer will figure out the right values
+        super(x,y); // passing 0,0 knowing that setPlayer will figure out the right values
         this.player = player;
         this.setPlayer(player);
 
@@ -48,9 +48,9 @@ export class MoveMenuScreen extends Screen {
 
         const moves = player.moves;
         const names = moves.map(move => move.name);
-        const maxLength = Math.max(...names.map(name => name.length));
+        // const maxLength = Math.max(...names.map(name => name.length));
 
-        this.width = maxLength+2;
-        this.height = moves.length+2;
+        // this.width = maxLength+2;
+        // this.height = moves.length+2;
     }
 }

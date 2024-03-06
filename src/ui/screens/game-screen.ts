@@ -7,6 +7,8 @@ import { Interactable } from "../../level/tile";
 import { Screen } from "../screen";
 import { MoveMenuScreen } from './move-menu-screen';
 
+const RIGHT_MENU_WIDTH: number= 20;
+
 export class GameScreen extends Screen {
     public level: Level;
 
@@ -24,7 +26,7 @@ export class GameScreen extends Screen {
         this.game = game;
 
         // careful, the height here relates to the screen height.
-        this.level = new Level(LevelType.DEBUG, 80, this.height-1);
+        this.level = new Level(LevelType.DEBUG, 80-RIGHT_MENU_WIDTH, this.height);
         this.level.x = 0;
         this.level.y = 0;
         this.x = 0;
@@ -218,7 +220,7 @@ export class GameScreen extends Screen {
         this.level.setPlayer(player);   
         
         if(!this.statusBar) {
-            this.statusBar = new StatusBar(0, this.height - 1, this.width, 1, player!);
+            this.statusBar = new StatusBar(this.width-RIGHT_MENU_WIDTH, this.height - 1, RIGHT_MENU_WIDTH, 1, player!);
             this.elements!.push(this.statusBar);
         } else {
             this.statusBar.player = player;
@@ -226,8 +228,11 @@ export class GameScreen extends Screen {
 
         if(!this.moveMenu) {
             this.moveMenu = new MoveMenuScreen(0, 0, player);
-            this.moveMenu.x = this.width - this.moveMenu.width;
-            this.moveMenu.y = this.height - this.moveMenu.height;
+            
+            this.moveMenu.x = this.width - RIGHT_MENU_WIDTH;
+            this.moveMenu.y = 0;
+            this.moveMenu.width = RIGHT_MENU_WIDTH;
+            this.moveMenu.height = this.height - 1;
             this.elements!.push(this.moveMenu);
         } else {
             this.moveMenu.setPlayer(player);
