@@ -3,7 +3,7 @@ import * as ROT from 'rot-js';
 import { Screen } from './ui/screen';
 import { KillScreen } from './ui/screens/kill-screen';
 import { WinScreen } from './ui/screens/win-screen';
-import { GameState, IGame } from '.';
+import { GameState, IGame, SCREEN_HEIGHT, SCREEN_WIDTH } from '.';
 import { Player } from './entities/player';
 import { GameScreen } from './ui/screens/game-screen';
 import { TitleScreen } from './ui/screens/title-screen';
@@ -13,8 +13,8 @@ export class Game implements IGame {
 
     private screen: Screen = null as any;
 
-    private w: number = 80;
-    private h: number = 24;
+    private w: number = SCREEN_WIDTH;
+    private h: number = SCREEN_HEIGHT;
 
     player: Player | null = null;
 

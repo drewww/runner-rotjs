@@ -1,6 +1,5 @@
 import { COLORS } from "../../colors";
 import { Player } from "../../entities/player";
-import { TextBox } from "../elements/text-box";
 import { Screen } from "../screen";
 
 export class MoveMenuScreen extends Screen {

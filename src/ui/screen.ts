@@ -3,22 +3,22 @@
 // and end-game summary screen, or the main game screen itself. The game object orchestrates
 // which screen is presented at any given moment.
 
-import { Drawable } from "..";
+import { Drawable, SCREEN_HEIGHT, SCREEN_WIDTH } from "..";
 import * as ROT from 'rot-js'; // Import the 'rot-js' module
 import { COLORS } from "../colors";
 
 export abstract class Screen implements Drawable {
     protected elements: Drawable[];
 
-    protected width: number=80;
-    protected height: number=24;
+    protected width: number=SCREEN_WIDTH;
+    protected height: number=SCREEN_HEIGHT;
 
     public x: number = 0;
     public y: number = 0;
 
     public disabled: boolean = false;
 
-    constructor(width: number = 80, height: number = 24) {
+    constructor(width: number = SCREEN_WIDTH, height: number = SCREEN_HEIGHT) {
         this.elements = [];
         this.width = width;
         this.height = height;

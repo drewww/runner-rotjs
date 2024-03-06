@@ -1,6 +1,6 @@
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../elements/status-bar";
-import { IGame, GameState, LevelType } from "../..";
+import { IGame, GameState, LevelType, SCREEN_HEIGHT, SCREEN_WIDTH } from "../..";
 import { Player } from "../../entities/player";
 import { Level } from "../../level/level";
 import { Interactable } from "../../level/tile";
@@ -26,9 +26,9 @@ export class GameScreen extends Screen {
         this.game = game;
 
         // careful, the height here relates to the screen height.
-        this.level = new Level(LevelType.DEBUG, 80-RIGHT_MENU_WIDTH, this.height);
-        this.level.x = 0;
-        this.level.y = 0;
+        this.level = new Level(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2);
+        this.level.x = 1;
+        this.level.y = 1;
         this.x = 0;
         this.y = 0;
         // this sets the render order, be careful.

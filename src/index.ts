@@ -1,5 +1,8 @@
 import * as ROT from 'rot-js'; // Import the 'ROT' namespace
 
+export const SCREEN_WIDTH: number = 140;
+export const SCREEN_HEIGHT: number = 36;
+
 export type Point = {
     x:number,
     y:number
