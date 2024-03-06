@@ -147,13 +147,6 @@ export class GameScreen extends Screen {
         // 1. in enemy vision? take damage
         // 2. on the exit? win
 
-        // check if the player is in the view areas of any enemies
-        // this is a terrible stupid way to do this but it works for now
-        const getEnemyVisiblePoints = this.level.getEnemyVisiblePoints();
-        const pos = this.level.player!.getPosition();
-        const posString = `${pos.x},${pos.y}`;
-
-       
         //-------------------//
         const curTile = this.level.map.getTile(this.level.player!.x, this.level.player!.y);
         
