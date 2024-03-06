@@ -5,7 +5,8 @@ import { Player } from "../entities/player";
 export const TILE_TYPES = {
     "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
     "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
-    "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
+    "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: true},
+    "ENTRANCE": {symbol: "%", fg: COLORS.DARK_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: true},
     "BUTTON": {symbol: "○", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "FORCEFIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},

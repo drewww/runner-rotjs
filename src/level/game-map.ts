@@ -131,9 +131,9 @@ export class GameMap {
         name: "ENTRANCE",
         template: [
             "WWW",
-            "W@W",
-            "W#W",
             "W%W",
+            "W#W",
+            "W@W",
             "   "
         ]
     }
@@ -194,7 +194,8 @@ export class GameMap {
                         newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "EXIT");
                         break;
                     case "@":
-                        // skip this?? 
+                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "ENTRANCE");
+                        newTile.procGenType = "ENTRANCE";
                         break;
                     default:
                         console.error("unrecognized template tile: " + templateTile);

@@ -114,7 +114,8 @@ export class BSPGameMap extends GameMap {
 
 
         // TODO: add exit template
-        this.addTemplate(GameMap.EXIT, -1, true); // Use the 'Template' module to add the exit template
+        this.addTemplate(GameMap.EXIT, -1, true);
+        this.addTemplate(GameMap.ENTRANCE, -1, true);
 
         // TODO: add enemies (happens one level up??)
     }

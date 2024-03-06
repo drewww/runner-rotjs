@@ -324,6 +324,14 @@ export class LevelController implements Drawable {
     public setPlayer(player: Player): void {
         this.player = player;
         this.player.setLevel(this);
+
+        // look for if the level has an entrance. if it does, move the player there.
+        const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
+        if (entranceTiles.length > 0) {
+            const entrance = entranceTiles[Math.floor(Math.random() * entranceTiles.length)];
+            player.setPosition({x: entrance.x, y: entrance.y});
+        }        
+
         this.scheduler.add(player, true);
         this.beings.push(player);
     }
