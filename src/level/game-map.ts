@@ -1,6 +1,7 @@
 import * as ROT from 'rot-js';
 import { Tile } from './tile';
 import { Point } from '..';
+import { Being } from '../entities/being';
 
 export class GameMap {
     
@@ -8,8 +9,14 @@ export class GameMap {
     // going to try to do this as 1d array with a fixed width, since 2d arrays
     // in js seem kinda janky.
     protected tiles:Tile[] = [];
+    protected beings:Being[] = [];
 
     constructor(protected w:number, protected h:number) {
+        this.w = w;
+        this.h = h;
+
+        this.tiles = [];
+        this.beings = [];
     }
 
     fillMapWithWalls(): void {
@@ -84,4 +91,15 @@ export class GameMap {
     getFreePoints(): Point[] {
         return this.getFreeTiles().map(tile => ({x: tile.x, y: tile.y}));
     } 
+
+    resetPlayerVisibility() {
+        for (const tile of this.getAllTiles()) {
+            tile.visible = false;
+        }
+    }
+
+    public pointTransparent(x: number, y: number) {
+        const tile = this.getTile(x, y);
+        return tile && !tile.opaque;
+    }
 }

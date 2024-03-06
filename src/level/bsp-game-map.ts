@@ -1,4 +1,5 @@
 import { Point } from "..";
+import { PatrolBot } from "../entities/patrol-bot";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
@@ -60,7 +61,7 @@ export class BSPGameMap extends GameMap {
         for (const hallway of hallways) {
             const tile = this.getTile(hallway.x, hallway.y)
             tile.procGenType = "HALLWAY";
-        }   
+        }
 
         // using this alternate type so we can select only internal walls later.
         // may also want to have a "burrow" move that can dig through walls but not
@@ -82,15 +83,48 @@ export class BSPGameMap extends GameMap {
         }
 
 
+        // Template.addTemplate(this, Template.ENTRANCE, -1, true); // Use the 'Template' module to add the exit template
+        // Template.addTemplate(this, EXIT, -1, true); // Use the 'Template' module to add the exit template
+
+        // there is surely a simpler way to do this, but I want 10 enemies WITHIN rooms and 10 hallway
+        // enemies.
+        for (let i = 0; i < 10; i++) {
+            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY"));
+
+            if (!roomTiles) {
+                console.error("No room tiles to place enemy.");
+                break;
+            }
+
+            const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
+            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
+
+            roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
+        }
+
+        for (let i = 0; i < 10; i++) {
+            const hallwayTiles = this.getAllTiles().filter(tile => (tile.procGenType == "HALLWAY"));
+
+            if (!hallwayTiles) {
+                console.error("No room tiles to place enemy.");
+                break;
+            }
+
+            const enemyCell = hallwayTiles[Math.floor(Math.random() * hallwayTiles.length)];
+            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
+
+            hallwayTiles.splice(hallwayTiles.indexOf(enemyCell), 1);
+        }
+
 
         // TODO: add exit template
 
         // TODO: add enemies (happens one level up??)
     }
 
-    protected getPointsWithinRect(rect: Rect) : Point[] {
+    protected getPointsWithinRect(rect: Rect): Point[] {
         const points: { x: number, y: number }[] = [];
-        for (let x = rect.x+1; x < rect.x + rect.w - 1; x++) {
+        for (let x = rect.x + 1; x < rect.x + rect.w - 1; x++) {
             for (let y = rect.y + 1; y < rect.y + rect.h - 1; y++) {
                 points.push({ x, y });
             }

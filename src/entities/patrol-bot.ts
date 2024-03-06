@@ -5,7 +5,7 @@ export class PatrolBot extends Enemy {
 
     public behavior: string = "rotate";
 
-    constructor(x:number, y:number, behavior: string = "rotate") {
+    constructor(x:number, y:number, behavior: string = "random") {
         super(x, y);
         
         if(behavior== "random") {
@@ -63,7 +63,7 @@ export class PatrolBot extends Enemy {
             const dY = Math.round(Math.sin(this.facing) * i);
             const point: Point = { x: this.x + dX, y: this.y + dY };
 
-            if(this.level!.pointTransparent(point.x, point.y) === false) {
+            if(this.level!.map.pointTransparent(point.x, point.y) === false) {
                 break;
             }
 
@@ -75,6 +75,6 @@ export class PatrolBot extends Enemy {
         // you may not need to do this check at all if you simply reject light on tiles that are solid
         // let passablePoints = points.filter(p => this.level!.pointPassable(p.x, p.y) && this.level!.pointTransparent(p.x, p.y));
         // passablePoints.push({x: this.x, y: this.y}); // add the current location to the list
-        return points.filter(p=>this.level!.pointTransparent(p.x, p.y));
+        return points.filter(p=>this.level!.map.pointTransparent(p.x, p.y));
     }
 }

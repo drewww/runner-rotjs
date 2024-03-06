@@ -64,7 +64,6 @@ export class Template {
 
         for (let y = 0; y < dimensions.h; y++) {
             for (let x = 0; x < dimensions.w; x++) {
-                const levelTile = level.map.getTile(point.x + x, point.y + y);
                 const templateTile = template.template[y][x];
 
                 var newTile;

@@ -153,11 +153,11 @@ export class Player extends Being {
         if(!this.level) { return; }
 
         let fov = new ROT.FOV.PreciseShadowcasting((x, y) => {
-            return this.level!.pointTransparent(x, y);
+            return this.level!.map.pointTransparent(x, y);
         });
 
         // set all tiles to not visible
-        this.level!.resetPlayerVisibility();
+        this.level!.map.resetPlayerVisibility();
 
         fov.compute(this.x, this.y, 10, (x, y, r, visibility) => {
             if (visibility > 0) {
