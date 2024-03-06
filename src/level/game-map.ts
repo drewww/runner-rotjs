@@ -214,11 +214,12 @@ export class GameMap {
         // check if the template fits at the point
         for (let y = 0; y < dimensions.h; y++) {
             for (let x = 0; x < dimensions.w; x++) {
-                const levelTile = this.getTile(point.x + x, point.y + y);
+                const rotatedPoint = rotateVector({x, y}, rotation);
+                const levelTile = this.getTile(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
 
                 // make sure none of the space the template might take up is solid. 
                 // non solid stuff we can overwrite(?)
-                if (levelTile.solid) {
+                if (!levelTile || levelTile.solid) {
                     return false;
                 }
             }
