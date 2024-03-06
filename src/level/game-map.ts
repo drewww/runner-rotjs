@@ -1,6 +1,6 @@
 import * as ROT from 'rot-js';
 import { Tile } from './tile';
-import { Point } from '..';
+import { Point, rotateVector } from '..';
 import { Being } from '../entities/being';
 
 type MapTemplate = {
@@ -169,24 +169,29 @@ export class GameMap {
     protected placeTemplateAtPoint(template: MapTemplate, point: {x: number, y: number}): void {
         const dimensions = this.getTemplateDimensions(template);
 
+        // pick a random rotation to test
+        const rotation = Math.floor(Math.random() * 4);
+
         for (let y = 0; y < dimensions.h; y++) {
             for (let x = 0; x < dimensions.w; x++) {
+                const rotatedPoint = rotateVector({x, y}, rotation);
+
                 const templateTile = template.template[y][x];
 
                 var newTile;
 
                 switch (templateTile) {
                     case " ":
-                        newTile = new Tile(point.x + x, point.y + y, "FLOOR");
+                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "FLOOR");
                         break;
                     case "W":
-                        newTile = new Tile(point.x + x, point.y + y, "WALL");
+                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "WALL");
                         break;
                     case "#":
-                        newTile = new Tile(point.x + x, point.y + y, "FORCEFIELD");
+                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "FORCEFIELD");
                         break;
                     case "%":
-                        newTile = new Tile(point.x + x, point.y + y, "EXIT");
+                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "EXIT");
                         break;
                     case "@":
                         // skip this?? 

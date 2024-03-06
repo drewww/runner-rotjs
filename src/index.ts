@@ -44,3 +44,10 @@ export interface IGame {
     refreshDisplay(): void;
     switchState(state: GameState): void;
 }
+
+export function rotateVector(vector: Point, times: number): Point {
+    for (let i = 0; i < times; i++) {
+        vector = { x: -vector.y, y: vector.x };
+    }
+    return vector;
+}

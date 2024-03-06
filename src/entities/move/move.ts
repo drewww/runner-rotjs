@@ -1,4 +1,4 @@
-import { Point } from "../..";
+import { Point, rotateVector } from "../..";
 import { LevelController } from "../../level/level-controller";
 
 export type Move = {
@@ -36,7 +36,9 @@ export class MoveManager {
         for (let i of validRotations) {
             let thisRotation = [];
             for (let step of stepsInMove) {
-                step = MoveManager.rotateVector(step, i);
+
+                // refactored this into index
+                step = rotateVector(step, i);
                 thisRotation.push(step);
             }
 
@@ -44,14 +46,6 @@ export class MoveManager {
         }
 
         return output;
-    }
-
-    // could do this ... better but it works.
-    static rotateVector(vector: Point, times: number): Point {
-        for (let i = 0; i < times; i++) {
-            vector = { x: -vector.y, y: vector.x };
-        }
-        return vector;
     }
 
     static getLocationInTemplate(template: MoveTemplate, symbol: string): Point {
@@ -131,7 +125,7 @@ export class MoveManager {
                         // when you go to get it out of the level.map object. so calculate the player-relative
                         // vector first (that's the x-playerLocation.x part) and then rotate normally around 0,0.
                         // the vector that comes out will be player relative still.
-                        const vectorToTile = MoveManager.rotateVector({ x: x - playerLocation.x, y: y - playerLocation.y }, i);
+                        const vectorToTile = rotateVector({ x: x - playerLocation.x, y: y - playerLocation.y }, i);
 
                         // the template x/y coordinates need to be transformed to be player-relative
                         // in other words, find the @ symbol in the template and make sure we are getting
