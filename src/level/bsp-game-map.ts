@@ -82,10 +82,6 @@ export class BSPGameMap extends GameMap {
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
         }
 
-
-        // Template.addTemplate(this, Template.ENTRANCE, -1, true); // Use the 'Template' module to add the exit template
-        // Template.addTemplate(this, EXIT, -1, true); // Use the 'Template' module to add the exit template
-
         // there is surely a simpler way to do this, but I want 10 enemies WITHIN rooms and 10 hallway
         // enemies.
         for (let i = 0; i < 10; i++) {
@@ -118,6 +114,7 @@ export class BSPGameMap extends GameMap {
 
 
         // TODO: add exit template
+        // Template.addTemplate(this, Template.EXIT, -1, true); // Use the 'Template' module to add the exit template
 
         // TODO: add enemies (happens one level up??)
     }
