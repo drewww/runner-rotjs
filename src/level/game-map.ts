@@ -118,21 +118,22 @@ export class GameMap {
     static EXIT: MapTemplate = {
         name: "EXIT",
         template: [
-            "   ",
-            " % ",
-            " # ",
-            " # ",
-            " # "
+            "WWW",
+            "W%W",
+            "W#W",
+            "W#W",
+            "W#W",
+            "   "
         ]
     }
     
     static ENTRANCE: MapTemplate = {
         name: "ENTRANCE",
         template: [
-            "   ",
-            " @ ",
-            " # ",
-            " % ",
+            "WWW",
+            "W@W",
+            "W#W",
+            "W%W",
             "   "
         ]
     }
@@ -176,6 +177,9 @@ export class GameMap {
 
                 switch (templateTile) {
                     case " ":
+                        newTile = new Tile(point.x + x, point.y + y, "FLOOR");
+                        break;
+                    case "W":
                         newTile = new Tile(point.x + x, point.y + y, "WALL");
                         break;
                     case "#":
