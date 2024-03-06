@@ -1,3 +1,4 @@
+import { Door } from "./door";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 
@@ -33,9 +34,8 @@ export class BSPGameMap extends GameMap {
         for (let i = 0; i < numDoors; i++) {
             const randomIndex = Math.floor(Math.random() * wallTiles.length);
             const randomWallTile = wallTiles[randomIndex];
-            this.setTile(new Tile(randomWallTile.x, randomWallTile.y, "DOOR"));
+            this.setTile(new Door(randomWallTile.x, randomWallTile.y));
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
-            console.log("splicing in door: " + randomWallTile.x + ", " + randomWallTile.y);
         }
         
         // get all tiles of type wall
