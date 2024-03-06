@@ -233,8 +233,6 @@ export class LevelController implements Drawable {
         return false;
     }
 
-    
-
     public getEmptyPoints(): Point[] {
         const tiles = this.map.getFreePoints();
 

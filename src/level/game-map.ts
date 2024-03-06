@@ -150,14 +150,19 @@ export class GameMap {
         });
     
         let placed = false;
-        while (!placed) {
+        let count = 0;
+        while (!placed && count < 20) {
             const randomIndex = Math.floor(Math.random() * freeCells.length);
 
             if(this.templateFitsAtPoint(template, freeCells[randomIndex])) {
                 this.placeTemplateAtPoint(template, freeCells[randomIndex]);
                 placed = true;
             }
+
+            count++;
         }
+
+        console.log("finishing place: " + placed + " " + count);
     }
 
     protected placeTemplateAtPoint(template: MapTemplate, point: {x: number, y: number}): void {
@@ -171,7 +176,7 @@ export class GameMap {
 
                 switch (templateTile) {
                     case " ":
-                        newTile = new Tile(point.x + x, point.y + y, "FLOOR");
+                        newTile = new Tile(point.x + x, point.y + y, "WALL");
                         break;
                     case "#":
                         newTile = new Tile(point.x + x, point.y + y, "FORCEFIELD");
@@ -210,7 +215,7 @@ export class GameMap {
             }
         }
 
-        return false;
+        return true;
     }
 
     protected getTemplateDimensions(template: MapTemplate): {w: number, h:number} {
