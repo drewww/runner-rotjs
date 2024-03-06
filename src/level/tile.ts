@@ -7,7 +7,9 @@ export const TILE_TYPES = {
     "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
     "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false},
     "BUTTON": {symbol: "b", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
-    "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true}
+    "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true},
+    "FORCE_FIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true},
+    "BOUNDARY": {symbol: "X", fg: COLORS.WHITE, bg: COLORS.WHITE, opaque: true, solid: true},
 }
 
 export interface Interactable {
