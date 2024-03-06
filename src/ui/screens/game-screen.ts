@@ -1,11 +1,13 @@
 import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../elements/status-bar";
-import { IGame, GameState, LevelType } from "../..";
+import { IGame, GameState, LevelType, SCREEN_HEIGHT, SCREEN_WIDTH } from "../..";
 import { Player } from "../../entities/player";
 import { Level } from "../../level/level";
 import { Interactable } from "../../level/tile";
 import { Screen } from "../screen";
 import { MoveMenuScreen } from './move-menu-screen';
+
+const RIGHT_MENU_WIDTH: number= 20;
 
 export class GameScreen extends Screen {
     public level: Level;
@@ -24,9 +26,9 @@ export class GameScreen extends Screen {
         this.game = game;
 
         // careful, the height here relates to the screen height.
-        this.level = new Level(LevelType.DEBUG, 78, this.height-1);
-        this.level.x = 0;
-        this.level.y = 0;
+        this.level = new Level(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2);
+        this.level.x = 1;
+        this.level.y = 1;
         this.x = 0;
         this.y = 0;
         // this sets the render order, be careful.
@@ -218,7 +220,7 @@ export class GameScreen extends Screen {
         this.level.setPlayer(player);   
         
         if(!this.statusBar) {
-            this.statusBar = new StatusBar(0, this.height - 1, this.width, 1, player!);
+            this.statusBar = new StatusBar(this.width-RIGHT_MENU_WIDTH, this.height - 1, RIGHT_MENU_WIDTH, 1, player!);
             this.elements!.push(this.statusBar);
         } else {
             this.statusBar.player = player;
@@ -226,8 +228,11 @@ export class GameScreen extends Screen {
 
         if(!this.moveMenu) {
             this.moveMenu = new MoveMenuScreen(0, 0, player);
-            this.moveMenu.x = this.width - this.moveMenu.width;
-            this.moveMenu.y = this.height - this.moveMenu.height;
+            
+            this.moveMenu.x = this.width - RIGHT_MENU_WIDTH;
+            this.moveMenu.y = 0;
+            this.moveMenu.width = RIGHT_MENU_WIDTH;
+            this.moveMenu.height = this.height - 1;
             this.elements!.push(this.moveMenu);
         } else {
             this.moveMenu.setPlayer(player);
