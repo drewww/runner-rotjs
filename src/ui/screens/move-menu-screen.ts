@@ -44,12 +44,5 @@ export class MoveMenuScreen extends Screen {
 
     setPlayer(player: Player) {
         this.player = player;
-
-        const moves = player.moves;
-        const names = moves.map(move => move.name);
-        // const maxLength = Math.max(...names.map(name => name.length));
-
-        // this.width = maxLength+2;
-        // this.height = moves.length+2;
     }
 }

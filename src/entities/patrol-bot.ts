@@ -13,6 +13,9 @@ export class PatrolBot extends Enemy {
         }
 
         this.behavior = behavior;
+
+        const directions = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+        this.facing = directions[Math.floor(Math.random() * directions.length)];
     }
 
     act() :void {

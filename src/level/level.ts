@@ -81,6 +81,36 @@ export class Level implements Drawable {
                     tile.discovered = true;
                 });
 
+                // there is surely a simpler way to do this, but I want 10 enemies WITHIN rooms and 10 hallway
+                // enemies.
+                for (let i = 0; i < 10; i++) {
+                    const roomTiles = this.map.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY"));
+                    
+                    if (!roomTiles) {
+                        console.error("No room tiles to place enemy.");
+                        break;
+                    }
+
+                    const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
+                    this.createEnemy(enemyCell);
+
+                    roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
+                }
+
+                for (let i = 0; i < 10; i++) {
+                    const hallwayTiles = this.map.getAllTiles().filter(tile => (tile.procGenType == "HALLWAY"));
+                    
+                    if (!hallwayTiles) {
+                        console.error("No room tiles to place enemy.");
+                        break;
+                    }
+
+                    const enemyCell = hallwayTiles[Math.floor(Math.random() * hallwayTiles.length)];
+                    this.createEnemy(enemyCell);
+
+                    hallwayTiles.splice(hallwayTiles.indexOf(enemyCell), 1);
+                }
+
                 break;
             case LevelType.RANDOM:
                 this.map = new GameMap(this.w, this.h);

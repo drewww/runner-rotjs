@@ -1,3 +1,4 @@
+import { Point } from "..";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
@@ -19,6 +20,48 @@ export class BSPGameMap extends GameMap {
         rects = this.shrinkRects(rects);
         this.addTilesOnRectBoundaries(rects);
 
+        const hallways = this.getFreePoints();
+
+        for (let i = 0; i < rects.length; i++) {
+            const rect = rects[i];
+            // add random junk to the map
+            const freeTiles = this.getPointsWithinRect(rect);
+
+            // remove these from the hallways  
+            for (const tilePoint of freeTiles) {
+                for (let j = 0; j < hallways.length; j++) {
+                    if (hallways[j].x === tilePoint.x && hallways[j].y === tilePoint.y) {
+                        hallways.splice(j, 1);
+                        const tile = this.getTile(tilePoint.x, tilePoint.y);
+                        tile.procGenType = "ROOM_" + i;
+                    }
+                }
+            }
+
+            for (const tile of freeTiles) {
+                if (Math.random() < 0.01) {
+                    this.setTile(new Tile(tile.x, tile.y, "TALL_JUNK"));
+                    // add short junk all around it
+                    for (let j = -1; j < 2; j++) {
+                        for (let k = -1; k < 2; k++) {
+                            if (Math.random() > 0.25) {
+                                const curTile = this.getTile(tile.x + j, tile.y + k);
+                                if (curTile && curTile.symbol === ".") {
+                                    this.setTile(new Tile(tile.x + j, tile.y + k, "SHORT_JUNK"));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // save this hallway visualizer. working at the moment.
+        for (const hallway of hallways) {
+            const tile = this.getTile(hallway.x, hallway.y)
+            tile.procGenType = "HALLWAY";
+        }   
+
         // using this alternate type so we can select only internal walls later.
         // may also want to have a "burrow" move that can dig through walls but not
         // boundary tiles.
@@ -37,15 +80,26 @@ export class BSPGameMap extends GameMap {
             this.setTile(new Door(randomWallTile.x, randomWallTile.y));
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
         }
-        
-        // get all tiles of type wall
+
 
 
         // TODO: add exit template
+
         // TODO: add enemies (happens one level up??)
     }
 
-    public addTilesOnRectBoundaries(rects: Rect[], tileType: string="WALL"): void {
+    protected getPointsWithinRect(rect: Rect) : Point[] {
+        const points: { x: number, y: number }[] = [];
+        for (let x = rect.x+1; x < rect.x + rect.w - 1; x++) {
+            for (let y = rect.y + 1; y < rect.y + rect.h - 1; y++) {
+                points.push({ x, y });
+            }
+        }
+
+        return points;
+    }
+
+    public addTilesOnRectBoundaries(rects: Rect[], tileType: string = "WALL"): void {
         for (const rect of rects) {
             for (let x = rect.x; x < rect.x + rect.w; x++) {
                 this.setTile(new Tile(x, rect.y, tileType));

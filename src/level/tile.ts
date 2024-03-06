@@ -6,10 +6,12 @@ export const TILE_TYPES = {
     "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
     "WALL": {symbol: " ", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
-    "BUTTON": {symbol: "b", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
+    "BUTTON": {symbol: "○", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "FORCE_FIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},
     "BOUNDARY": {symbol: "X", fg: COLORS.WHITE, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: true},
+    "TALL_JUNK": {symbol: "0", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: true, solid: true, indestructable: false},
+    "SHORT_JUNK": {symbol: "o", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},
 }
 
 export interface Interactable {
@@ -30,6 +32,8 @@ export class Tile {
     public discovered:boolean;
     public indestructable: boolean;
 
+    public procGenType: string;
+
     constructor(x:number, y:number, type:string) {
         this.x = x;
         this.y = y;
@@ -43,6 +47,9 @@ export class Tile {
         this.symbol = " ";
         this.fg = COLORS.WHITE;
         this.bg = COLORS.BLACK;
+        this.indestructable = false;
+
+        this.procGenType = "unknown";
 
         const tileType = TILE_TYPES[type as keyof typeof TILE_TYPES];
         Object.assign(this, tileType);

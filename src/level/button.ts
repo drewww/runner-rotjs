@@ -11,6 +11,6 @@ export class Button extends Tile implements Interactable {
 
     interact(player:Player) {
         this.activated = true;
-        this.symbol = "B";
+        this.symbol = "•";
     }
 }
