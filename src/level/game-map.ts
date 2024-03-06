@@ -210,7 +210,7 @@ export class GameMap {
                 // make sure none of the space the template might take up is solid. 
                 // non solid stuff we can overwrite(?)
                 if (levelTile.solid) {
-                    break;
+                    return false;
                 }
             }
         }
