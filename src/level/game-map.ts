@@ -131,8 +131,6 @@ export class GameMap {
         name: "ENTRANCE",
         template: [
             "WWW",
-            "W%W",
-            "W#W",
             "W@W",
             "   "
         ]

@@ -5,8 +5,8 @@ export const COLORS = {
     RED: "#ff0000",
 
     GREEN: "#00ff00",
-    LIGHT_GREEN: "#00AA00",
-    DARK_GREEN: "#004400",
+    LIGHT_GREEN: "#00BB00",
+    DARK_GREEN: "#005500",
 
     YELLOW: "#ffff00",
 

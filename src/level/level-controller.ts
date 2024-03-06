@@ -167,10 +167,10 @@ export class LevelController implements Drawable {
                 bg = tile.bg;
             }
 
-            if(tile.indestructable) {
-                fg = COLORS.WHITE;
-                bg = COLORS.WHITE;
-            }
+            // if(tile.indestructable) {
+            //     fg = COLORS.WHITE;
+            //     bg = COLORS.WHITE;
+            // }
 
             // TODO check in on the offset math here
             // I think this might need xOffset and we're just getting lucky that it's 0 in the current
