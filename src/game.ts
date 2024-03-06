@@ -65,7 +65,8 @@ export class Game implements IGame {
         try {
             this.screen.draw(this.display);
         } catch(e) {
-            console.error("Error drawing screen: " + e);
+            console.error("Error drawing screen: ");
+            console.error(e);
         }
     }
 

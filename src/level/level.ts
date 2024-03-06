@@ -13,6 +13,7 @@ import { Color } from 'rot-js/lib/color';
 import { MoveOption } from '../entities/move/move';
 import { BSPGameMap } from './bsp-game-map';
 
+
 export class Level implements Drawable {
     public map: GameMap;
     private beings: Being[];
@@ -81,7 +82,7 @@ export class Level implements Drawable {
                     tile.discovered = true;
                 });
 
-                // Template.addTemplate(this, ENTRANCE, -1, true); // Use the 'Template' module to add the exit template
+                // Template.addTemplate(this, Template.ENTRANCE, -1, true); // Use the 'Template' module to add the exit template
                 // Template.addTemplate(this, EXIT, -1, true); // Use the 'Template' module to add the exit template
 
                 // there is surely a simpler way to do this, but I want 10 enemies WITHIN rooms and 10 hallway

@@ -9,33 +9,35 @@ export type MapTemplate = {
     // there may be other constraints we add here
 }
 
-export const EXIT: MapTemplate = {
-    name: "EXIT",
-    template: [
-        "   ",
-        " % ",
-        " # ",
-        " # ",
-        " # "
-    ]
-}
-
-export const ENTRANCE: MapTemplate = {
-    name: "ENTRANCE",
-    template: [
-        "   ",
-        " @ ",
-        " # ",
-        " % ",
-        "   "
-    ]
-}
 
 export class Template {
+
+
+    
+    static EXIT: MapTemplate = {
+        name: "EXIT",
+        template: [
+            "   ",
+            " % ",
+            " # ",
+            " # ",
+            " # "
+        ]
+    }
+    
+    static ENTRANCE: MapTemplate = {
+        name: "ENTRANCE",
+        template: [
+            "   ",
+            " @ ",
+            " # ",
+            " % ",
+            "   "
+        ]
+    }
+
     static addTemplate(level: Level, template: MapTemplate, minDistance: number = 0, hallway: boolean=false): void {
         // look for places to put the template
-
-        const templateSize = Template.getTemplateDimensions(template);
 
         // distance will let you know how far in A* distance it can be from the player starting. 
         // for now ignore it.

@@ -33,6 +33,7 @@ export class Tile {
     public indestructable: boolean;
 
     public procGenType: string;
+    procGenDistance: number;
 
     constructor(x:number, y:number, type:string) {
         this.x = x;
@@ -50,6 +51,7 @@ export class Tile {
         this.indestructable = false;
 
         this.procGenType = "unknown";
+        this.procGenDistance = -1;
 
         const tileType = TILE_TYPES[type as keyof typeof TILE_TYPES];
         Object.assign(this, tileType);
