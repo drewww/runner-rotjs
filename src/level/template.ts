@@ -1,4 +1,4 @@
-import { Level } from "./level";
+import { LevelController } from "./level-controller";
 import { Tile } from "./tile";
 
 
@@ -36,7 +36,7 @@ export class Template {
         ]
     }
 
-    static addTemplate(level: Level, template: MapTemplate, minDistance: number = 0, hallway: boolean=false): void {
+    static addTemplate(level: LevelController, template: MapTemplate, minDistance: number = 0, hallway: boolean=false): void {
         // look for places to put the template
 
         // distance will let you know how far in A* distance it can be from the player starting. 
@@ -59,7 +59,7 @@ export class Template {
         }
     }
 
-    static placeTemplateAtPoint(level: Level, template: MapTemplate, point: {x: number, y: number}): void {
+    static placeTemplateAtPoint(level: LevelController, template: MapTemplate, point: {x: number, y: number}): void {
         const dimensions = Template.getTemplateDimensions(template);
 
         for (let y = 0; y < dimensions.h; y++) {
@@ -94,7 +94,7 @@ export class Template {
         }
     }
 
-    static templateFitsAtPoint(level: Level, template: MapTemplate, point: {x: number, y: number}, rotation: number = 0): boolean {
+    static templateFitsAtPoint(level: LevelController, template: MapTemplate, point: {x: number, y: number}, rotation: number = 0): boolean {
         const dimensions = Template.getTemplateDimensions(template);
         
         // check if the template fits at the point

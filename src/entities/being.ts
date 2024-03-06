@@ -2,10 +2,10 @@ import * as ROT from 'rot-js'; // Import the 'ROT' module
 
 import { COLORS } from '../colors.ts';
 import { Drawable, Point, Light } from '../index.ts';
-import { Level } from '../level/level.ts';
+import { LevelController } from '../level/level-controller.ts';
 
 export abstract class Being implements Drawable {
-    protected level: Level | null = null;
+    protected level: LevelController | null = null;
 
     constructor(public x:number, public y:number, protected symbol:string,
         protected fg:string, protected bg:string) {
@@ -53,7 +53,7 @@ export abstract class Being implements Drawable {
         return [];
     }
 
-    setLevel(level: Level): void {
+    setLevel(level: LevelController): void {
         this.level = level;
     }
 

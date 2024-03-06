@@ -1,5 +1,5 @@
 import { Point } from "../..";
-import { Level } from "../../level/level";
+import { LevelController } from "../../level/level-controller";
 
 export type Move = {
     name: string;
@@ -16,7 +16,7 @@ export type MoveOption = {
 export class MoveManager {
 
 
-    public static moveResults(level: Level, template: MoveTemplate): MoveOption[] {
+    public static moveResults(level: LevelController, template: MoveTemplate): MoveOption[] {
         // this method will a list of points that this moveTemplate would
         // move the player to. expressed in player-relative vector locations.
 
@@ -88,7 +88,7 @@ export class MoveManager {
         return points;
     }
 
-    static getValidRotationsForTemplate(level: Level, template: MoveTemplate): number[] {
+    static getValidRotationsForTemplate(level: LevelController, template: MoveTemplate): number[] {
         // for the given template and level return which rotations are valid.
         // (consider a version of this that shows where the templates are failing... people
         // may find it weird not knowing what are the options. or it may be that we end up

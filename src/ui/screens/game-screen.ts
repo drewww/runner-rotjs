@@ -2,7 +2,7 @@ import * as ROT from "rot-js"; // Import the 'rot-js' module
 import { StatusBar } from "../elements/status-bar";
 import { IGame, GameState, LevelType, SCREEN_HEIGHT, SCREEN_WIDTH } from "../..";
 import { Player } from "../../entities/player";
-import { Level } from "../../level/level";
+import { LevelController } from "../../level/level-controller";
 import { Interactable } from "../../level/tile";
 import { Screen } from "../screen";
 import { MoveMenuScreen } from './move-menu-screen';
@@ -10,7 +10,7 @@ import { MoveMenuScreen } from './move-menu-screen';
 const RIGHT_MENU_WIDTH: number= 20;
 
 export class GameScreen extends Screen {
-    public level: Level;
+    public level: LevelController;
 
     private game: IGame;
     statusBar: StatusBar | undefined;
@@ -26,7 +26,7 @@ export class GameScreen extends Screen {
         this.game = game;
 
         // careful, the height here relates to the screen height.
-        this.level = new Level(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2);
+        this.level = new LevelController(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2);
         this.level.x = 1;
         this.level.y = 1;
         this.x = 0;
@@ -178,7 +178,7 @@ export class GameScreen extends Screen {
             this.game.switchState(GameState.WINSCREEN);
         } else {
             // prepare another level.
-            const newLevel = new Level(LevelType.CAVE, 80, this.height-1);
+            const newLevel = new LevelController(LevelType.CAVE, 80, this.height-1);
 
             this.level = newLevel;
             

@@ -14,7 +14,7 @@ import { MoveOption } from '../entities/move/move';
 import { BSPGameMap } from './bsp-game-map';
 
 
-export class Level implements Drawable {
+export class LevelController implements Drawable {
     public map: GameMap;
     private beings: Being[];
 
