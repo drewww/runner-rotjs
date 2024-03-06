@@ -13,8 +13,8 @@ export type Light = {
 
 export enum LevelType {
     CAVE = "CAVE",      // using the built in ROT.js "Digger" implementation and N bots
-    DEBUG = "DEBUG"     // a more open and random map for testing
-
+    DEBUG = "DEBUG",     // use this to figure out new generation techniques; defaults to all visible tiles
+    RANDOM = "RANDOM"   // a random map with random bots and tiles
     // add other level generator types here
     // can also add a sequence of tutorial levels here
 }

@@ -7,15 +7,19 @@ export class GameMap {
 
     // going to try to do this as 1d array with a fixed width, since 2d arrays
     // in js seem kinda janky.
-    private tiles:Tile[] = [];
+    protected tiles:Tile[] = [];
 
-    constructor(private w:number, private h:number) {
+    constructor(protected w:number, protected h:number) {
     }
 
     fillMapWithWalls(): void {
+        this.fillMapWithTile("WALL");
+    }
+
+    fillMapWithTile(tileType: string): void {
         for (let y = 0; y < this.h; y++) {
             for (let x = 0; x < this.w; x++) {
-                this.tiles.push(new Tile(x, y, "WALL"));
+                this.tiles.push(new Tile(x, y, tileType));
             }
         }
     }

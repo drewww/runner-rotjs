@@ -11,6 +11,7 @@ import { GameMap } from './game-map';
 import { PatrolBot } from '../entities/patrol-bot';
 import { Color } from 'rot-js/lib/color';
 import { MoveOption } from '../entities/move/move';
+import { BSPGameMap } from './bsp-game-map';
 
 export class Level implements Drawable {
     public map: GameMap;
@@ -74,6 +75,14 @@ export class Level implements Drawable {
 
                 break;
             case LevelType.DEBUG:
+                this.map = new BSPGameMap(this.w, this.h);
+
+                this.map.getAllTiles().forEach(tile => {
+                    tile.discovered = true;
+                });
+
+                break;
+            case LevelType.RANDOM:
                 this.map = new GameMap(this.w, this.h);
                 this.map.generateTrivialMap();
 
