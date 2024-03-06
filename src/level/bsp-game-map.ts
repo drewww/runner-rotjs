@@ -14,8 +14,10 @@ export class BSPGameMap extends GameMap {
         super(w, h);
 
         this.fillMapWithTile("FLOOR");
-        const rects = this.divideSpace();
+        let rects = this.divideSpace({ x: 2, y: 2, w: this.w-4, h: this.h-4});
+        rects = this.shrinkRects(rects);
         this.addWallsOnRectBoundaries(rects);
+        this.addWallsOnRectBoundaries([{x: 0, y: 0, w: this.w, h: this.h}]);
     }
 
     public addWallsOnRectBoundaries(rects: Rect[]): void {
@@ -28,15 +30,27 @@ export class BSPGameMap extends GameMap {
                 this.setTile(new Tile(rect.x, y, "WALL"));
                 this.setTile(new Tile(rect.x + rect.w - 1, y, "WALL"));
             }
-            
         }
     }
 
-    protected divideSpace(): Rect[] {
+    protected shrinkRects(rects: Rect[]): Rect[] {
+        const newRects: Rect[] = [];
+        for (const rect of rects) {
+            const newRect: Rect = {
+                x: rect.x + 1,
+                y: rect.y + 1,
+                w: rect.w - 2,
+                h: rect.h - 2
+            };
+            newRects.push(newRect);
+        }
+        return newRects;
+    }
+
+    protected divideSpace(root: Rect): Rect[] {
         const rects: Rect[] = [];
-        const root = { x: 0, y: 0, w: this.w, h: this.h };
         rects.push(root);
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 3; i++) {
             const rect = rects.pop()!;
             if (Math.random() > 0.5) {
                 const splitRects: Rect[] = this.splitRect(rect, false);
