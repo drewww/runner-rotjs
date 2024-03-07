@@ -3,6 +3,7 @@ import { Tile } from './tile';
 import { Point, rotateVector } from '..';
 import { Being } from '../entities/being';
 import { Button } from './button';
+import { Door } from './door';
 
 type MapTemplate = {
     name: string;
@@ -178,6 +179,37 @@ export class GameMap {
         ]
     }
 
+    static WALL: MapTemplate = {
+        name: "WALL",
+        templates: [
+            [
+                "W",
+                "W",
+                "W",
+                "W",
+                "W",
+                "W",
+                "W"
+            ],
+            [
+                "W****",
+                "W****",
+                "W****",
+                "WWWWW",
+                "W****",
+                "W****",
+                "W****"
+            ],
+            [
+                "W  W",
+                "W  W",
+                "W  W",
+                "W  W",
+                "*  *"
+            ]
+        ]
+    }
+
     public addTemplate(template: MapTemplate, minDistance: number = 0, hallway: boolean = false): void {
         // look for places to put the template
 
@@ -240,6 +272,10 @@ export class GameMap {
                         newTile = new Button(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
                         newTile.procGenType = "BUTTON";
                         break;
+                    case "-":
+                        newTile = new Door(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
+                        newTile.procGenType = "DOOR";
+                        break;
                     default:
                         console.error("unrecognized template tile: " + templateTile);
                         break;
@@ -284,6 +320,31 @@ export class GameMap {
 
                 const levelTile = this.getTile(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
 
+                const templateSymbol = template.templates[templateIndex][y][x];
+                // TODO write a more complex template checker, like we use in the MoveManager.
+
+                if(!levelTile) { return false; }
+
+                switch(templateSymbol) {
+                    case "*":
+                        // means any tile is acceptable here (except maybe boundary tile? indestructable?)
+                        continue;
+                    case " ":
+                        // break if there's not an empty tile there. that's the constraint -- it needs to be
+                        // passable.
+                        if(levelTile.solid) { return false; }
+                        break;
+                    case "W":
+                        // basically, we want this to be a wall. we're happy with an existing wall.
+                        // what would cause us to fail? a pre-existing "special" tile? 
+                        // an indestructable tile
+                        // a hallway tile?
+                        
+                        // if it's open, we can replace it. 
+                        // ("special" tiles are basically all indestructable, so we can use that.)
+                        if(levelTile.indestructable || levelTile.procGenType == "HALLWAY") { return false; }
+                        break;
+                }
                 // make sure none of the space the template might take up is solid. 
                 // non solid stuff we can overwrite(?)
                 if (!levelTile || levelTile.solid) {

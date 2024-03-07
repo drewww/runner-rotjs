@@ -82,15 +82,18 @@ export class BSPGameMap extends GameMap {
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
         }
 
-        this.addTemplate(GameMap.BUTTON, -1, true);
-        this.addTemplate(GameMap.BUTTON, -1, true);
-        this.addTemplate(GameMap.BUTTON, -1, true);
+        this.addTemplate(GameMap.BUTTON, -1);
+        this.addTemplate(GameMap.BUTTON, -1);
+        this.addTemplate(GameMap.BUTTON, -1);
 
 
         // TODO: add exit template
-        this.addTemplate(GameMap.EXIT, -1, true);
-        this.addTemplate(GameMap.ENTRANCE, -1, true);
+        this.addTemplate(GameMap.EXIT, -1);
+        this.addTemplate(GameMap.ENTRANCE, -1);
 
+        for (let i=0; i<30; i++) {
+            this.addTemplate(GameMap.WALL, -1);
+        }
 
         // there is surely a simpler way to do this, but I want 30 enemies WITHIN rooms and 10 hallway
         // enemies.
