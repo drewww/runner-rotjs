@@ -85,7 +85,7 @@ export class BSPGameMap extends GameMap {
         // there is surely a simpler way to do this, but I want 30 enemies WITHIN rooms and 10 hallway
         // enemies.
         for (let i = 0; i < 30; i++) {
-            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" && tile.solid));
+            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" || tile.solid));
 
             if (!roomTiles) {
                 console.error("No room tiles to place enemy.");
