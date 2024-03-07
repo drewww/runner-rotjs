@@ -1,5 +1,4 @@
 import { COLORS } from "../colors";
-import { Player } from "../entities/player";
 import { Interactable, Tile } from "./tile";
 
 export class Door extends Tile implements Interactable {
@@ -10,7 +9,7 @@ export class Door extends Tile implements Interactable {
         this.activated = false;
     }
 
-    interact(player:Player) {
+    interact() {
 
         this.activated = !this.activated;
         this.opaque = !this.opaque;

@@ -38,6 +38,8 @@ export class Tile {
 
     public enabled: boolean;
 
+    public type: string;
+
     protected callbacks: {[key:string]: Function[]} = {};
 
     constructor(x:number, y:number, type:string) {
@@ -47,6 +49,7 @@ export class Tile {
         this.visible = false;
         this.discovered = false;
 
+        this.type = type;
         // assign defaults to calm the linter, then merge in defaults.
         this.opaque = false;
         this.solid = false;

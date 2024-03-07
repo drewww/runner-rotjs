@@ -2,6 +2,7 @@ import { Path } from 'rot-js';
 import { GameMap } from '../level/game-map';
 import { Enemy } from './enemy';
 import { Point } from '..';
+import { Door } from '../level/door';
 
 export class Hunter extends Enemy {
     protected map: GameMap;
@@ -25,10 +26,12 @@ export class Hunter extends Enemy {
             const tile = this.map.getTile(x, y);
             // console.log(`${x},${y}`);
             if(tile) {
-                // doors will be a problem for this. 
-                // for now, delete doors from generation.
-                // later -- have doors auto open if a hunter enters the space next to them.
-                return !tile.solid;
+                // consider doors "passable"
+                if(tile.type=="DOOR") {
+                    return true;
+                } else {
+                    return !tile.solid;
+                }
             } else {
                 return false;
             }
@@ -58,6 +61,21 @@ export class Hunter extends Enemy {
 
         if(this.nextMove) {
             console.log("hunter moving: " + JSON.stringify(this.nextMove));
+
+            // check if I want to move into a door.
+            const tile = this.map.getTile(this.nextMove.x + this.x, this.nextMove.y + this.y);
+
+            if(tile && tile.type=="DOOR") {
+                console.log("pausing to open door");
+                const doorTile : Door = <Door>tile;
+                if(doorTile.solid) {
+                    // consider making it wait TWO turns?? not sure.
+
+                    doorTile.interact();
+                    return;
+                }
+            }
+
             const didMove: boolean = this.move(this.nextMove.x, this.nextMove.y);
 
             // this is probably wrong idk

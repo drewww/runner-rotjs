@@ -79,8 +79,8 @@ export class BSPGameMap extends GameMap {
         for (let i = 0; i < numDoors; i++) {
             const randomIndex = Math.floor(Math.random() * wallTiles.length);
             const randomWallTile = wallTiles[randomIndex];
-            // this.setTile(new Door(randomWallTile.x, randomWallTile.y));
-            this.setTile(new Tile(randomWallTile.x, randomWallTile.y, "."));
+            this.setTile(new Door(randomWallTile.x, randomWallTile.y));
+            // this.setTile(new Tile(randomWallTile.x, randomWallTile.y, "."));
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
         }
 
