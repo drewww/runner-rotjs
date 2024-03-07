@@ -6,7 +6,7 @@ import { JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL
 import { Light } from '../index.ts';
 
 export class Player extends Being {
-    public health: number = 10;
+    public health: number = 20;
 
     public depth: number = -3;
     private callbacks: {

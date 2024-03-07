@@ -1,4 +1,5 @@
 import { Point } from "..";
+import { Hunter } from "../entities/hunter";
 import { PatrolBot } from "../entities/patrol-bot";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
@@ -40,7 +41,7 @@ export class BSPGameMap extends GameMap {
             }
 
             for (const tile of freeTiles) {
-                if (Math.random() < 0.01) {
+                if (Math.random() < 0.008) {
                     this.setTile(new Tile(tile.x, tile.y, "TALL_JUNK"));
                     // add short junk all around it
                     for (let j = -1; j < 2; j++) {
@@ -78,7 +79,8 @@ export class BSPGameMap extends GameMap {
         for (let i = 0; i < numDoors; i++) {
             const randomIndex = Math.floor(Math.random() * wallTiles.length);
             const randomWallTile = wallTiles[randomIndex];
-            this.setTile(new Door(randomWallTile.x, randomWallTile.y));
+            // this.setTile(new Door(randomWallTile.x, randomWallTile.y));
+            this.setTile(new Tile(randomWallTile.x, randomWallTile.y, "."));
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
         }
 
@@ -91,13 +93,13 @@ export class BSPGameMap extends GameMap {
         this.addTemplate(GameMap.EXIT, -1);
         this.addTemplate(GameMap.ENTRANCE, -1);
 
-        for (let i=0; i<30; i++) {
+        for (let i=0; i<15; i++) {
             this.addTemplate(GameMap.WALL, -1);
         }
 
         // there is surely a simpler way to do this, but I want 30 enemies WITHIN rooms and 10 hallway
         // enemies.
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 20; i++) {
             const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" || tile.solid));
 
             if (!roomTiles) {
@@ -106,12 +108,16 @@ export class BSPGameMap extends GameMap {
             }
 
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
-            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
 
+            if(i==0) {
+                this.beings.push(new Hunter(enemyCell.x, enemyCell.y, this));
+            } else {
+                this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
+            }
             roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
         }
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 8; i++) {
             const hallwayTiles = this.getAllTiles().filter(tile => (tile.procGenType == "HALLWAY"));
 
             if (!hallwayTiles) {
@@ -124,6 +130,8 @@ export class BSPGameMap extends GameMap {
 
             hallwayTiles.splice(hallwayTiles.indexOf(enemyCell), 1);
         }
+
+
 
 
 

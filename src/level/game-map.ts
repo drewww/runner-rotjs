@@ -13,13 +13,12 @@ type MapTemplate = {
 }
 
 export class GameMap {
-
-
-
     // going to try to do this as 1d array with a fixed width, since 2d arrays
     // in js seem kinda janky.
     protected tiles: Tile[] = [];
     protected beings: Being[] = [];
+
+    public latestPlayerPosition: Point;
 
     constructor(protected w: number, protected h: number) {
         this.w = w;
@@ -27,6 +26,8 @@ export class GameMap {
 
         this.tiles = [];
         this.beings = [];
+
+        this.latestPlayerPosition = {x:0, y:0};
     }
 
     fillMapWithWalls(): void {
@@ -75,6 +76,22 @@ export class GameMap {
         const freeTiles = this.getFreeTiles();
         const exit = freeTiles[Math.floor(Math.random() * freeTiles.length)];
         this.setTile(new Tile(exit.x, exit.y, "EXIT"));
+    }
+
+    getPlayerLocation() : Point {
+        // var player;
+        // player = this.beings.find(being => {
+        //     return "takeDamage" in being;
+        // });
+
+        // if(player) {
+        //     console.log("found a player: " + player);
+        //     return {x:player.x, y:player.y};    
+        // } else {
+        //     console.log("COULD NOT FIND PLAYER");
+        //     return {x:0, y:0};
+        // }
+        return this.latestPlayerPosition;
     }
 
     getIndex(x: number, y: number): number {

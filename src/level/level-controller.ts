@@ -80,9 +80,10 @@ export class LevelController implements Drawable {
             case LevelType.DEBUG:
                 this.map = new BSPGameMap(this.w, this.h);
 
-                // this.map.getAllTiles().forEach(tile => {
-                //     tile.discovered = true;
-                // });
+                this.map.getAllTiles().forEach(tile => {
+                    tile.discovered = true;
+
+                });
 
                 this.map.getBeings().forEach(being => {
                     this.addBeing(being);
@@ -354,6 +355,10 @@ export class LevelController implements Drawable {
 
         this.scheduler.add(player, true);
         this.beings.push(player);
+
+        this.player.addListener("move", () => {
+            this.map.latestPlayerPosition = {x:this.player!.x, y:this.player!.y};
+        });
     }
 
     public disable(): void {
