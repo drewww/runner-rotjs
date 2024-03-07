@@ -84,7 +84,7 @@ export class BSPGameMap extends GameMap {
 
         // there is surely a simpler way to do this, but I want 10 enemies WITHIN rooms and 10 hallway
         // enemies.
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 30; i++) {
             const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY"));
 
             if (!roomTiles) {
