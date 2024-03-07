@@ -33,8 +33,16 @@ export class Game implements IGame {
     constructor() {
         console.log("Game created!");
         
-        this.display = new ROT.Display({ width: this.w, height: this.h });
+        this.display = new ROT.Display({ width: this.w, height: this.h, 
+            layout: "rect",
+            // fontFamily: "squaremodern",
+            // fontSize: 14,
+            forceSquareRatio: true,
+        });
         document.body.appendChild(<Node>this.display.getContainer());
+
+        // const canvas = this.display.getContainer();
+        // if(canvas) { canvas.style = "image-rendering: crisp-edges"; } 
 
         // in the original tutorial, this was getting added and removed in sync
         // with the engine locking and unlocking. this avoided reacting to keypresses
