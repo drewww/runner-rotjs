@@ -94,7 +94,7 @@ export class BSPGameMap extends GameMap {
 
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
             this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
-33
+
             roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
         }
 
