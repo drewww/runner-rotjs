@@ -82,10 +82,10 @@ export class BSPGameMap extends GameMap {
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
         }
 
-        // there is surely a simpler way to do this, but I want 10 enemies WITHIN rooms and 10 hallway
+        // there is surely a simpler way to do this, but I want 30 enemies WITHIN rooms and 10 hallway
         // enemies.
         for (let i = 0; i < 30; i++) {
-            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY"));
+            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" && tile.solid));
 
             if (!roomTiles) {
                 console.error("No room tiles to place enemy.");
@@ -94,7 +94,7 @@ export class BSPGameMap extends GameMap {
 
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
             this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
-
+33
             roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
         }
 
