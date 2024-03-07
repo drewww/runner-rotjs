@@ -63,26 +63,21 @@ export class Hunter extends Enemy {
         
 
         if(this.nextMove) {
-            console.log("hunter moving: " + JSON.stringify(this.nextMove));
-
             // check if I want to move into a door.
             const tile = this.map.getTile(this.nextMove.x + this.x, this.nextMove.y + this.y);
 
             if(tile && tile.type=="DOOR") {
                 if(this.doorCountdown==-1) {
-                    console.log("pausing to open door");
                     this.doorCountdown = 2;
                     return;
                 }
                 const doorTile : Door = <Door>tile;
                 if(doorTile.solid && this.doorCountdown==0) {
                     // consider making it wait TWO turns?? not sure.
-                    console.log("opening door");
                     doorTile.interact();
                     this.doorCountdown = -1
                     return;
                 } else {
-                    console.log("waiting at door");
                     this.doorCountdown--;
                 }
             }
@@ -91,9 +86,6 @@ export class Hunter extends Enemy {
 
             // this is probably wrong idk
             this.queueNextMove();
-            if(didMove) {
-                console.log("move successful");
-            }    
         } else {
             this.queueNextMove();
         }
