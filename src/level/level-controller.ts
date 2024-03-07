@@ -35,6 +35,7 @@ export class LevelController implements Drawable {
         this.w = w;
         this.h = h;
 
+        // TODO move all this into separate GameMap extending classes
         switch (type) {
             case LevelType.CAVE:
                 this.map = new GameMap(this.w, this.h);

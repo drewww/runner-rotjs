@@ -76,9 +76,9 @@ export class GameScreen extends Screen {
                 return;
 
             } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9) {
-                // this behavior is the same regardless of mode, actually. So, skip it here. next block will catch it
-                // and handle it correctly.
-                                
+                            
+                this.level.player!.deselectMoves();
+                return;
             } else if (code in keyMap) {
                 // call select move again, but we need to pass the string version of the key character.
                 // this has gotten VERY stupid but we're going to see it through to finish up for the night.
@@ -153,7 +153,8 @@ export class GameScreen extends Screen {
         const curTile = this.level.map.getTile(this.level.player!.x, this.level.player!.y);
         
         // stupid that this depends on a specific character
-        if (curTile && curTile.symbol === '%') {
+        if (curTile && curTile.symbol === '%' && curTile.enabled) {
+            console.log("player on exit " + JSON.stringify(curTile));
             this.advanceDepth();
         }
 

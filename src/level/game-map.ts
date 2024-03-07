@@ -162,7 +162,7 @@ export class GameMap {
             count++;
         }
 
-        console.log("finishing place: " + placed + " " + count);
+        // console.log("finishing place: " + placed + " " + count);
     }
 
     protected placeTemplateAtPoint(template: MapTemplate, point: {x: number, y: number}, rotation: number): void {
@@ -208,7 +208,7 @@ export class GameMap {
     protected templateFitsAtPoint(template: MapTemplate, point: {x: number, y: number}, rotation: number = -1): boolean {
         const dimensions = this.getTemplateDimensions(template);
 
-        console.log("--------------------");
+        // console.log("--------------------");
 
         for (let y = -2; y < dimensions.h+4; y++) {
             var mapRow = [];
@@ -225,7 +225,7 @@ export class GameMap {
                     mapRow.push(t.symbol);
                 }
             }
-            console.log(mapRow.join(""));
+            // console.log(mapRow.join(""));
         }
 
 
