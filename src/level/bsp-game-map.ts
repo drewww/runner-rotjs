@@ -71,7 +71,7 @@ export class BSPGameMap extends GameMap {
         // TODO: add doors
         // simple version -- just randomly knock out walls that ARENT on the edges
         // select all wall tiles
-        const wallTiles = this.tiles.filter(tile => tile.symbol === " ");
+        const wallTiles = this.tiles.filter(tile => tile.symbol === " " && tile.indestructable === false);
 
         // randomly replace N of them with door tiles
         const numDoors = Math.floor(wallTiles.length / 20); // replace 5% of the wall tiles with doors
@@ -111,6 +111,11 @@ export class BSPGameMap extends GameMap {
 
             hallwayTiles.splice(hallwayTiles.indexOf(enemyCell), 1);
         }
+
+
+        this.addTemplate(GameMap.BUTTON, -1, true);
+        this.addTemplate(GameMap.BUTTON, -1, true);
+        this.addTemplate(GameMap.BUTTON, -1, true);
 
 
         // TODO: add exit template

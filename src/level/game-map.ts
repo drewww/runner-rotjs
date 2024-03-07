@@ -2,6 +2,7 @@ import * as ROT from 'rot-js';
 import { Tile } from './tile';
 import { Point, rotateVector } from '..';
 import { Being } from '../entities/being';
+import { Button } from './button';
 
 type MapTemplate = {
     name: string;
@@ -136,6 +137,15 @@ export class GameMap {
         ]
     }
 
+    static BUTTON: MapTemplate = {
+        name: "BUTTON",
+        template: [
+            "W ",
+            "WB",
+            "W "
+        ]
+    }
+
     public addTemplate(template: MapTemplate, minDistance: number = 0, hallway: boolean=false): void {
         // look for places to put the template
 
@@ -192,6 +202,10 @@ export class GameMap {
                     case "@":
                         newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "ENTRANCE");
                         newTile.procGenType = "ENTRANCE";
+                        break;
+                    case "B":
+                        newTile = new Button(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "BUTTON");
+                        newTile.procGenType = "BUTTON";
                         break;
                     default:
                         console.error("unrecognized template tile: " + templateTile);

@@ -100,6 +100,7 @@ export class GameScreen extends Screen {
         if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
+            
             // check for adjacent interactables. 
             const playerPos = this.level.player!.getPosition();
 
@@ -111,6 +112,8 @@ export class GameScreen extends Screen {
 
                     // TODO does this fail if you're adjacent to a map edge? maybe.
                     const adjacentTile = this.level.map.getTile(playerPos.x + xOffset, playerPos.y + yOffset);
+                    // console.log("adjacent tile: " + JSON.stringify(adjacentTile));
+                    // console.log("interactable: " + ('interact' in adjacentTile));
                     if (adjacentTile && 'interact' in adjacentTile) {
                         (<Interactable>adjacentTile).interact(this.level.player!);
                     }
