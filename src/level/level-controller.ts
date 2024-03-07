@@ -12,6 +12,7 @@ import { PatrolBot } from '../entities/patrol-bot';
 import { Color } from 'rot-js/lib/color';
 import { MoveOption } from '../entities/move/move';
 import { BSPGameMap } from './bsp-game-map';
+import { Tile } from './tile';
 
 
 export class LevelController implements Drawable {
@@ -107,6 +108,24 @@ export class LevelController implements Drawable {
 
                 break;
         }
+
+
+        // add a listener to all tiles??? this feels overkill. 
+        this.map.getAllTiles().forEach(tile => {
+            if(tile instanceof Button) {
+                tile.addListener("button", (tile: Button) => {
+                    const forcefields = this.map.getAllTiles().filter(t => t.symbol === "#");
+
+                    // for a random forecfield tile, turn it into a floor tile.
+                    const t = forcefields[Math.floor(Math.random() * forcefields.length)];
+                    if(t) {
+                        const position = {x: t.x, y: t.y};
+                        this.map.setTile(new Tile(position.x, position.y, "FLOOR"));
+                    }
+                });
+            }
+
+        })
     }
 
     // Methods specific to managing a specific level
@@ -345,4 +364,6 @@ export class LevelController implements Drawable {
         //     this.scheduler.remove(being);
         // }
     }
+
+
 }

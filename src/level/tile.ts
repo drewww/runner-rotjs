@@ -38,6 +38,8 @@ export class Tile {
 
     public enabled: boolean;
 
+    protected callbacks: {[key:string]: Function[]} = {};
+
     constructor(x:number, y:number, type:string) {
         this.x = x;
         this.y = y;
@@ -59,5 +61,23 @@ export class Tile {
 
         const tileType = TILE_TYPES[type as keyof typeof TILE_TYPES];
         Object.assign(this, tileType);
+    }
+
+    protected emit(type: string): void {
+        const values = this.callbacks[type];
+        if(values) {
+            values.forEach(callback => callback(this));
+        }
+    }
+
+    public addListener(type: string, callback: Function): void {
+        let values = this.callbacks[type];
+        
+        if(!values) {
+            values = [];
+        }
+
+        values.push(callback);
+        this.callbacks[type] = values;
     }
 }

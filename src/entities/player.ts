@@ -42,7 +42,7 @@ export class Player extends Being {
         this.callbacks[type] = values;
     }
 
-    private fireListeners(type: string): void {
+    private emit(type: string): void {
         const values = this.callbacks[type];
         if(values) {
             values.forEach(callback => callback(this));
@@ -53,7 +53,7 @@ export class Player extends Being {
         const superDidMove = super.move(dX, dY);
 
         if(superDidMove) {
-            this.fireListeners("move");
+            this.emit("move");
         }
 
         return superDidMove;
@@ -135,7 +135,7 @@ export class Player extends Being {
 
     act(): void {
         super.act();
-        this.fireListeners("act");
+        this.emit("act");
     }
 
     takeDamage(amount: number): void {
@@ -143,7 +143,7 @@ export class Player extends Being {
         console.log("[PLAYER] took damage, health now " + this.health);
         
         if (this.health <= 0) {
-            this.fireListeners("death");
+            this.emit("death");
         }
     }
 
