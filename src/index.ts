@@ -26,7 +26,8 @@ export enum GameState {
     TITLE = "TITLE",
     GAME = "GAME",
     KILLSCREEN = "KILLSCREEN",
-    WINSCREEN = "WINSCREEN"
+    WINSCREEN = "WINSCREEN",
+    MAP_EXPLORE = "MAP_EXPLORE",
 }
 
 export interface Drawable {

@@ -204,7 +204,7 @@ export class GameMap {
                         newTile.procGenType = "ENTRANCE";
                         break;
                     case "B":
-                        newTile = new Button(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "BUTTON");
+                        newTile = new Button(point.x + rotatedPoint.x, point.y + rotatedPoint.y);
                         newTile.procGenType = "BUTTON";
                         break;
                     default:

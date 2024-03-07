@@ -7,6 +7,7 @@ import { GameState, IGame, SCREEN_HEIGHT, SCREEN_WIDTH } from '.';
 import { Player } from './entities/player';
 import { GameScreen } from './ui/screens/game-screen';
 import { TitleScreen } from './ui/screens/title-screen';
+import { MapExploreScreen } from './ui/screens/map-explore-screen';
 
 export class Game implements IGame {
     public display: ROT.Display;
@@ -27,6 +28,7 @@ export class Game implements IGame {
     gameScreen!: GameScreen;
     killScreen!: KillScreen;
     winScreen!: WinScreen;
+    mapExploreScreen!: MapExploreScreen;
 
     constructor() {
         console.log("Game created!");
@@ -46,6 +48,7 @@ export class Game implements IGame {
         this.killScreen = new KillScreen();
         this.titleScreen = new TitleScreen();
         this.winScreen = new WinScreen();
+        this.mapExploreScreen = new MapExploreScreen(this);
         this.screen = this.titleScreen;
 
         this.gameScreen = new GameScreen(this);
@@ -78,14 +81,18 @@ export class Game implements IGame {
         switch(this.state) {
             case GameState.TITLE:
                 // intercept any key to start the game
-                if(e.keyCode != ROT.KEYS.VK_I) { 
+                if (e.keyCode == ROT.KEYS.VK_M) {
+                    this.switchState(GameState.MAP_EXPLORE);
+                } else if (e.keyCode == ROT.KEYS.VK_I) {
+                    // a bit odd ... this just falls through into the handle for the screen itself, which
+                    // will turn itself into the "information" version
+                } else {
                     this.switchState(GameState.GAME);
                     
                     // event is handled, don't pass it to the screen
                     return;
-                } else {
-                    // a little weird the screen can't ASK for a refresh.
                 }
+                
                 break;
             case GameState.GAME:
                 break;
@@ -94,6 +101,12 @@ export class Game implements IGame {
                 // nice idea, but need to fully regenerate the game state
                 // to restart. TBD.
                 break;
+            case GameState.WINSCREEN:
+                if(e.keyCode == ROT.KEYS.VK_ESCAPE) {
+                    this.switchState(GameState.TITLE);
+                } else {
+                    this.mapExploreScreen.generateLevel("DEBUG");
+                }
         }
 
         // regardless, give the screen a chance to deal with it.
@@ -122,6 +135,9 @@ export class Game implements IGame {
                 break;
             case GameState.WINSCREEN:
                 this.screen = this.winScreen;
+                break;
+            case GameState.MAP_EXPLORE:
+                this.screen = this.mapExploreScreen;
                 break;
         }
         this.refreshDisplay();
