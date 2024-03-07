@@ -11,13 +11,20 @@ export class Door extends Tile implements Interactable {
     }
 
     interact(player:Player) {
-        this.activated = true;
-        this.opaque = false;
-        this.solid = false;
 
-        this.bg = COLORS.BLACK;
-        this.fg = COLORS.WHITE;
-        
-        this.symbol = "_";
+        this.activated = !this.activated;
+        this.opaque = !this.opaque;
+        this.solid = !this.solid;
+
+        if(this.activated) {
+            this.bg = COLORS.BLACK;
+            this.fg = COLORS.WHITE;
+            
+            this.symbol = "_";
+        } else {
+            this.bg = COLORS.WHITE;
+            this.fg = COLORS.BLACK;
+            this.symbol = "-";
+        }
     }
 }
