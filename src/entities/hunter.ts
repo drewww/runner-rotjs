@@ -10,12 +10,15 @@ export class Hunter extends Enemy {
     protected hasMovedThisCycle: boolean;
     protected nextMove: Point;
 
+    protected doorCountdown: number;
+
     constructor(x:number, y:number, map: GameMap) {
         super(x, y);
         this.map = map;
         this.hasMovedThisCycle = false;
         this.nextMove = {x:0, y:0};
         this.symbol = "H";
+        this.doorCountdown = -1;
     }
 
     queueNextMove(): void {
@@ -66,13 +69,21 @@ export class Hunter extends Enemy {
             const tile = this.map.getTile(this.nextMove.x + this.x, this.nextMove.y + this.y);
 
             if(tile && tile.type=="DOOR") {
-                console.log("pausing to open door");
-                const doorTile : Door = <Door>tile;
-                if(doorTile.solid) {
-                    // consider making it wait TWO turns?? not sure.
-
-                    doorTile.interact();
+                if(this.doorCountdown==-1) {
+                    console.log("pausing to open door");
+                    this.doorCountdown = 2;
                     return;
+                }
+                const doorTile : Door = <Door>tile;
+                if(doorTile.solid && this.doorCountdown==0) {
+                    // consider making it wait TWO turns?? not sure.
+                    console.log("opening door");
+                    doorTile.interact();
+                    this.doorCountdown = -1
+                    return;
+                } else {
+                    console.log("waiting at door");
+                    this.doorCountdown--;
                 }
             }
 
