@@ -58,7 +58,7 @@ export class PatrolBot extends Enemy {
         // iterate "forward" in the direction we're facing until you hit a solid tile
         // or you hit the max range.
 
-        for(let i = 2; i <= this.range; i++) {
+        for(let i = 1; i <= this.range; i++) {
             const dX = Math.round(Math.cos(this.facing) * i);
             const dY = Math.round(Math.sin(this.facing) * i);
             const point: Point = { x: this.x + dX, y: this.y + dY };
@@ -67,6 +67,11 @@ export class PatrolBot extends Enemy {
                 break;
             }
 
+            // test if the point in front of the bot is solid. if it is, stop in the "break"
+            // above. otherwise, continue. but don't add it to the list in dpulication.
+            if(i==1) {
+                continue;
+            }
             points.push(point);
         }
 
