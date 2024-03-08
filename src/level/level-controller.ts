@@ -161,7 +161,7 @@ export class LevelController implements Drawable {
                                         const distanceToExit = Math.floor(Math.sqrt(Math.pow(Math.abs(exitTile.x - x), 2) +
                                             Math.pow(Math.abs(exitTile.y - y), 2)));
 
-                                        if(distanceToExit<=1 && !revealedExit) {
+                                        if (distanceToExit <= 1 && !revealedExit) {
                                             // this.map.setTile(new Tile(exitTile.x, exitTile.y, "EXIT", true, true));
                                             for (let dx = -1; dx <= 1; dx++) {
                                                 for (let dy = -1; dy <= 1; dy++) {
@@ -536,14 +536,61 @@ export class LevelController implements Drawable {
             this.overlays?.startLayerFade("player-damage", 1000, 10, 0.9);
         });
 
-        this.player.addListener("move", (player:Player) => {
+        this.player.addListener("move", (player: Player) => {
             console.log("checking move damage safety");
             if (this.getEnemyVisiblePoints().includes(`${player.x},${player.y}`)) {
+                // find the nearest enemy that is doing the shooting
+
+                // search through the beings to find the one closest to this location
+                let closestBeing: Being | null = null;
+                let closestDistance = Infinity;
+
+                for (const being of this.beings) {
+                    if(being instanceof Player) { continue; }
+                    const distance = Math.abs(being.x - player.x) + Math.abs(being.y - player.y);
+                    if (distance < closestDistance) {
+                        closestBeing = being;
+                        closestDistance = distance;
+                    }
+                }
+
+                if (closestBeing) {
+                    this.overlays?.addLayer("shot-line");
+
+                    // this is the DESTINATION that we pass in here
+                    const path = new ROT.Path.AStar(player.x, player.y, (x, y) => {
+                        // ignore the actual map, the point is not to show the path just to make an animation
+                        return true;
+                    });
+
+                    var timesCalled = 0;
+                    path.compute(closestBeing.x, closestBeing.y, (x, y) => {
+                        timesCalled++;
+                        setTimeout(() => {
+                            if (!this.overlays) { return; }
+
+                            this.overlays.setValueOnLayer("shot-line", x, y, COLORS.WHITE + "FF");
+                            this.overlays.draw();
+                        }, timesCalled * 10 + 100);
+                    });
+
+                    setTimeout(() => {
+                        if (!this.overlays) { return; }
+
+                        this.overlays.startLayerFade("shot-line", 1000, 10, 0.9);
+                    }, 140);
+                }
+
+                // make an animtion of the shot
+                //   1. draw a red line from the enemy to the player
+
+                // disable the enemy so it doesn't contribution vision for 3 turns
+                // or move for 3 turns
+
                 player.takeDamage(1);
                 player.interruptMoveChain();
-                 // later -- INTERRUPT movement and show the enemy that hit you.
-             }
-         });
+            }
+        });
     }
 
     public disable(): void {
