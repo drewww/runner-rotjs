@@ -3,6 +3,7 @@ import { GameMap } from '../level/game-map';
 import { Enemy } from './enemy';
 import { Point } from '..';
 import { Door } from '../level/door';
+import * as ROT from 'rot-js'; // Import the 'rot-js' package
 
 export class Hunter extends Enemy {
     protected map: GameMap;
@@ -11,6 +12,7 @@ export class Hunter extends Enemy {
     protected nextMove: Point;
 
     protected doorCountdown: number;
+    protected pointsInVision: Point[];
 
     constructor(x:number, y:number, map: GameMap) {
         super(x, y);
@@ -19,6 +21,8 @@ export class Hunter extends Enemy {
         this.nextMove = {x:0, y:0};
         this.symbol = "H";
         this.doorCountdown = -1;
+
+        this.pointsInVision = [];
     }
 
     queueNextMove(): void {
@@ -81,7 +85,7 @@ export class Hunter extends Enemy {
             }
 
             const didMove: boolean = this.move(this.nextMove.x, this.nextMove.y);
-
+            this.updateVision();
             // this is probably wrong idk
             this.queueNextMove();
         } else {
@@ -90,21 +94,28 @@ export class Hunter extends Enemy {
     }
 
 
+    updateVision(): void {
+        if(!this.map) { return; }
+
+        let fov = new ROT.FOV.PreciseShadowcasting((x, y) => {
+            return this.level!.map.pointTransparent(x, y);
+        });
+
+        // set all tiles to not visible
+        // this.level!.map.resetPlayerVisibility();
+        this.pointsInVision = [];
+        fov.compute(this.x, this.y, 2, (x, y, r, visibility) => {
+            if (visibility > 0) {
+                // case to be made to put this into a method on tile and call
+                // discovered from there ...
+                this.pointsInVision.push({x:x, y:y});
+            }
+        });
+    }
+
     getVision(): Point[] {
         if(!this.level) { return []; }
 
-        const points: Point[] = [];
-
-        // could make this a proper FOV checker, but no need for radius 1.
-        // just make a const list of adjacent points
-        for (let dx = -2; dx <= 2; dx++) {
-            for (let dy = -2; dy <= 2; dy++) {
-                // if (dx === 0 && dy === 0) continue; // Skip the current location
-                const point: Point = { x: this.x + dx, y: this.y + dy };
-                points.push(point);
-            }
-        }
-
-        return points;
+        return this.pointsInVision;
     }
 }
