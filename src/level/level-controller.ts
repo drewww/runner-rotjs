@@ -14,6 +14,7 @@ import { MoveOption } from '../entities/move/move';
 import { BSPGameMap } from './bsp-game-map';
 import { Tile } from './tile';
 import { Hunter } from '../entities/hunter';
+import { Overlays } from '../ui/overlays';
 
 
 export class LevelController implements Drawable {
@@ -32,13 +33,16 @@ export class LevelController implements Drawable {
     private firstTurnRender = false;
     turnCounter: number;
     hunter: Hunter | null = null;
+    overlays: Overlays;
 
     // put the logic for different types of levels in here
-    constructor(type: LevelType, w: number, h: number) {
+    constructor(type: LevelType, w: number, h: number, overlays: Overlays) {
         this.beings = [];
 
         this.w = w;
         this.h = h;
+
+        this.overlays = overlays;
 
         this.turnCounter = 0;
         
@@ -221,21 +225,30 @@ export class LevelController implements Drawable {
 
                     points = points.filter((point, index) => points.indexOf(point) === index);
 
-                    setTimeout(() => {
-                        for(let point of points) {
-                            display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                        }
-                    }, r*50);
+                    this.overlays.addLayer("hunter-pulse");
 
-                    if(r==distance) {
-                        for(let i=0; i<50; i++) {
-                            setTimeout(() => {
-                                for(let point of points) {
-                                    display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                                } 
-                            }, i);
-                        }
+                    for(let point of points) {
+                        this.overlays.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
+                        COLORS.LASER_RED + "80")
                     }
+
+                    this.overlays.draw();
+
+                    // setTimeout(() => {
+                    //     for(let point of points) {
+                    //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                    //     }
+                    // }, r*50);
+
+                    // if(r==distance) {
+                    //     for(let i=0; i<50; i++) {
+                    //         setTimeout(() => {
+                    //             for(let point of points) {
+                    //                 display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                    //             } 
+                    //         }, i);
+                    //     }
+                    // }
 
 
                     // setTimeout(() => {

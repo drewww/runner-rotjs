@@ -1,5 +1,4 @@
-import { Display } from "rot-js";
-import { Drawable, SCREEN_HEIGHT, SCREEN_WIDTH } from "..";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "..";
 
 
 export class Overlays {

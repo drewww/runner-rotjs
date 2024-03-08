@@ -29,13 +29,14 @@ export class GameScreen extends Screen {
         this.game = game;
 
         // careful, the height here relates to the screen height.
-        this.level = new LevelController(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2);
+        this.overlays = new Overlays(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        this.level = new LevelController(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
         this.level.x = 1;
         this.level.y = 1;
         this.x = 0;
         this.y = 0;
         // this sets the render order, be careful.
-        this.overlays = new Overlays(0, 0, this.level.w, this.level.h);
 
         this.overlays.fillLayerWithValue("red", "#aa0000FF");
         // this.overlays.addListener("draw", () => {
@@ -197,7 +198,7 @@ export class GameScreen extends Screen {
             this.game.switchState(GameState.WINSCREEN);
         } else {
             // prepare another level.
-            const newLevel = new LevelController(LevelType.CAVE, 80, this.height-1);
+            const newLevel = new LevelController(LevelType.CAVE, 80, this.height-1, this.overlays);
 
             this.level = newLevel;
             
