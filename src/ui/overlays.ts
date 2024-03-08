@@ -1,6 +1,5 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "..";
 
-
 export class Overlays {
     x: number;
     y: number;
@@ -12,42 +11,45 @@ export class Overlays {
     callbacks: {
         [key: string]: Function[]
     } = {};
+
+    bufferCanvas: HTMLCanvasElement;
+    visibleCanvas: HTMLCanvasElement;
+    tileY: number;
     tileX: number;
 
-    canvas: HTMLCanvasElement;
-    tileY: number;
 
     constructor(x: number, y: number, width: number, height: number) {
-
         this.x = x;
         this.y = y;
-
         this.width = width;
         this.height = height;
-
         this.layers = {};
 
-        const overlayCanvas = document.createElement("canvas");
-        const gameCanvas = document.getElementById("game") as HTMLCanvasElement;
-        overlayCanvas.width = gameCanvas.width;
-        overlayCanvas.height = gameCanvas.height;
 
-        // tile dimensions
+        const gameCanvas = document.getElementById("game") as HTMLCanvasElement;
+
+        // Create buffer canvas
+        this.bufferCanvas = document.createElement("canvas");
+        this.bufferCanvas.width = gameCanvas.width;
+        this.bufferCanvas.height = gameCanvas.height;
+
         this.tileX = gameCanvas.width / SCREEN_WIDTH;
         this.tileY = gameCanvas.height / SCREEN_HEIGHT;
 
-        overlayCanvas.style.backgroundColor = "rgba(0,0,0,0)";
-        overlayCanvas.style.position = "absolute";
-        overlayCanvas.style.top = "0px";
-        overlayCanvas.style.left = "0px";
 
-        this.canvas = overlayCanvas;
+        // Create visible canvas
+        this.visibleCanvas = document.createElement("canvas");
+        this.visibleCanvas.width = gameCanvas.width;
+        this.visibleCanvas.height = gameCanvas.height;
+        this.visibleCanvas.style.backgroundColor = "rgba(0,0,0,0)";
+        this.visibleCanvas.style.position = "absolute";
+        this.visibleCanvas.style.top = "0px";
+        this.visibleCanvas.style.left = "0px";
 
-        document.body.appendChild(overlayCanvas);
+        document.body.appendChild(this.visibleCanvas);
     }
 
     addLayer(name: string, defaultColor: string = "#00000000") {
-
         const newLayer = [];
 
         for (let i = 0; i < this.width * this.height; i++) {
@@ -70,7 +72,6 @@ export class Overlays {
         layer[x + y * this.width] = color;
     }
 
-    // this is very similar to addLayer?? not sure
     fillLayerWithValue(layerName: string, color: string) {
         const layer = [];
         for (let i = 0; i < this.width * this.height; i++) {
@@ -82,11 +83,14 @@ export class Overlays {
     }
 
     draw(): void {
-        var ctx = this.canvas.getContext("2d");
+        const bufferCtx = this.bufferCanvas.getContext("2d");
+        const visibleCtx = this.visibleCanvas.getContext("2d");
 
-        if (!ctx) { return; }
+        if (!bufferCtx || !visibleCtx) {
+            return;
+        }
 
-        ctx.reset();
+        bufferCtx.clearRect(0, 0, this.bufferCanvas.width, this.bufferCanvas.height);
 
         for (const layerName in this.layers) {
             const layer = this.layers[layerName];
@@ -94,24 +98,17 @@ export class Overlays {
                 const x = i % this.width;
                 const y = Math.floor(i / this.width);
                 const color = layer[i];
-                ctx.fillStyle = color;
-                ctx.fillRect(this.tileX * x, this.tileY * y, this.tileX, this.tileY);
+                bufferCtx.fillStyle = color;
+                bufferCtx.fillRect(this.tileX * x, this.tileY * y, this.tileX, this.tileY);
             }
         }
+
+        visibleCtx.clearRect(0, 0, this.visibleCanvas.width, this.visibleCanvas.height);
+        visibleCtx.drawImage(this.bufferCanvas, 0, 0);
     }
 
     startLayerFade(layerName: string, duration: number = 1000, steps: number = 10, startingOpacity: number = 1.0) {
-        // keep calling this function repeatedly until it's close to black. 
-        // console.log("fading: "+layerName);
         const layer = this.layers[layerName];
-
-        // const fadeStep = duration / steps;
-        // const opacityStep = startingOpacity / steps;
-
-        // const fadeStep = duration / steps;
-        // const opacityStep = Math.floor(startingOpacity*255/steps);
-
-        // console.log("opacityStep: "+opacityStep);
 
         if (!layer) {
             console.log("No layer found with name: " + layerName);
@@ -130,24 +127,19 @@ export class Overlays {
             const transparency = parseInt(color.slice(-2), 16);
 
             if (transparency > 0) {
-                console.log("transparency: " + transparency);
                 const newTransparency = Math.max(transparency - 10, 0);
-                console.log("new transparency: " + newTransparency);
                 const newColor = color.slice(0, -2) + newTransparency.toString(16).padStart(2, '0');
-                // console.log(newColor);
                 layer[i] = newColor;
                 fullyTransparent = false;
             }
         }
 
-        // later, batcht hese. 
         this.emit("draw");
 
         if (!fullyTransparent) {
             setTimeout(() => {
                 this.startLayerFade(layerName);
-
-            })
+            });
         } else {
             delete this.layers[layerName];
         }
