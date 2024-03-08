@@ -1,6 +1,6 @@
 import * as ROT from 'rot-js';
 import { Tile } from './tile';
-import { Point, rotateVector } from '..';
+import { Point, Rect, rotateVector } from '..';
 import { Being } from '../entities/being';
 import { Button } from './button';
 import { Door } from './door';
@@ -125,6 +125,19 @@ export class GameMap {
     resetPlayerVisibility() {
         for (const tile of this.getAllTiles()) {
             tile.visible = false;
+        }
+    }
+
+    public addTilesOnRectBoundaries(rects: Rect[], tileType: string = "WALL"): void {
+        for (const rect of rects) {
+            for (let x = rect.x; x < rect.x + rect.w; x++) {
+                this.setTile(new Tile(x, rect.y, tileType));
+                this.setTile(new Tile(x, rect.y + rect.h - 1, tileType));
+            }
+            for (let y = rect.y; y < rect.y + rect.h; y++) {
+                this.setTile(new Tile(rect.x, y, tileType));
+                this.setTile(new Tile(rect.x + rect.w - 1, y, tileType));
+            }
         }
     }
 

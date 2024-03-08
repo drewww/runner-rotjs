@@ -140,18 +140,7 @@ export class BSPGameMap extends GameMap {
         return points;
     }
 
-    public addTilesOnRectBoundaries(rects: Rect[], tileType: string = "WALL"): void {
-        for (const rect of rects) {
-            for (let x = rect.x; x < rect.x + rect.w; x++) {
-                this.setTile(new Tile(x, rect.y, tileType));
-                this.setTile(new Tile(x, rect.y + rect.h - 1, tileType));
-            }
-            for (let y = rect.y; y < rect.y + rect.h; y++) {
-                this.setTile(new Tile(rect.x, y, tileType));
-                this.setTile(new Tile(rect.x + rect.w - 1, y, tileType));
-            }
-        }
-    }
+    
 
     protected shrinkRects(rects: Rect[]): Rect[] {
         const newRects: Rect[] = [];
