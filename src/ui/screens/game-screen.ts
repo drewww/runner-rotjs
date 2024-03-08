@@ -37,6 +37,8 @@ export class GameScreen extends Screen {
         // this sets the render order, be careful.
         this.overlays = new Overlays(0, 0, this.level.w, this.level.h);
 
+        this.overlays.fillLayerWithValue("red", "#aa000055");
+
         this.elements!.push(this.level);
         this.elements!.push(this.overlays);
 

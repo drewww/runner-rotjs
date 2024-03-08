@@ -22,13 +22,13 @@ export class Overlays implements Drawable {
         this.layers = {};
     }
 
-    addLayer(name: string) {
+    addLayer(name: string, defaultColor: string = "#00000000") {
 
         const newLayer = [];
 
         for (let i = 0; i < this.width * this.height; i++) {
             // last two 00s are the alpha channel
-            newLayer.push("#00000000");
+            newLayer.push(defaultColor);
         }
         
         this.layers[name] = newLayer;
@@ -46,6 +46,17 @@ export class Overlays implements Drawable {
         layer[x + y*this.width] = color;
     }
 
+    // this is very similar to addLayer?? not sure
+    fillLayerWithValue(layerName: string, color:string) {
+        const layer = [];
+        for (let i = 0; i < this.width * this.height; i++) {
+            // last two 00s are the alpha channel
+            layer.push(color);
+        }
+
+        this.layers[layerName] = layer;
+    }
+
     draw(display: Display, xOffset: number, yOffset: number, bg: string): void {
         for (const layerName in this.layers) {
             const layer = this.layers[layerName];
@@ -54,7 +65,7 @@ export class Overlays implements Drawable {
                 const y = Math.floor(i / this.width);
                 const color = layer[i];
                 display.drawOver(x + this.x + xOffset,
-                    y + this.y + yOffset, "-", color, color);
+                    y + this.y + yOffset, "", null, color);
             }
         }
     }
