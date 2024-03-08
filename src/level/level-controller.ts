@@ -15,6 +15,7 @@ import { BSPGameMap } from './bsp-game-map';
 import { Tile } from './tile';
 import { Hunter } from '../entities/hunter';
 import { Overlays } from '../ui/overlays';
+import { EdgeRoomGameMap } from './edge-room-game-map';
 
 
 export class LevelController implements Drawable {
@@ -88,6 +89,22 @@ export class LevelController implements Drawable {
 
                 break;
             case LevelType.DEBUG:
+                this.map = new BSPGameMap(this.w, this.h);
+
+                this.map.getBeings().forEach(being => {
+                    this.addBeing(being);
+                });
+
+                break;
+
+            case LevelType.EDGE_ROOM:
+                this.map = new EdgeRoomGameMap(this.w, this.h);
+                this.map.getBeings().forEach(being => {
+                    this.addBeing(being);
+                });
+
+                break;
+            case LevelType.BSP:
                 this.map = new BSPGameMap(this.w, this.h);
 
                 // this.map.getAllTiles().forEach(tile => {

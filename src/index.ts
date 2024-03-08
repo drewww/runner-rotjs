@@ -9,6 +9,13 @@ export type Point = {
     y:number
 }
 
+export type Rect = {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+
 export type Light = {
     p: Point,
     intensity: number,
@@ -19,7 +26,9 @@ export type Light = {
 export enum LevelType {
     CAVE = "CAVE",      // using the built in ROT.js "Digger" implementation and N bots
     DEBUG = "DEBUG",     // use this to figure out new generation techniques; defaults to all visible tiles
-    RANDOM = "RANDOM"   // a random map with random bots and tiles
+    RANDOM = "RANDOM",   // a random map with random bots and tiles
+    BSP = "BSP",
+    EDGE_ROOM = "EDGE_ROOM",
     // add other level generator types here
     // can also add a sequence of tutorial levels here
 }

@@ -1,15 +1,10 @@
-import { Point } from "..";
+import { Rect, Point } from "..";
 import { PatrolBot } from "../entities/patrol-bot";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 
-type Rect = {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-}
+
 
 export class BSPGameMap extends GameMap {
 

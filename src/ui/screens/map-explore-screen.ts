@@ -8,6 +8,7 @@ export class MapExploreScreen extends Screen {
 
     private game: IGame;
     level: LevelController;
+    levelType: LevelType;
 
     constructor(game: IGame) {
         super();
@@ -15,8 +16,9 @@ export class MapExploreScreen extends Screen {
         // starter level. eventually this should be the "intro" level, but for now use the tutorial cave.
         this.game = game;
 
+        this.levelType = LevelType.EDGE_ROOM;
 
-        this.level = this.generateLevelType(LevelType.DEBUG);
+        this.level = this.generateLevelType(this.levelType);
     }
 
     generateLevel(typeString: string) {
@@ -50,7 +52,7 @@ export class MapExploreScreen extends Screen {
 
     handleEvent(e: KeyboardEvent): void {
         // regenerate level on every key press
-        this.level = this.generateLevelType(LevelType.DEBUG);
+        this.level = this.generateLevelType(this.levelType);
 
         this.game.refreshDisplay();
     }
