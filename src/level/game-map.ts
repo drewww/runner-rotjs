@@ -141,8 +141,8 @@ export class GameMap {
             "WWW",
             "W%W",
             "W#W",
-            "W#W",
-            "W#W",
+            "W W",
+            "W W",
             "   "
         ]
         ]
@@ -276,7 +276,7 @@ export class GameMap {
                         newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "WALL");
                         break;
                     case "#":
-                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "FORCEFIELD");
+                        newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "EXIT_FORCEFIELD");
                         break;
                     case "%":
                         newTile = new Tile(point.x + rotatedPoint.x, point.y + rotatedPoint.y, "EXIT");

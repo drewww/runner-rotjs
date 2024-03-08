@@ -84,8 +84,8 @@ export class BSPGameMap extends GameMap {
         }
 
         this.addTemplate(GameMap.BUTTON, -1);
-        this.addTemplate(GameMap.BUTTON, -1);
-        this.addTemplate(GameMap.BUTTON, -1);
+        // this.addTemplate(GameMap.BUTTON, -1);
+        // this.addTemplate(GameMap.BUTTON, -1);
 
 
         // TODO: add exit template

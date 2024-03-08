@@ -125,7 +125,7 @@ export class LevelController implements Drawable {
         this.map.getAllTiles().forEach(tile => {
             if (tile instanceof Button) {
                 tile.addListener("button", (tile: Button) => {
-                    const forcefields = this.map.getAllTiles().filter(t => t.symbol === "#");
+                    const forcefields = this.map.getAllTiles().filter(t => t.type === "EXIT_FORCEFIELD");
 
                     // for a random forecfield tile, turn it into a floor tile.
                     const t = forcefields[Math.floor(Math.random() * forcefields.length)];
@@ -133,10 +133,60 @@ export class LevelController implements Drawable {
                         const position = { x: t.x, y: t.y };
                         this.map.setTile(new Tile(position.x, position.y, "FLOOR"));
                     }
+
+                    // if this was the last one ...
+                    if (forcefields.length == 1) {
+                        this.overlays?.addLayer("path-to-exit");
+                        const exitTile = this.map.getAllTiles().find(tile => tile.type === "EXIT");
+                        var timesCalled = 0;
+
+                        if (exitTile) {
+                            // this is the DESTINATION that we pass in here
+                            const path = new ROT.Path.AStar(exitTile.x, exitTile.y, (x, y) => {
+                                // ignore the actual map, the point is not to show the path just to make an animation
+                                return true;
+                            });
+
+                            if (path) {
+                                var revealedExit = false;
+                                path.compute(this.player!.x, this.player!.y, (x, y) => {
+                                    timesCalled++;
+                                    setTimeout(() => {
+
+                                        if (!this.overlays) { return; }
+
+                                        this.overlays.setValueOnLayer("path-to-exit", x, y, COLORS.LIGHT_GREEN + "80");
+                                        this.overlays.draw();
+
+                                        const distanceToExit = Math.floor(Math.sqrt(Math.pow(Math.abs(exitTile.x - x), 2) +
+                                            Math.pow(Math.abs(exitTile.y - y), 2)));
+
+                                        if(distanceToExit<=1 && !revealedExit) {
+                                            // this.map.setTile(new Tile(exitTile.x, exitTile.y, "EXIT", true, true));
+                                            for (let dx = -1; dx <= 1; dx++) {
+                                                for (let dy = -1; dy <= 1; dy++) {
+                                                    const adjacentTile = this.map.getTile(exitTile.x + dx, exitTile.y + dy);
+                                                    if (adjacentTile) {
+                                                        adjacentTile.discovered = true;
+                                                        adjacentTile.visible = true;
+                                                    }
+                                                }
+                                            }
+
+                                            revealedExit = true;
+                                        }
+                                    }, timesCalled * 10 + 100);
+                                });
+                                setTimeout(() => {
+                                    this.overlays?.startLayerFade("path-to-exit", 1000, 10, 0.9);
+                                }, 1000);
+                            }
+                        }
+                    }
+
                 });
             }
-
-        })
+        });
     }
 
     // Methods specific to managing a specific level
@@ -183,6 +233,7 @@ export class LevelController implements Drawable {
             for (var button of buttons) {
                 // kick off a pathing animation
 
+                // this is the DESTINATION that we pass in here
                 const path = new ROT.Path.AStar(button.x, button.y, (x, y) => {
                     // ignore the actual map, the point is not to show the path just to make an animation
                     return true;
@@ -192,20 +243,11 @@ export class LevelController implements Drawable {
                 path.compute(this.player!.x, this.player!.y, (x, y) => {
                     timesCalled++;
                     setTimeout(() => {
-                        // TODO this is not working if there is other vision shown
-                        // display.drawOver(x, y, null, null, COLORS.LIGHT_GREEN);
-
                         if (!this.overlays) { return; }
 
                         this.overlays.setValueOnLayer("button-pathing", x, y, COLORS.LIGHT_GREEN + "80");
                         this.overlays.draw();
                     }, timesCalled * 10 + 100);
-
-
-
-                    // setTimeout(() => {
-                    //     this.drawTile(this.map.getTile(x, y), display, xOffset, yOffset, lightMap);
-                    // }, timesCalled*10 + 1000);
                 });
 
                 setTimeout(() => {
@@ -236,13 +278,13 @@ export class LevelController implements Drawable {
                 // kick off an animation pulse of circles
                 // for big distances this is .. a lot. do a max of 5 circles
                 // start at 5 less than the max, or 1.
-                for (let r = Math.max(distance-3, 1); r <= distance; r++) {
+                for (let r = Math.max(distance - 3, 1); r <= distance; r++) {
                     // calculate the points for the radius.
                     // let r = distance;
                     let points: Point[] = [];
 
 
-                    for (let a = 0; a <= Math.PI * 2; a += Math.PI / (4*distance)) {
+                    for (let a = 0; a <= Math.PI * 2; a += Math.PI / (4 * distance)) {
                         points.push({ x: Math.floor(r * Math.cos(a)), y: Math.floor(r * Math.sin(a)) });
                     }
                     console.log("pulsing for r=" + r + " points: " + points.length);
@@ -252,43 +294,15 @@ export class LevelController implements Drawable {
                     this.overlays.addLayer("hunter-pulse");
 
                     setTimeout(() => {
-                    for (let point of points) {
-                        this.overlays!.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
-                            COLORS.LASER_RED + Math.floor(0.9 * 255).toString(16))
-                    }
-                    this.overlays!.draw();
+                        for (let point of points) {
+                            this.overlays!.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
+                                COLORS.LASER_RED + Math.floor(0.9 * 255).toString(16))
+                        }
+                        this.overlays!.draw();
 
-                    }, (3-(distance-r))*50);
+                    }, (3 - (distance - r)) * 50);
 
                 }
-                // }, r*150);
-
-
-
-                // this.overlays.draw();
-
-                // setTimeout(() => {
-                //     for(let point of points) {
-                //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                //     }
-                // }, r*50);
-
-                // if(r==distance) {
-                //     for(let i=0; i<50; i++) {
-                //         setTimeout(() => {
-                //             for(let point of points) {
-                //                 display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                //             } 
-                //         }, i);
-                //     }
-                // }
-
-
-                // setTimeout(() => {
-                //     for(let point of points) {
-                //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                //     }
-                // }, r*150);
 
                 setTimeout(() => {
                     if (!this.overlays) { return; }
