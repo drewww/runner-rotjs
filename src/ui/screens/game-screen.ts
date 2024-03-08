@@ -37,8 +37,11 @@ export class GameScreen extends Screen {
         // this sets the render order, be careful.
         this.overlays = new Overlays(0, 0, this.level.w, this.level.h);
 
-        this.overlays.fillLayerWithValue("red", "#aa000055");
-
+        this.overlays.fillLayerWithValue("red", "#aa0000FF");
+        this.overlays.addListener("draw", () => {
+            this.game.refreshDisplay();
+        });
+        
         this.elements!.push(this.level);
         this.elements!.push(this.overlays);
 
@@ -269,5 +272,7 @@ export class GameScreen extends Screen {
                 // later -- INTERRUPT movement and show the enemy that hit you.
             }
         });
+
+        this.overlays.startLayerFade("red");
     }
 }
