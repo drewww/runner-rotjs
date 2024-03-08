@@ -31,6 +31,7 @@ export class LevelController implements Drawable {
     public player: Player | null = null;
     private firstTurnRender = false;
     turnCounter: number;
+    hunter: Hunter | null = null;
 
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number) {
@@ -184,6 +185,7 @@ export class LevelController implements Drawable {
                 path.compute(this.player!.x, this.player!.y, (x, y) => {
                     timesCalled++;
                     setTimeout(() => {
+                        // TODO this is not working if there is other vision shown
                         display.drawOver(x, y, " ", COLORS.LIGHT_GREEN, COLORS.LIGHT_GREEN);
                     }, timesCalled*10+100);
 
@@ -199,6 +201,51 @@ export class LevelController implements Drawable {
                 this.draw(display, xOffset, yOffset, bg);
             }
         }
+
+        if(this.player && this.player.triggerPulse) {
+            // look for hunter.
+            if(this.hunter) {
+                //calculate distance
+                const distance = Math.floor(Math.sqrt(Math.pow(Math.abs(this.hunter.x - this.player.x), 2) +
+                    Math.pow(Math.abs(this.hunter.y - this.player.y), 2)));
+                console.log("distance: " + distance);
+
+                // kick off an animation pulse of circles
+                for(let r=1; r<=distance; r++) {
+                    // calculate the points for the radius.
+
+                    let points: Point[] = [];
+                    for(let a=0; a<Math.PI*2; a+=Math.PI/80) {
+                       points.push({x:Math.floor(r*Math.cos(a)), y:Math.floor(r*Math.sin(a))}); 
+                    }
+
+                    points = points.filter((point, index) => points.indexOf(point) === index);
+
+                    setTimeout(() => {
+                        for(let point of points) {
+                            display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                        }
+                    }, r*50);
+
+                    if(r==distance) {
+                        for(let i=0; i<50; i++) {
+                            setTimeout(() => {
+                                for(let point of points) {
+                                    display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                                } 
+                            }, i);
+                        }
+                    }
+
+
+                    // setTimeout(() => {
+                    //     for(let point of points) {
+                    //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                    //     }
+                    // }, r*150);
+                }
+            }
+        }   
     }
 
     private drawTile(tile:Tile, display:ROT.Display, xOffset:number, yOffset:number, lightMap: { [key: string]: Light }) {
@@ -410,6 +457,7 @@ export class LevelController implements Drawable {
                 if(entranceTiles) {
                     const hunter = new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map); 
                     hunter.queueNextMove();
+                    this.hunter = hunter;
                     this.addBeing(hunter);
                 }
             }

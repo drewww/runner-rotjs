@@ -17,6 +17,7 @@ export class Player extends Being {
 
     // this is relative to the players location
     public selectedMoveOptions: MoveOption[];
+    triggerPulse: boolean;
 
     constructor() {
         // don't need to have a valid position for the player to make the object
@@ -28,6 +29,7 @@ export class Player extends Being {
         this.moves.push({name: "(4) Running Jump", template:RUNNING_JUMP, cooldown: 0, selected:false})
 
         this.selectedMoveOptions = [];
+        this.triggerPulse = false;
     }
 
 
@@ -54,6 +56,13 @@ export class Player extends Being {
 
         if(superDidMove || (dX==0 && dY==0)) {
             this.emit("move");
+        }
+
+        
+        if(dX==0 && dY == 0) {
+            this.triggerPulse = true;
+        } else {
+            this.triggerPulse = false;
         }
 
         return superDidMove;
