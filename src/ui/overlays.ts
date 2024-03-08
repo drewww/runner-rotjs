@@ -101,7 +101,7 @@ export class Overlays {
                 const y = Math.floor(i / this.width);
                 const color = layer[i];
                 bufferCtx.fillStyle = color;
-                bufferCtx.fillRect(this.tileX * x, this.tileY * y, this.tileX, this.tileY);
+                bufferCtx.fillRect(this.tileX * (x+1), this.tileY * (y+1), this.tileX, this.tileY);
             }
         }
 
