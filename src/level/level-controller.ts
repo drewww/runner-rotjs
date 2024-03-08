@@ -177,6 +177,7 @@ export class LevelController implements Drawable {
             // draw a path from the player to each of the buttons
             const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
 
+            this.overlays.addLayer("button-pathing");
             for (var button of buttons) {
                 // kick off a pathing animation
 
@@ -190,13 +191,21 @@ export class LevelController implements Drawable {
                     timesCalled++;
                     setTimeout(() => {
                         // TODO this is not working if there is other vision shown
-                        display.drawOver(x, y, null, null, COLORS.LIGHT_GREEN);
+                        // display.drawOver(x, y, null, null, COLORS.LIGHT_GREEN);
+                        this.overlays.setValueOnLayer("button-pathing", x, y, COLORS.LIGHT_GREEN + "80");
+                        this.overlays.draw();
                     }, timesCalled * 10 + 100);
+
+                    
 
                     // setTimeout(() => {
                     //     this.drawTile(this.map.getTile(x, y), display, xOffset, yOffset, lightMap);
                     // }, timesCalled*10 + 1000);
                 });
+
+                setTimeout(() => {
+                    this.overlays.startLayerFade("button-pathing", 1000, 10, 0.9);
+                }, 1000);
 
                 button.discovered = true;
                 button.visible = true;
@@ -217,50 +226,50 @@ export class LevelController implements Drawable {
 
                 // kick off an animation pulse of circles
                 // for (let r = distance; r > 1; r-=2) {
-                    // calculate the points for the radius.
+                // calculate the points for the radius.
                 let r = distance;
-                    let points: Point[] = [];
-                    for (let a = 0; a < Math.PI * 2; a += Math.PI / 20) {
-                        points.push({ x: Math.floor(r * Math.cos(a)), y: Math.floor(r * Math.sin(a)) });
-                    }
+                let points: Point[] = [];
+                for (let a = 0; a < Math.PI * 2; a += Math.PI / 20) {
+                    points.push({ x: Math.floor(r * Math.cos(a)), y: Math.floor(r * Math.sin(a)) });
+                }
 
-                    points = points.filter((point, index) => points.indexOf(point) === index);
-
-
-                    // setTimeout(() => {
-                        for (let point of points) {
-                            this.overlays.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
-                                COLORS.LASER_RED + Math.floor(0.9 * 255).toString(16))
-                        }
-                    // }, r*150);
-
-                    
-
-                    // this.overlays.draw();
-
-                    // setTimeout(() => {
-                    //     for(let point of points) {
-                    //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                    //     }
-                    // }, r*50);
-
-                    // if(r==distance) {
-                    //     for(let i=0; i<50; i++) {
-                    //         setTimeout(() => {
-                    //             for(let point of points) {
-                    //                 display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                    //             } 
-                    //         }, i);
-                    //     }
-                    // }
+                points = points.filter((point, index) => points.indexOf(point) === index);
 
 
-                    // setTimeout(() => {
-                    //     for(let point of points) {
-                    //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
-                    //     }
-                    // }, r*150);
-                
+                // setTimeout(() => {
+                for (let point of points) {
+                    this.overlays.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
+                        COLORS.LASER_RED + Math.floor(0.9 * 255).toString(16))
+                }
+                // }, r*150);
+
+
+
+                // this.overlays.draw();
+
+                // setTimeout(() => {
+                //     for(let point of points) {
+                //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                //     }
+                // }, r*50);
+
+                // if(r==distance) {
+                //     for(let i=0; i<50; i++) {
+                //         setTimeout(() => {
+                //             for(let point of points) {
+                //                 display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                //             } 
+                //         }, i);
+                //     }
+                // }
+
+
+                // setTimeout(() => {
+                //     for(let point of points) {
+                //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
+                //     }
+                // }, r*150);
+
                 setTimeout(() => {
                     this.overlays.startLayerFade("hunter-pulse", 5000, 40, 0.9);
                 }, 500);

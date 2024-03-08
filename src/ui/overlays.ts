@@ -130,8 +130,9 @@ export class Overlays {
             const transparency = parseInt(color.slice(-2), 16);
 
             if (transparency > 0) {
-                // console.log("transparency: "+transparency);
-                const newTransparency = Math.max(transparency - opacityStep, 0);
+                console.log("transparency: "+transparency);
+                const newTransparency = Math.max(transparency - 10, 0);
+                console.log("new transparency: " + newTransparency);
                 const newColor = color.slice(0, -2) + newTransparency.toString(16).padStart(2, '0');
                 // console.log(newColor);
                 layer[i] = newColor;
