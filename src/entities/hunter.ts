@@ -27,10 +27,10 @@ export class Hunter extends Enemy {
         const path = new Path.AStar(playerPoint.x, playerPoint.y, (x, y) => {
             // Implement your own logic to determine if a tile is passable
             const tile = this.map.getTile(x, y);
-            // console.log(`${x},${y}`);
+            console.log(`${x},${y}`);
             if(tile) {
                 // consider doors "passable"
-                if(tile.type=="DOOR") {
+                if(tile.type=="DOOR" || tile.type=="ENTRANCE") {
                     return true;
                 } else {
                     return !tile.solid;
@@ -47,7 +47,7 @@ export class Hunter extends Enemy {
             const yDistance = y - this.y;
             const xDistance = x - this.x;
 
-            // console.log("compute response: " + x + "," + y + " dX=" + xDistance + " dY=" + yDistance);
+            console.log("compute response: " + x + "," + y + " dX=" + xDistance + " dY=" + yDistance);
 
             if(!(x == this.x && y == this.y) && Math.abs(yDistance) <=1 && Math.abs(xDistance) <=1) {
                 console.log(`setting next hunter move from ${this.x},${this.y} to ${x},${y}`);
@@ -59,9 +59,7 @@ export class Hunter extends Enemy {
     }
 
     act(): void {
-
-        
-
+        console.log("hunter got act()");
         if(this.nextMove) {
             // check if I want to move into a door.
             const tile = this.map.getTile(this.nextMove.x + this.x, this.nextMove.y + this.y);

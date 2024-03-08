@@ -364,9 +364,7 @@ export class LevelController implements Drawable {
 
         this.player.addListener("move", () => {
             this.map.latestPlayerPosition = {x:this.player!.x, y:this.player!.y};
-
             this.turnCounter++;
-            console.log("player moved: " + this.turnCounter);
 
             if(this.turnCounter == 20) {
                 console.log("-----------HUNTER ENTERING----------");
@@ -374,7 +372,9 @@ export class LevelController implements Drawable {
                 const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
 
                 if(entranceTiles) {
-                    this.addBeing(new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map));
+                    const hunter = new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map); 
+                    hunter.queueNextMove();
+                    this.addBeing(hunter);
                 }
             }
         });
