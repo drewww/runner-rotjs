@@ -458,6 +458,7 @@ export class LevelController implements Drawable {
         for (let key in lightMapSources) {
             let bg = COLORS.BLACK;
 
+            var firstBeing: Being = lightMapSources[key][0].being;
             if (key in lightMapSources) {
                 const EMPTY_COLOR: Color = [-1, -1, -1];
                 let finalTileColor: Color = EMPTY_COLOR;
@@ -476,7 +477,7 @@ export class LevelController implements Drawable {
 
             lightMap[key] = {
                 p: { x: parseInt(key.split(",")[0]), y: parseInt(key.split(",")[1]) },
-                intensity: 10, color: bg
+                intensity: 10, color: bg, being: firstBeing
             };
         }
 
@@ -542,19 +543,10 @@ export class LevelController implements Drawable {
                 // find the nearest enemy that is doing the shooting
 
                 // search through the beings to find the one closest to this location
-                let closestBeing: Being | null = null;
-                let closestDistance = Infinity;
+                // (a bit wasteful to run merge lightmaps again here ... TODO cache it)
+                let sourceBeing: Being = this.mergeLightMaps()[`${player.x},${player.y}`].being!;
 
-                for (const being of this.beings) {
-                    if(being instanceof Player) { continue; }
-                    const distance = Math.abs(being.x - player.x) + Math.abs(being.y - player.y);
-                    if (distance < closestDistance) {
-                        closestBeing = being;
-                        closestDistance = distance;
-                    }
-                }
-
-                if (closestBeing) {
+                if (sourceBeing) {
                     this.overlays?.addLayer("shot-line");
 
                     // this is the DESTINATION that we pass in here
@@ -564,7 +556,7 @@ export class LevelController implements Drawable {
                     });
 
                     var timesCalled = 0;
-                    path.compute(closestBeing.x, closestBeing.y, (x, y) => {
+                    path.compute(sourceBeing.x, sourceBeing.y, (x, y) => {
                         timesCalled++;
                         setTimeout(() => {
                             if (!this.overlays) { return; }

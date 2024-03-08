@@ -206,7 +206,8 @@ export class Player extends Being {
                 const light: Light = {
                     p: {x: this.x + step.x, y: this.y + step.y},
                     intensity: 1,
-                    color: COLORS.MOVE_LIGHT_BLUE
+                    color: COLORS.MOVE_LIGHT_BLUE,
+                    being: this
                 };
                 lights.push(light);
             }

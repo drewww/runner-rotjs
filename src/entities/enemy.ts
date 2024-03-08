@@ -17,7 +17,8 @@ export abstract class Enemy extends Being {
         return visionPoints.map(point => ({
             p: { x: point.x, y: point.y },
             color: COLORS.LASER_RED,
-            intensity: 10
+            intensity: 10,
+            being: this
         }));
     }
 

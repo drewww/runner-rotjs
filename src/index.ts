@@ -1,4 +1,5 @@
 import * as ROT from 'rot-js'; // Import the 'ROT' namespace
+import { Being } from './entities/being';
 
 export const SCREEN_WIDTH: number = 70;
 export const SCREEN_HEIGHT: number = 40;
@@ -12,6 +13,7 @@ export type Light = {
     p: Point,
     intensity: number,
     color: string
+    being: Being
 }
 
 export enum LevelType {
