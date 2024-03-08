@@ -50,6 +50,8 @@ export class Overlays {
     }
 
     addLayer(name: string, defaultColor: string = "#00000000") {
+        if(this.layers[name]) { return; }
+        
         const newLayer = [];
 
         for (let i = 0; i < this.width * this.height; i++) {
@@ -139,7 +141,7 @@ export class Overlays {
         if (!fullyTransparent) {
             setTimeout(() => {
                 this.startLayerFade(layerName);
-            });
+            }, 50);
         } else {
             delete this.layers[layerName];
         }
