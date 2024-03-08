@@ -22,8 +22,8 @@ export class LevelController implements Drawable {
 
     public scheduler = new ROT.Scheduler.Simple();
 
-    protected w: number = 80;
-    protected h: number = 23;
+    public w: number = 80;
+    public h: number = 23;
 
     public x: number = 0;
     public y: number = 0;

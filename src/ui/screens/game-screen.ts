@@ -6,6 +6,7 @@ import { LevelController } from "../../level/level-controller";
 import { Interactable } from "../../level/tile";
 import { Screen } from "../screen";
 import { MoveMenuScreen } from './move-menu-screen';
+import { Overlays } from "../overlays";
 
 const RIGHT_MENU_WIDTH: number= 20;
 
@@ -18,6 +19,8 @@ export class GameScreen extends Screen {
 
     engine: ROT.Engine;
     moveMenu: any;
+
+    overlays: Overlays;
 
     constructor(game: IGame) {
         super();
@@ -32,7 +35,10 @@ export class GameScreen extends Screen {
         this.x = 0;
         this.y = 0;
         // this sets the render order, be careful.
+        this.overlays = new Overlays(0, 0, this.level.w, this.level.h);
+
         this.elements!.push(this.level);
+        this.elements!.push(this.overlays);
 
         this.engine = new ROT.Engine(this.level.scheduler);
     }
