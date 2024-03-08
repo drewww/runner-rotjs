@@ -33,10 +33,10 @@ export class LevelController implements Drawable {
     private firstTurnRender = false;
     turnCounter: number;
     hunter: Hunter | null = null;
-    overlays: Overlays;
+    overlays: Overlays | null = null;
 
     // put the logic for different types of levels in here
-    constructor(type: LevelType, w: number, h: number, overlays: Overlays) {
+    constructor(type: LevelType, w: number, h: number, overlays: Overlays | null =null) {
         this.beings = [];
 
         this.w = w;
@@ -177,6 +177,8 @@ export class LevelController implements Drawable {
             // draw a path from the player to each of the buttons
             const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
 
+            if(!this.overlays) {return;}
+
             this.overlays.addLayer("button-pathing");
             for (var button of buttons) {
                 // kick off a pathing animation
@@ -192,6 +194,9 @@ export class LevelController implements Drawable {
                     setTimeout(() => {
                         // TODO this is not working if there is other vision shown
                         // display.drawOver(x, y, null, null, COLORS.LIGHT_GREEN);
+
+                        if(!this.overlays) { return; }
+
                         this.overlays.setValueOnLayer("button-pathing", x, y, COLORS.LIGHT_GREEN + "80");
                         this.overlays.draw();
                     }, timesCalled * 10 + 100);
@@ -204,6 +209,8 @@ export class LevelController implements Drawable {
                 });
 
                 setTimeout(() => {
+                    if(!this.overlays) { return; }
+
                     this.overlays.startLayerFade("button-pathing", 1000, 10, 0.9);
                 }, 1000);
 
@@ -222,6 +229,9 @@ export class LevelController implements Drawable {
                 const distance = Math.floor(Math.sqrt(Math.pow(Math.abs(this.hunter.x - this.player.x), 2) +
                     Math.pow(Math.abs(this.hunter.y - this.player.y), 2)));
                 console.log("distance: " + distance);
+
+                if(!this.overlays) { return; }
+
                 this.overlays.addLayer("hunter-pulse");
 
                 // kick off an animation pulse of circles
@@ -271,6 +281,7 @@ export class LevelController implements Drawable {
                 // }, r*150);
 
                 setTimeout(() => {
+                    if(!this.overlays) { return; }
                     this.overlays.startLayerFade("hunter-pulse", 5000, 40, 0.9);
                 }, 500);
             }

@@ -109,7 +109,7 @@ export class Overlays {
         // const opacityStep = startingOpacity / steps;
 
         const fadeStep = duration / steps;
-        const opacityStep = Math.floor(startingOpacity*255/steps);
+        // const opacityStep = Math.floor(startingOpacity*255/steps);
 
         // console.log("opacityStep: "+opacityStep);
 
