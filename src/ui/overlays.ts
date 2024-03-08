@@ -1,8 +1,8 @@
 import { Display } from "rot-js";
-import { Drawable } from "..";
+import { Drawable, SCREEN_HEIGHT, SCREEN_WIDTH } from "..";
 
 
-export class Overlays implements Drawable {
+export class Overlays {
     x: number;
     y: number;
     height: number;
@@ -13,6 +13,10 @@ export class Overlays implements Drawable {
     callbacks: {
         [key:string]: Function[]
     } = {};
+    tileX: number;
+
+    canvas: HTMLCanvasElement;
+    tileY: number;
 
     constructor(x: number, y: number, width: number, height: number) {
 
@@ -23,6 +27,24 @@ export class Overlays implements Drawable {
         this.height = height;
 
         this.layers = {};
+
+        const overlayCanvas = document.createElement("canvas");
+        const gameCanvas = document.getElementById("game") as HTMLCanvasElement;
+        overlayCanvas.width = gameCanvas.width;
+        overlayCanvas.height = gameCanvas.height;
+
+        // tile dimensions
+        this.tileX = gameCanvas.width / SCREEN_WIDTH;
+        this.tileY = gameCanvas.height / SCREEN_HEIGHT;
+
+        overlayCanvas.style.backgroundColor = "rgba(0,0,0,0)";
+        overlayCanvas.style.position = "absolute";
+        overlayCanvas.style.top = "0px";
+        overlayCanvas.style.left = "0px";
+
+        this.canvas = overlayCanvas;
+
+        document.body.appendChild(overlayCanvas);
     }
 
     addLayer(name: string, defaultColor: string = "#00000000") {
@@ -60,15 +82,21 @@ export class Overlays implements Drawable {
         this.layers[layerName] = layer;
     }
 
-    draw(display: Display, xOffset: number, yOffset: number, bg: string): void {
+    draw(): void {
+        var ctx = this.canvas.getContext("2d");
+        
+        if(!ctx) { return; }
+
+        ctx.reset();
+        
         for (const layerName in this.layers) {
             const layer = this.layers[layerName];
             for (let i = 0; i < layer.length; i++) {
                 const x = i % this.width;
                 const y = Math.floor(i / this.width);
                 const color = layer[i];
-                display.drawOver(x + this.x + xOffset,
-                    y + this.y + yOffset, null, null, color);
+                ctx.fillStyle = color;
+                ctx.fillRect(this.tileX*x, this.tileY*y, this.tileX, this.tileY);
             }
         }
     }
@@ -90,7 +118,7 @@ export class Overlays implements Drawable {
             const transparency = parseInt(color.slice(-2), 16);
 
             if (transparency > 0) {
-                const newTransparency = Math.max(transparency - 16, 0);
+                const newTransparency = Math.max(transparency - 8, 0);
                 const newColor = color.slice(0, -2) + newTransparency.toString(16).padStart(2, '0');
                 layer[i] = newColor;
                 fullyTransparent = false;
@@ -103,9 +131,10 @@ export class Overlays implements Drawable {
         if (!fullyTransparent) {
             setTimeout(() => {
                 this.startLayerFade(layerName);
-            }, 100);
+            }, 10);
         }
 
+        this.draw();
     }
 
     addListener(type: string, callback: Function): void {

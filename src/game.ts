@@ -40,6 +40,7 @@ export class Game implements IGame {
             forceSquareRatio: true,
         });
         document.body.appendChild(<Node>this.display.getContainer());
+        this.display.getContainer()!.id="game"
 
         // const canvas = this.display.getContainer();
         // if(canvas) { canvas.style = "image-rendering: crisp-edges"; } 
