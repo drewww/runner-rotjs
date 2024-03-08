@@ -84,7 +84,7 @@ export class Hunter extends Enemy {
                 }
             }
 
-            const didMove: boolean = this.move(this.nextMove.x, this.nextMove.y);
+            this.move(this.nextMove.x, this.nextMove.y);
             this.updateVision();
             // this is probably wrong idk
             this.queueNextMove();

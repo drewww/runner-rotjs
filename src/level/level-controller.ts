@@ -165,74 +165,7 @@ export class LevelController implements Drawable {
         const tiles = this.map.getAllTiles();
         const lightMap = this.mergeLightMaps();
         for (const tile of tiles) {            
-
-            // if not discovered, skip it.
-            if (!tile.discovered) {
-                continue;
-            }
-
-
-            let fg = tile.fg;
-            let bg = tile.bg;
-
-            if(tile.visible) {
-                const key = `${tile.x},${tile.y}`;
-                if(key in lightMap) {
-                    bg = lightMap[`${tile.x},${tile.y}`].color;
-                } else {
-                    bg = COLORS.BLACK;
-                }
-            } else {
-                // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
-                // fgHSL[2] = fgHSL[2]-0.5;  
-                // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
-                fg = COLORS.INVISIBLE_TILE;
-            }
-
-            if (tile.opaque) {
-                bg = tile.bg;
-            }
-
-            // if(tile.indestructable) {
-            //     fg = COLORS.WHITE;
-            //     bg = COLORS.WHITE;
-            // }
-
-            // TODO check in on the offset math here
-            // I think this might need xOffset and we're just getting lucky that it's 0 in the current
-            // UI design
-            display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, fg, bg);
-
-
-            for (let being of this.beings) {
-                // ah this is failing sometimes when beings get created OUTSIDE the boundaries.
-                const t = this.map.getTile(being.x, being.y);
-
-                if(!t) {
-                    console.error("being at invalid location", being.x, being.y, being);
-                }
-
-                if (t && t.visible) {
-                    let bg = COLORS.BLACK;
-                    const key = `${being.x},${being.y}`;
-                    if (key in lightMap) {
-                        bg = lightMap[key].color;
-                    }
-
-                    being.draw(display, this.x, this.y, bg);
-                }
-            }
-
-            // render destination moves
-            const selectedMoveOptions: MoveOption[] = this.player?.selectedMoveOptions ?? [];
-            
-            // should be length 0 or length 4
-            let i=1;
-            for (const selectedMove of selectedMoveOptions) {
-                const lastStep = selectedMove.moves[selectedMove.moves.length - 1];
-                display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, selectedMove.symbol, COLORS.WHITE, COLORS.MOVE_BLUE);
-                i++;
-            }
+           this.drawTile(tile, display, xOffset, yOffset, lightMap);
         }
 
        if(this.turnCounter==0 && !this.firstTurnRender) {
@@ -255,9 +188,8 @@ export class LevelController implements Drawable {
                     }, timesCalled*10+100);
 
                     setTimeout(() => {
-                        display.draw(x, y, " ", COLORS.BLACK, COLORS.BLACK);
+                        this.drawTile(this.map.getTile(x, y), display, xOffset, yOffset, lightMap);
                     }, timesCalled*10 + 1000);
-
                 });
 
                 button.discovered = true;
@@ -266,6 +198,80 @@ export class LevelController implements Drawable {
                 this.firstTurnRender = true;
                 this.draw(display, xOffset, yOffset, bg);
             }
+        }
+    }
+
+    private animateEntryPath(x, y) {
+        
+    }
+
+    private drawTile(tile:Tile, display:ROT.Display, xOffset:number, yOffset:number, lightMap: { [key: string]: Light }) {
+         // if not discovered, skip it.
+         if (!tile.discovered) {
+            return;
+        }
+
+
+        let fg = tile.fg;
+        let bg = tile.bg;
+
+        if(tile.visible) {
+            const key = `${tile.x},${tile.y}`;
+            if(key in lightMap) {
+                bg = lightMap[`${tile.x},${tile.y}`].color;
+            } else {
+                bg = COLORS.BLACK;
+            }
+        } else {
+            // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
+            // fgHSL[2] = fgHSL[2]-0.5;  
+            // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
+            fg = COLORS.INVISIBLE_TILE;
+        }
+
+        if (tile.opaque) {
+            bg = tile.bg;
+        }
+
+        // if(tile.indestructable) {
+        //     fg = COLORS.WHITE;
+        //     bg = COLORS.WHITE;
+        // }
+
+        // TODO check in on the offset math here
+        // I think this might need xOffset and we're just getting lucky that it's 0 in the current
+        // UI design
+        display.draw(tile.x + this.x, tile.y + this.y, tile.symbol, fg, bg);
+
+
+        for (let being of this.beings) {
+            // ah this is failing sometimes when beings get created OUTSIDE the boundaries.
+            const t = this.map.getTile(being.x, being.y);
+
+            if(!t) {
+                console.error("being at invalid location", being.x, being.y, being);
+            }
+
+            if (t && t.visible) {
+                let bg = COLORS.BLACK;
+                const key = `${being.x},${being.y}`;
+                if (key in lightMap) {
+                    bg = lightMap[key].color;
+                }
+
+                being.draw(display, this.x, this.y, bg);
+            }
+        }
+
+        // render destination moves
+        const selectedMoveOptions: MoveOption[] = this.player?.selectedMoveOptions ?? [];
+        
+        // should be length 0 or length 4
+        let i=1;
+        for (const selectedMove of selectedMoveOptions) {
+            const lastStep = selectedMove.moves[selectedMove.moves.length - 1];
+            display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, selectedMove.symbol, COLORS.WHITE, COLORS.MOVE_BLUE);
+            i++;
         }
     }
 
