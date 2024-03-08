@@ -68,7 +68,7 @@ export class Overlays implements Drawable {
                 const y = Math.floor(i / this.width);
                 const color = layer[i];
                 display.drawOver(x + this.x + xOffset,
-                    y + this.y + yOffset, "", null, color);
+                    y + this.y + yOffset, null, null, color);
             }
         }
     }

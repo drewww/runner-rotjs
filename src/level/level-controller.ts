@@ -186,12 +186,12 @@ export class LevelController implements Drawable {
                     timesCalled++;
                     setTimeout(() => {
                         // TODO this is not working if there is other vision shown
-                        display.drawOver(x, y, " ", COLORS.LIGHT_GREEN, COLORS.LIGHT_GREEN);
+                        display.drawOver(x, y, null, null, COLORS.LIGHT_GREEN);
                     }, timesCalled*10+100);
 
-                    setTimeout(() => {
-                        this.drawTile(this.map.getTile(x, y), display, xOffset, yOffset, lightMap);
-                    }, timesCalled*10 + 1000);
+                    // setTimeout(() => {
+                    //     this.drawTile(this.map.getTile(x, y), display, xOffset, yOffset, lightMap);
+                    // }, timesCalled*10 + 1000);
                 });
 
                 button.discovered = true;
