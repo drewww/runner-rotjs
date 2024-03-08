@@ -6,6 +6,7 @@ import { JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL
 import { Light } from '../index.ts';
 
 export class Player extends Being {
+
     public health: number = 10 ;
 
     public depth: number = -3;
@@ -17,6 +18,7 @@ export class Player extends Being {
 
     // this is relative to the players location
     public selectedMoveOptions: MoveOption[];
+    protected interruptMoves: boolean;
     triggerPulse: boolean;
 
     constructor() {
@@ -30,6 +32,7 @@ export class Player extends Being {
 
         this.selectedMoveOptions = [];
         this.triggerPulse = false;
+        this.interruptMoves = false;
     }
 
 
@@ -83,7 +86,7 @@ export class Player extends Being {
             // we're double-using the numbers here. there's move selection number,
             // then rotation number. 
             console.log("trying to move: " + selectedMove.name + "with rotation: " + symbol);
-
+            this.interruptMoves = false;
             // eventually I will need to select a move VARIANT which will be numbered as well. for now,
             // we're just going to accept the move as is.
 
@@ -107,13 +110,14 @@ export class Player extends Being {
             // that should get recomputed to be [(1,0), (2,0)]
             // because after the first move completes, the correct RELATIVE move is only two more steps. not three.
             
+            // TODO THIS IS WHERE TO WORK
             for(let i = 0; i < selectedMoveOption.moves.length; i++) {
+                if(this.interruptMoves) { break; }
                 let move = selectedMoveOption.moves[i];
                 if(i>0) {
                     move = {x: selectedMoveOption.moves[i].x - selectedMoveOption.moves[i-1].x, y: selectedMoveOption.moves[i].y - selectedMoveOption.moves[i-1].y};
                 }
                 this.move(move.x, move.y);
-
             }
 
             // TODO execute code here
@@ -147,6 +151,11 @@ export class Player extends Being {
         this.emit("act");
     }
 
+    interruptMoveChain() {
+        this.deselectMoves();
+        this.interruptMoves = true;
+    }
+
     takeDamage(amount: number): void {
         this.health -= amount;
         console.log("[PLAYER] took damage, health now " + this.health);
@@ -156,6 +165,8 @@ export class Player extends Being {
         } else {
             this.emit("damage");
         }
+
+        this.interruptMoveChain();
     }
 
     // the way ROT.js wants to do vision is async. That makes me ... uncomfortable? But lets roll

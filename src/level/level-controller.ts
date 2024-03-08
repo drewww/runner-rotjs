@@ -535,6 +535,15 @@ export class LevelController implements Drawable {
             this.overlays?.draw();
             this.overlays?.startLayerFade("player-damage", 1000, 10, 0.9);
         });
+
+        this.player.addListener("move", (player:Player) => {
+            console.log("checking move damage safety");
+            if (this.getEnemyVisiblePoints().includes(`${player.x},${player.y}`)) {
+                player.takeDamage(1);
+                player.interruptMoveChain();
+                 // later -- INTERRUPT movement and show the enemy that hit you.
+             }
+         });
     }
 
     public disable(): void {

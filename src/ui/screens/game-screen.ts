@@ -265,15 +265,5 @@ export class GameScreen extends Screen {
         this.player.addListener("death", (player:Player) => {
             this.game.switchState(GameState.KILLSCREEN);
         });
-
-        this.player.addListener("move", (player:Player) => {
-           if (this.level.getEnemyVisiblePoints().includes(`${player.x},${player.y}`)) {
-                player.takeDamage(1);
-
-                // later -- INTERRUPT movement and show the enemy that hit you.
-            }
-        });
-
-        // this.overlays.startLayerFade("red");
     }
 }

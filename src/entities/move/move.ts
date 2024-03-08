@@ -234,7 +234,6 @@ export const JUMP: MoveTemplate = [
     '@',
 ]
 
-// TODO figure out how to accept the chiral version? this it the R variant
 export const WALL_RUN_R: MoveTemplate = [
     '1W',
     '0W',
@@ -252,7 +251,6 @@ export const LONG_WALL_JUMP: MoveTemplate = [
 ]
 
 export const RUNNING_JUMP: MoveTemplate = [
-    '0',
     '3',
     '0',
     '0',
