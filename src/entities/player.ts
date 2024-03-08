@@ -153,6 +153,8 @@ export class Player extends Being {
         
         if (this.health <= 0) {
             this.emit("death");
+        } else {
+            this.emit("damage");
         }
     }
 

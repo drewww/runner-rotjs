@@ -504,6 +504,13 @@ export class LevelController implements Drawable {
                 }
             }
         });
+
+        this.player.addListener("damage", (player: Player) => {
+            console.log("add damage overlay");
+            this.overlays?.addLayer("player-damage", COLORS.LASER_RED + "80");
+            this.overlays?.draw();
+            this.overlays?.startLayerFade("player-damage", 1000, 10, 0.9);
+        });
     }
 
     public disable(): void {

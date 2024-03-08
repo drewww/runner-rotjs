@@ -10,7 +10,7 @@ export class Overlays {
     // where the string is a color hex string for rotjs
     layers: { [key: string]: string[] };
     callbacks: {
-        [key:string]: Function[]
+        [key: string]: Function[]
     } = {};
     tileX: number;
 
@@ -83,11 +83,11 @@ export class Overlays {
 
     draw(): void {
         var ctx = this.canvas.getContext("2d");
-        
-        if(!ctx) { return; }
+
+        if (!ctx) { return; }
 
         ctx.reset();
-        
+
         for (const layerName in this.layers) {
             const layer = this.layers[layerName];
             for (let i = 0; i < layer.length; i++) {
@@ -95,7 +95,7 @@ export class Overlays {
                 const y = Math.floor(i / this.width);
                 const color = layer[i];
                 ctx.fillStyle = color;
-                ctx.fillRect(this.tileX*x, this.tileY*y, this.tileX, this.tileY);
+                ctx.fillRect(this.tileX * x, this.tileY * y, this.tileX, this.tileY);
             }
         }
     }
@@ -108,12 +108,12 @@ export class Overlays {
         // const fadeStep = duration / steps;
         // const opacityStep = startingOpacity / steps;
 
-        const fadeStep = duration / steps;
+        // const fadeStep = duration / steps;
         // const opacityStep = Math.floor(startingOpacity*255/steps);
 
         // console.log("opacityStep: "+opacityStep);
 
-        if(!layer) { 
+        if (!layer) {
             console.log("No layer found with name: " + layerName);
             return;
         }
@@ -123,14 +123,14 @@ export class Overlays {
         for (let i = 0; i < layer.length; i++) {
             let color = layer[i];
 
-            if(!color) {
+            if (!color) {
                 color = "#00000000";
             }
 
             const transparency = parseInt(color.slice(-2), 16);
 
             if (transparency > 0) {
-                console.log("transparency: "+transparency);
+                console.log("transparency: " + transparency);
                 const newTransparency = Math.max(transparency - 10, 0);
                 console.log("new transparency: " + newTransparency);
                 const newColor = color.slice(0, -2) + newTransparency.toString(16).padStart(2, '0');
@@ -146,7 +146,10 @@ export class Overlays {
         if (!fullyTransparent) {
             setTimeout(() => {
                 this.startLayerFade(layerName);
-            }, fadeStep);
+
+            })
+        } else {
+            delete this.layers[layerName];
         }
 
         this.draw();
@@ -154,8 +157,8 @@ export class Overlays {
 
     addListener(type: string, callback: Function): void {
         let values = this.callbacks[type];
-        
-        if(!values) {
+
+        if (!values) {
             values = [];
         }
 
@@ -165,7 +168,7 @@ export class Overlays {
 
     private emit(type: string): void {
         const values = this.callbacks[type];
-        if(values) {
+        if (values) {
             values.forEach(callback => callback(this));
         }
     }
