@@ -113,6 +113,7 @@ export class Hunter extends Enemy {
         });
     }
 
+
     getVision(): Point[] {
         if(!this.level) { return []; }
 
