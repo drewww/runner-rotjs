@@ -13,6 +13,8 @@ export abstract class Enemy extends Being {
     }
 
     getLight(): Light[] {
+        if(this.stunned > 0) { return []; }
+
         const visionPoints = this.getVision();
         return visionPoints.map(point => ({
             p: { x: point.x, y: point.y },

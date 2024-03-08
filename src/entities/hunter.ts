@@ -63,6 +63,10 @@ export class Hunter extends Enemy {
     }
 
     act(): void {
+        super.act();
+
+        if(this.stunned > 0) { return; }
+
         console.log("hunter got act()");
         if(this.nextMove) {
             // check if I want to move into a door.

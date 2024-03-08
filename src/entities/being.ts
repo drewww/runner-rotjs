@@ -6,6 +6,7 @@ import { LevelController } from '../level/level-controller.ts';
 
 export abstract class Being implements Drawable {
     protected level: LevelController | null = null;
+    protected stunned: number = 0;
 
     constructor(public x:number, public y:number, protected symbol:string,
         protected fg:string, protected bg:string) {
@@ -13,6 +14,10 @@ export abstract class Being implements Drawable {
 
     draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string=COLORS.BLACK): void {
         display.draw(this.x+xOffset, this.y+yOffset, this.symbol, this.fg, bg);
+    }
+
+    stun(turns:number): void {
+        this.stunned = turns;
     }
 
     move(dX:number, dY:number): boolean {
@@ -36,7 +41,9 @@ export abstract class Being implements Drawable {
     }
 
     act(): void {
-        // this.draw();
+        if(this.stunned > 0) {
+           this.stunned -= 1;
+        }
     }
 
     // returns how this being wants to add light around them

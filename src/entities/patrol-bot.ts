@@ -19,6 +19,10 @@ export class PatrolBot extends Enemy {
     }
 
     act() :void {
+        super.act();
+
+        if(this.stunned > 0) { return; }
+        
         // move in the "facing" direction. If you hit a wall, turn 90 degrees and try again.
         const dX = Math.round(Math.cos(this.facing));
         const dY = Math.round(Math.sin(this.facing));

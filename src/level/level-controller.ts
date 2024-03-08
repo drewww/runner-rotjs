@@ -571,6 +571,8 @@ export class LevelController implements Drawable {
 
                         this.overlays.startLayerFade("shot-line", 1000, 10, 0.9);
                     }, 140);
+
+                    sourceBeing.stun(4);
                 }
 
                 // make an animtion of the shot
