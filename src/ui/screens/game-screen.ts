@@ -38,7 +38,7 @@ export class GameScreen extends Screen {
         this.y = 0;
         // this sets the render order, be careful.
 
-        this.overlays.fillLayerWithValue("red", "#aa0000FF");
+        // this.overlays.fillLayerWithValue("red", "#aa0000FF");
         // this.overlays.addListener("draw", () => {
         //     this.game.refreshDisplay();
         // });
@@ -274,6 +274,6 @@ export class GameScreen extends Screen {
             }
         });
 
-        this.overlays.startLayerFade("red");
+        // this.overlays.startLayerFade("red");
     }
 }

@@ -45,7 +45,7 @@ export class LevelController implements Drawable {
         this.overlays = overlays;
 
         this.turnCounter = 0;
-        
+
         // TODO move all this into separate GameMap extending classes
         switch (type) {
             case LevelType.CAVE:
@@ -64,7 +64,7 @@ export class LevelController implements Drawable {
                     freeCells.splice(freeCells.indexOf(enemyCell), 1);
                 }
 
-                for(let i=0; i<2; i++) {
+                for (let i = 0; i < 2; i++) {
                     const freeCells = this.getEmptyPoints();
                     if (!freeCells) {
                         console.error("No free cells to place button.");
@@ -75,7 +75,7 @@ export class LevelController implements Drawable {
                     this.map.setTile(new Button(buttonCell.x, buttonCell.y));
                 }
 
-                for(let i=0; i<4; i++) {
+                for (let i = 0; i < 4; i++) {
                     const freeCells = this.getEmptyPoints();
                     if (!freeCells) {
                         console.error("No free cells to place door.");
@@ -104,7 +104,7 @@ export class LevelController implements Drawable {
                 this.map = new GameMap(this.w, this.h);
                 this.map.generateTrivialMap();
 
-              
+
                 // generate a bunch of enemies
                 for (let i = 0; i < 8; i++) {
                     const freeCells = this.map.getFreePoints();
@@ -123,14 +123,14 @@ export class LevelController implements Drawable {
 
         // add a listener to all tiles??? this feels overkill. 
         this.map.getAllTiles().forEach(tile => {
-            if(tile instanceof Button) {
+            if (tile instanceof Button) {
                 tile.addListener("button", (tile: Button) => {
                     const forcefields = this.map.getAllTiles().filter(t => t.symbol === "#");
 
                     // for a random forecfield tile, turn it into a floor tile.
                     const t = forcefields[Math.floor(Math.random() * forcefields.length)];
-                    if(t) {
-                        const position = {x: t.x, y: t.y};
+                    if (t) {
+                        const position = { x: t.x, y: t.y };
                         this.map.setTile(new Tile(position.x, position.y, "FLOOR"));
                     }
                 });
@@ -164,20 +164,20 @@ export class LevelController implements Drawable {
 
     public getBeings(): Being[] {
         return this.beings;
-    } 
+    }
 
-    public draw(display: ROT.Display, xOffset:number, yOffset:number, bg:string): void {
+    public draw(display: ROT.Display, xOffset: number, yOffset: number, bg: string): void {
         const tiles = this.map.getAllTiles();
         const lightMap = this.mergeLightMaps();
-        for (const tile of tiles) {            
-           this.drawTile(tile, display, xOffset, yOffset, lightMap);
+        for (const tile of tiles) {
+            this.drawTile(tile, display, xOffset, yOffset, lightMap);
         }
 
-       if(this.turnCounter==0 && !this.firstTurnRender) {
+        if (this.turnCounter == 0 && !this.firstTurnRender) {
             // draw a path from the player to each of the buttons
             const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
 
-            for(var button of buttons) {
+            for (var button of buttons) {
                 // kick off a pathing animation
 
                 const path = new ROT.Path.AStar(button.x, button.y, (x, y) => {
@@ -191,7 +191,7 @@ export class LevelController implements Drawable {
                     setTimeout(() => {
                         // TODO this is not working if there is other vision shown
                         display.drawOver(x, y, null, null, COLORS.LIGHT_GREEN);
-                    }, timesCalled*10+100);
+                    }, timesCalled * 10 + 100);
 
                     // setTimeout(() => {
                     //     this.drawTile(this.map.getTile(x, y), display, xOffset, yOffset, lightMap);
@@ -206,33 +206,37 @@ export class LevelController implements Drawable {
             }
         }
 
-        if(this.player && this.player.triggerPulse) {
+        if (this.player && this.player.triggerPulse) {
             // look for hunter.
-            if(this.hunter) {
+            if (this.hunter) {
                 //calculate distance
                 const distance = Math.floor(Math.sqrt(Math.pow(Math.abs(this.hunter.x - this.player.x), 2) +
                     Math.pow(Math.abs(this.hunter.y - this.player.y), 2)));
                 console.log("distance: " + distance);
+                this.overlays.addLayer("hunter-pulse");
 
                 // kick off an animation pulse of circles
-                for(let r=1; r<=distance; r++) {
+                // for (let r = distance; r > 1; r-=2) {
                     // calculate the points for the radius.
-
+                let r = distance;
                     let points: Point[] = [];
-                    for(let a=0; a<Math.PI*2; a+=Math.PI/80) {
-                       points.push({x:Math.floor(r*Math.cos(a)), y:Math.floor(r*Math.sin(a))}); 
+                    for (let a = 0; a < Math.PI * 2; a += Math.PI / 20) {
+                        points.push({ x: Math.floor(r * Math.cos(a)), y: Math.floor(r * Math.sin(a)) });
                     }
 
                     points = points.filter((point, index) => points.indexOf(point) === index);
 
-                    this.overlays.addLayer("hunter-pulse");
 
-                    for(let point of points) {
-                        this.overlays.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
-                        COLORS.LASER_RED + "80")
-                    }
+                    // setTimeout(() => {
+                        for (let point of points) {
+                            this.overlays.setValueOnLayer("hunter-pulse", point.x + this.player!.x, point.y + this.player!.y,
+                                COLORS.LASER_RED + Math.floor(0.9 * 255).toString(16))
+                        }
+                    // }, r*150);
 
-                    this.overlays.draw();
+                    
+
+                    // this.overlays.draw();
 
                     // setTimeout(() => {
                     //     for(let point of points) {
@@ -256,14 +260,17 @@ export class LevelController implements Drawable {
                     //         display.drawOver(point.x + this.player!.x, point.y + this.player!.y, " ", COLORS.LASER_RED, COLORS.LASER_RED);
                     //     }
                     // }, r*150);
-                }
+                
+                setTimeout(() => {
+                    this.overlays.startLayerFade("hunter-pulse", 5000, 40, 0.9);
+                }, 500);
             }
-        }   
+        }
     }
 
-    private drawTile(tile:Tile, display:ROT.Display, xOffset:number, yOffset:number, lightMap: { [key: string]: Light }) {
-         // if not discovered, skip it.
-         if (!tile.discovered) {
+    private drawTile(tile: Tile, display: ROT.Display, xOffset: number, yOffset: number, lightMap: { [key: string]: Light }) {
+        // if not discovered, skip it.
+        if (!tile.discovered) {
             return;
         }
 
@@ -271,9 +278,9 @@ export class LevelController implements Drawable {
         let fg = tile.fg;
         let bg = tile.bg;
 
-        if(tile.visible) {
+        if (tile.visible) {
             const key = `${tile.x},${tile.y}`;
-            if(key in lightMap) {
+            if (key in lightMap) {
                 bg = lightMap[`${tile.x},${tile.y}`].color;
             } else {
                 bg = COLORS.BLACK;
@@ -304,7 +311,7 @@ export class LevelController implements Drawable {
             // ah this is failing sometimes when beings get created OUTSIDE the boundaries.
             const t = this.map.getTile(being.x, being.y);
 
-            if(!t) {
+            if (!t) {
                 console.error("being at invalid location", being.x, being.y, being);
             }
 
@@ -321,9 +328,9 @@ export class LevelController implements Drawable {
 
         // render destination moves
         const selectedMoveOptions: MoveOption[] = this.player?.selectedMoveOptions ?? [];
-        
+
         // should be length 0 or length 4
-        let i=1;
+        let i = 1;
         for (const selectedMove of selectedMoveOptions) {
             const lastStep = selectedMove.moves[selectedMove.moves.length - 1];
             display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, selectedMove.symbol, COLORS.WHITE, COLORS.MOVE_BLUE);
@@ -392,7 +399,7 @@ export class LevelController implements Drawable {
         for (const light of beingLight) {
             var existing = lightMapSources[`${light.p.x},${light.p.y}`];
 
-            if(existing) {
+            if (existing) {
                 existing.push(light);
             } else {
                 existing = [light];
@@ -411,7 +418,7 @@ export class LevelController implements Drawable {
                 const EMPTY_COLOR: Color = [-1, -1, -1];
                 let finalTileColor: Color = EMPTY_COLOR;
                 const tileLightSources: Light[] = lightMapSources[key];
-    
+
                 for (let tileLightSource of tileLightSources) {
                     if (finalTileColor === EMPTY_COLOR) {
                         finalTileColor = ROT.Color.fromString(tileLightSource.color);
@@ -419,13 +426,15 @@ export class LevelController implements Drawable {
                         finalTileColor = ROT.Color.add(finalTileColor, ROT.Color.fromString(tileLightSource.color));
                     }
                 }
-    
+
                 bg = ROT.Color.toHex(finalTileColor).toString();
             }
-    
-            lightMap[key] = { p: { x: parseInt(key.split(",")[0]), y: parseInt(key.split(",")[1]) },
-                intensity: 10, color: bg};
-        }       
+
+            lightMap[key] = {
+                p: { x: parseInt(key.split(",")[0]), y: parseInt(key.split(",")[1]) },
+                intensity: 10, color: bg
+            };
+        }
 
         return lightMap;
     }
@@ -450,8 +459,8 @@ export class LevelController implements Drawable {
         const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
         if (entranceTiles.length > 0) {
             const entrance = entranceTiles[Math.floor(Math.random() * entranceTiles.length)];
-            player.setPosition({x: entrance.x, y: entrance.y});
-        }        
+            player.setPosition({ x: entrance.x, y: entrance.y });
+        }
 
         this.scheduler.add(player, true);
         this.beings.push(player);
@@ -459,16 +468,16 @@ export class LevelController implements Drawable {
         this.turnCounter = 0;
 
         this.player.addListener("move", () => {
-            this.map.latestPlayerPosition = {x:this.player!.x, y:this.player!.y};
+            this.map.latestPlayerPosition = { x: this.player!.x, y: this.player!.y };
             this.turnCounter++;
 
-            if(this.turnCounter == 20) {
+            if (this.turnCounter == 20) {
                 console.log("-----------HUNTER ENTERING----------");
 
                 const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
 
-                if(entranceTiles) {
-                    const hunter = new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map); 
+                if (entranceTiles) {
+                    const hunter = new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map);
                     hunter.queueNextMove();
                     this.hunter = hunter;
                     this.addBeing(hunter);

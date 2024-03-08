@@ -100,10 +100,18 @@ export class Overlays {
         }
     }
 
-    startLayerFade(layerName: string) {
+    startLayerFade(layerName: string, duration: number = 1000, steps: number = 10, startingOpacity: number = 1.0) {
         // keep calling this function repeatedly until it's close to black. 
-        console.log("fading: "+layerName);
+        // console.log("fading: "+layerName);
         const layer = this.layers[layerName];
+
+        // const fadeStep = duration / steps;
+        // const opacityStep = startingOpacity / steps;
+
+        const fadeStep = duration / steps;
+        const opacityStep = Math.floor(startingOpacity*255/steps);
+
+        // console.log("opacityStep: "+opacityStep);
 
         if(!layer) { 
             console.log("No layer found with name: " + layerName);
@@ -113,12 +121,19 @@ export class Overlays {
         let fullyTransparent = true;
 
         for (let i = 0; i < layer.length; i++) {
-            const color = layer[i];
+            let color = layer[i];
+
+            if(!color) {
+                color = "#00000000";
+            }
+
             const transparency = parseInt(color.slice(-2), 16);
 
             if (transparency > 0) {
-                const newTransparency = Math.max(transparency - 8, 0);
+                // console.log("transparency: "+transparency);
+                const newTransparency = Math.max(transparency - opacityStep, 0);
                 const newColor = color.slice(0, -2) + newTransparency.toString(16).padStart(2, '0');
+                // console.log(newColor);
                 layer[i] = newColor;
                 fullyTransparent = false;
             }
@@ -130,7 +145,7 @@ export class Overlays {
         if (!fullyTransparent) {
             setTimeout(() => {
                 this.startLayerFade(layerName);
-            }, 10);
+            }, fadeStep);
         }
 
         this.draw();
