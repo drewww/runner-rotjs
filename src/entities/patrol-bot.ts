@@ -26,8 +26,8 @@ export class PatrolBot extends Enemy {
         const didMove:boolean = this.move(dX, dY);
 
             if(!didMove) {
-                console.log("hit a wall, turning from ", this.facing/Math.PI + " to " +
-                    ((this.facing + (Math.PI / 2) % (Math.PI * 2))/Math.PI));
+                // console.log("hit a wall, turning from ", this.facing/Math.PI + " to " +
+                //     ((this.facing + (Math.PI / 2) % (Math.PI * 2))/Math.PI));
 
                 if(this.behavior == "rotate") {
                     this.facing += Math.PI / 2;

@@ -52,7 +52,7 @@ export class Player extends Being {
     move(dX: number, dY: number): boolean {
         const superDidMove = super.move(dX, dY);
 
-        if(superDidMove) {
+        if(superDidMove || (dX==0 && dY==0)) {
             this.emit("move");
         }
 

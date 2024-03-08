@@ -119,6 +119,10 @@ export class GameScreen extends Screen {
                     }
                 }
             }
+
+            // do this so pauses advance the turn counter
+            this.level.player!.move(0, 0);
+
         } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9){
             console.log("move key pressed");
 

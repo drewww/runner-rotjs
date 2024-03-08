@@ -13,6 +13,7 @@ import { Color } from 'rot-js/lib/color';
 import { MoveOption } from '../entities/move/move';
 import { BSPGameMap } from './bsp-game-map';
 import { Tile } from './tile';
+import { Hunter } from '../entities/hunter';
 
 
 export class LevelController implements Drawable {
@@ -28,6 +29,7 @@ export class LevelController implements Drawable {
     public y: number = 0;
 
     public player: Player | null = null;
+    turnCounter: number;
 
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number) {
@@ -36,6 +38,8 @@ export class LevelController implements Drawable {
         this.w = w;
         this.h = h;
 
+        this.turnCounter = 0;
+        
         // TODO move all this into separate GameMap extending classes
         switch (type) {
             case LevelType.CAVE:
@@ -356,8 +360,23 @@ export class LevelController implements Drawable {
         this.scheduler.add(player, true);
         this.beings.push(player);
 
+        this.turnCounter = 0;
+
         this.player.addListener("move", () => {
             this.map.latestPlayerPosition = {x:this.player!.x, y:this.player!.y};
+
+            this.turnCounter++;
+            console.log("player moved: " + this.turnCounter);
+
+            if(this.turnCounter == 20) {
+                console.log("-----------HUNTER ENTERING----------");
+
+                const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
+
+                if(entranceTiles) {
+                    this.addBeing(new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map));
+                }
+            }
         });
     }
 

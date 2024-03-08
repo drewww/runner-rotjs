@@ -1,5 +1,4 @@
 import { Point } from "..";
-import { Hunter } from "../entities/hunter";
 import { PatrolBot } from "../entities/patrol-bot";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
@@ -109,11 +108,8 @@ export class BSPGameMap extends GameMap {
 
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
 
-            if(i==0) {
-                this.beings.push(new Hunter(enemyCell.x, enemyCell.y, this));
-            } else {
-                this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
-            }
+            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
+
             roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
         }
 
