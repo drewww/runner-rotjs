@@ -201,10 +201,6 @@ export class LevelController implements Drawable {
         }
     }
 
-    private animateEntryPath(x, y) {
-        
-    }
-
     private drawTile(tile:Tile, display:ROT.Display, xOffset:number, yOffset:number, lightMap: { [key: string]: Light }) {
          // if not discovered, skip it.
          if (!tile.discovered) {
