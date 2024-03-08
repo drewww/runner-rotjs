@@ -29,6 +29,7 @@ export class LevelController implements Drawable {
     public y: number = 0;
 
     public player: Player | null = null;
+    private firstTurnRender = false;
     turnCounter: number;
 
     // put the logic for different types of levels in here
@@ -84,10 +85,10 @@ export class LevelController implements Drawable {
             case LevelType.DEBUG:
                 this.map = new BSPGameMap(this.w, this.h);
 
-                this.map.getAllTiles().forEach(tile => {
-                    tile.discovered = true;
+                // this.map.getAllTiles().forEach(tile => {
+                //     tile.discovered = true;
 
-                });
+                // });
 
                 this.map.getBeings().forEach(being => {
                     this.addBeing(being);
@@ -231,6 +232,39 @@ export class LevelController implements Drawable {
                 const lastStep = selectedMove.moves[selectedMove.moves.length - 1];
                 display.draw(lastStep.x + this.x + this.player!.x, lastStep.y + this.y + this.player!.y, selectedMove.symbol, COLORS.WHITE, COLORS.MOVE_BLUE);
                 i++;
+            }
+        }
+
+       if(this.turnCounter==0 && !this.firstTurnRender) {
+            // draw a path from the player to each of the buttons
+            const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
+
+            for(var button of buttons) {
+                // kick off a pathing animation
+
+                const path = new ROT.Path.AStar(button.x, button.y, (x, y) => {
+                    // ignore the actual map, the point is not to show the path just to make an animation
+                    return true;
+                });
+
+                var timesCalled = 0;
+                path.compute(this.player!.x, this.player!.y, (x, y) => {
+                    timesCalled++;
+                    setTimeout(() => {
+                        display.drawOver(x, y, " ", COLORS.LIGHT_GREEN, COLORS.LIGHT_GREEN);
+                    }, timesCalled*10+100);
+
+                    setTimeout(() => {
+                        display.draw(x, y, " ", COLORS.BLACK, COLORS.BLACK);
+                    }, timesCalled*10 + 1000);
+
+                });
+
+                button.discovered = true;
+                button.visible = true;
+
+                this.firstTurnRender = true;
+                this.draw(display, xOffset, yOffset, bg);
             }
         }
     }
