@@ -518,7 +518,7 @@ export class LevelController implements Drawable {
         this.player.setLevel(this);
 
         // look for if the level has an entrance. if it does, move the player there.
-        const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
+        const entranceTiles = this.map.getAllTiles().filter(tile => tile.type === "ENTRANCE");
         if (entranceTiles.length > 0) {
             const entrance = entranceTiles[Math.floor(Math.random() * entranceTiles.length)];
             player.setPosition({ x: entrance.x, y: entrance.y });
@@ -536,7 +536,7 @@ export class LevelController implements Drawable {
             if (this.turnCounter == 20) {
                 console.log("-----------HUNTER ENTERING----------");
 
-                const entranceTiles = this.map.getAllTiles().filter(tile => tile.procGenType === "ENTRANCE");
+                const entranceTiles = this.map.getAllTiles().filter(tile => tile.type === "ENTRANCE");
 
                 if (entranceTiles) {
                     const hunter = new Hunter(entranceTiles[0].x, entranceTiles[0].y, this.map);

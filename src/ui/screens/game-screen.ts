@@ -31,7 +31,7 @@ export class GameScreen extends Screen {
         // careful, the height here relates to the screen height.
         this.overlays = new Overlays(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        this.level = new LevelController(LevelType.DEBUG, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
+        this.level = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
         this.level.x = 1;
         this.level.y = 1;
         this.x = 0;
@@ -229,6 +229,9 @@ export class GameScreen extends Screen {
         console.log("SETTING PLAYER");
 
         this.player = player;
+
+
+
         const freeCells = this.level.getEmptyPoints();
         if (!freeCells) {
             console.error("No free cells to place player.");
