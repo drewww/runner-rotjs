@@ -1,4 +1,5 @@
 import { Point, Rect } from "..";
+import { PatrolBot } from "../entities/patrol-bot";
 import { Button } from "./button";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
@@ -204,6 +205,9 @@ export class EdgeRoomGameMap extends GameMap {
         // first pass, place the entrance on the left edge, and the exit on the right
         const leftEdgeTiles = this.tiles.filter(tile => tile.x === 0 && tile.type === "BOUNDARY");
 
+
+        var entrancePoint = {x: -1, y: -1};
+
         while(leftEdgeTiles.length > 0) {
             const randomIndex = Math.floor(Math.random() * leftEdgeTiles.length);
             const tile = leftEdgeTiles[randomIndex];
@@ -226,13 +230,16 @@ export class EdgeRoomGameMap extends GameMap {
                     this.setTile(new Tile(tile.x+1, tile.y+1, "WALL"));
 
                     pathingPoints.push({x: tile.x+1, y: tile.y});
-
+                    entrancePoint = {x: tile.x+1, y: tile.y};
                     break;
                 }
             }
             leftEdgeTiles.splice(randomIndex, 1)
         }
         
+
+        var exitPoint = {x: -1, y: -1};
+
         const rightEdgeTiles = this.tiles.filter(tile => tile.x === this.w-1 && tile.type === "BOUNDARY");
         while(rightEdgeTiles.length > 0) {
             const randomIndex = Math.floor(Math.random() * rightEdgeTiles.length);
@@ -265,6 +272,7 @@ export class EdgeRoomGameMap extends GameMap {
 
 
                     pathingPoints.push({x: tile.x-1, y: tile.y});
+                    exitPoint = {x: tile.x-1, y: tile.y};
                     console.log("EXIT: " + JSON.stringify({x: tile.x-1, y: tile.y}));
                     console.log("height: " + this.h);
                     break;
@@ -315,8 +323,6 @@ export class EdgeRoomGameMap extends GameMap {
             }
         }
 
-
-
         const visitedPoints: Point[] = [];
 
         for (const junctionPoint of junctionPoints) {
@@ -327,7 +333,7 @@ export class EdgeRoomGameMap extends GameMap {
                 { x: 0, y: -1 } // up
             ];
 
-            this.setTile(new Tile(junctionPoint.x, junctionPoint.y, "SHORT_JUNK"));
+            // this.setTile(new Tile(junctionPoint.x, junctionPoint.y, "SHORT_JUNK"));
 
             for (const direction of directions) {
 
@@ -411,8 +417,24 @@ export class EdgeRoomGameMap extends GameMap {
 
 
         // for each junction point, travel in each cardinat direction until we hit a boundary or another junction point or a visited point.
-        
+        // first just place enemies randomly
 
+        // compute a* pathing distance to all the tiles and make sure there are no bots immediately near you at the start
+
+
+    
+        for(var i = 0; i < 15; i++) {
+            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" || tile.solid));
+            const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
+
+            //if enemyCell distance to entrancePoint is less than 5, skip it
+            if (Math.abs(enemyCell.x - entrancePoint.x) + Math.abs(enemyCell.y - entrancePoint.y) < 3) {
+                continue;
+            }
+
+            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
+            roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
+        }
     }
 
     getRectForRoomId(roomId: number): Rect {
