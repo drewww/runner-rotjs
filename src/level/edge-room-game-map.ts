@@ -71,7 +71,7 @@ export class EdgeRoomGameMap extends GameMap {
             let skipped = false;
             // numSplits = 2;
 
-            const SKIP_CHANCE = 0.5;
+            const SKIP_CHANCE = 0.0;
 
             console.log("numSplits", numSplits);
             let rect = { x: xCursor, y: 0, w: nextX - xCursor, h: this.h };
@@ -292,8 +292,9 @@ export class EdgeRoomGameMap extends GameMap {
 
             let numAdjacentWalls = 0;
             let allBoundary = true;
-            console.log(adjacentTiles);
             for (const adjacentTile of adjacentTiles) {
+                if(!adjacentTile) { continue; }
+
                 if (adjacentTile.procGenType === "PARTITION") {
                     numAdjacentWalls++;
                 } 
@@ -304,16 +305,83 @@ export class EdgeRoomGameMap extends GameMap {
             }
 
             if(numAdjacentWalls>2 && !allBoundary) {
-                console.log(" --- JUNCTION");
                 junctionPoints.push({x: tile.x, y: tile.y});
             }
         }
 
-        console.log(junctionPoints);
+
+
+        const visitedPoints: Point[] = [];
+
         for (const junctionPoint of junctionPoints) {
-            this.setTile(new Tile(junctionPoint.x, junctionPoint.y, "FLOOR"));
+            const directions: Point[] = [
+                { x: 1, y: 0 }, // right
+                { x: -1, y: 0 }, // left
+                { x: 0, y: 1 }, // down
+                { x: 0, y: -1 } // up
+            ];
+
+            for (const direction of directions) {
+
+                // decide what to do in this direction. our options are:
+                // -- blank the entire wall
+                // -- blank a section of wall
+                // -- add N random doors
+
+                var strategies:string[] = ["BLANK", "DOORS", "BLANK_SECTION"];
+                var strategy = strategies[Math.floor(Math.random() * strategies.length)];
+
+                // have it go up each space and then reset after a door is placed
+                var doorChance = 0.33; 
+
+                var sectionSize = Math.floor(Math.random()*5);
+                var sectionCounter = 0;
+                var sectionStartOffset = 2;
+
+                let currentX = junctionPoint.x + direction.x;
+                let currentY = junctionPoint.y + direction.y;
+
+                while (true) {
+                    const currentTile = this.getTile(currentX, currentY);
+
+                    if (!currentTile || currentTile.type === "BOUNDARY" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
+                        console.log("found a boundary or visited point, breaking");
+                        break;
+                    }
+
+                    visitedPoints.push({ x: currentX, y: currentY });
+
+                    if(strategy==="BLANK") {
+                        this.setTile(new Tile(currentX, currentY, "FLOOR"));
+                    } else if(strategy==="DOORS") {
+                        if(Math.random() < doorChance) {
+                            this.setTile(new Door(currentX, currentY));
+                            doorChance = 0.05;
+                        } else {
+                            doorChance += 0.34;
+                        }
+                    } else if(strategy==="BLANK_SECTION") {
+
+                        if(sectionCounter >= sectionStartOffset && sectionCounter <= sectionStartOffset + sectionSize) {
+                            this.setTile(new Tile(currentX, currentY, "FLOOR"));
+                        }
+
+                        sectionCounter++;
+                    }
+
+                    // if (currentTile.type === "PARTITION") {
+                    //     this.setTile(new Door(currentX, currentY));
+                    // }
+                    // this.setTile(new Tile(currentX, currentY, "TALL_JUNK"));
+
+                    currentX += direction.x;
+                    currentY += direction.y;
+                }
+            }
         }
 
+
+        // for each junction point, travel in each cardinat direction until we hit a boundary or another junction point or a visited point.
 
         
         // // Punch random holes in the partition walls
