@@ -1,4 +1,6 @@
+import { Rect } from "..";
 import { GameMap } from "./game-map";
+import { Tile } from "./tile";
 
 export class EdgeRoomGameMap extends GameMap {
     totalRooms: number;
@@ -148,8 +150,109 @@ export class EdgeRoomGameMap extends GameMap {
 
         // 
 
-            // do this last so it ovewrites any "wall" types on the edges
-            this.addTilesOnRectBoundaries([{ x: 0, y: 0, w: this.w, h: this.h }], "BOUNDARY");
+        // do this last so it ovewrites any "wall" types on the edges
+        this.addTilesOnRectBoundaries([{ x: 0, y: 0, w: this.w, h: this.h }], "BOUNDARY");
         this.totalRooms = roomId;
+
+        //---------------------------------------//
+        //   FILL IN THE ROOMS                   //
+        //---------------------------------------//
+        for (let roomId = 0; roomId < this.totalRooms; roomId++) {
+            let rect = this.getRectForRoomId(roomId);
+            let filler = new RowsRoomFiller(rect);
+            filler.fillRoom();
+            // now take the transposed tiles out and REPLACE them on the map
+            const tiles = filler.transposeTiles();
+
+            for (let tile of tiles) {
+                this.setTile(tile);
+            }
+        }
+
+    }
+
+    getRectForRoomId(roomId: number): Rect {
+        let rect: Rect = { x: Infinity, y: Infinity, w: 0, h: 0 };
+        for (let tile of this.tiles) {
+            if (tile.procGenType === "ROOM_" + roomId) {
+                rect.x = Math.min(rect.x, tile.x);
+                rect.y = Math.min(rect.y, tile.y);
+                rect.w = Math.max(rect.w, tile.x - rect.x + 1);
+                rect.h = Math.max(rect.h, tile.y - rect.y + 1);
+            }
+        }
+        return rect;
+    }
+}
+
+interface RoomFiller {
+    // takes a rect, returns a list of tiles ordered by x, then y with w and h
+    // matching the rect provided.
+    fillRoom(): void;
+}
+
+abstract class BaseRoomFiller implements RoomFiller {
+    tiles: Tile[];
+    rect: Rect;
+
+    constructor(rect: Rect) {
+        this.rect = rect;
+        this.tiles = [];
+
+        for (let y = 0; y < rect.h; y++) {
+            for (let x = 0; x < rect.w; x++) {
+                this.tiles.push(new Tile(x, y, "FLOOR"));
+            }
+        }
+    }
+
+    getTile(x: number, y: number): Tile {
+        return this.tiles[y * this.rect.w + x];
+    }
+
+    setTile(x: number, y: number, tile: Tile) {
+        this.tiles[y * this.rect.w + x] = tile;
+    }
+ 
+    transposeTiles(): Tile[] {
+        for(let tile of this.tiles) {
+            tile.x = tile.x + this.rect.x;
+            tile.y = tile.y + this.rect.y;
+        }
+
+        return this.tiles;
+    }
+
+    fillRoom(): void {
+        return;
+    }
+
+}
+
+class RowsRoomFiller extends BaseRoomFiller {
+
+    fillRoom(): void {
+        var w = this.rect.w;
+        var h = this.rect.h;
+
+        // fill all spaces with floor tiles
+
+        // oooookay. first, pick horizontal or vertical.
+        // hard code vetical for now.
+
+        // const axis = Math.random() > 0.5 ? "H" : "V";
+        // figure out how many columns we can do. we want to have a free edge on each side.
+        const numCols = Math.floor((w-1) / 2);
+
+        // start at 2 for a left margin of 1
+        var cursor = 1;
+        for(let i = 0; i < numCols; i++) {
+            // fill in a line of tiles
+            for(let j = 1; j < h-1; j++) {
+                this.setTile(cursor, j, new Tile(cursor, j, "WALL"));
+            }
+
+            cursor+=2;
+        }
     }
 }
