@@ -2,7 +2,7 @@
 import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
-import { JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
+import { BURROW, JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
 import { Light } from '../index.ts';
 
 export class Player extends Being {
@@ -28,7 +28,8 @@ export class Player extends Being {
         this.moves.push({name: "(1) Jump----------", template:JUMP, cooldown: 3, selected:false, cooldownOnUse: 15});
         this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 3, selected:false, cooldownOnUse: 15});
         this.moves.push({name: "(3) Wall Jump-----", template:LONG_WALL_JUMP, cooldown: 3, selected:false, cooldownOnUse: 15});
-        this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 3, selected:false, cooldownOnUse: 15})
+        this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 3, selected:false, cooldownOnUse: 15});
+        this.moves.push({name: "(5) Burrow--------", template:BURROW, cooldown: 10, selected:false, cooldownOnUse: 100});
 
         this.selectedMoveOptions = [];
         this.triggerPulse = false;

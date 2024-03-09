@@ -228,6 +228,7 @@ type MoveTemplate = string[];
 // W   - the space must be a wall or other solid tile
 // 0   - the space must be not solid
 // E   - the space must have an enemy in it (TODO)
+// #   - the space must be a destructible wall
 
 export const JUMP: MoveTemplate = [
     '1',
@@ -257,5 +258,11 @@ export const RUNNING_JUMP: MoveTemplate = [
     '0',
     '2',
     '1',
+    '@'
+]
+
+export const BURROW: MoveTemplate = [
+    '1',
+    'W',
     '@'
 ]
