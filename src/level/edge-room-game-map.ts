@@ -189,7 +189,7 @@ export class EdgeRoomGameMap extends GameMap {
         var pathingPoints: Point[] = [];
 
         // TODO don't let buttons go on the original procgen walls
-        const wallTiles = this.tiles.filter(tile => tile.type === "WALL");
+        const wallTiles = this.tiles.filter(tile => tile.type === "WALL" && tile.procGenType !== "PARTITION" );
         // randomly replace 3 of them with buttons
         for (let i = 0; i < 3; i++) {
             const randomIndex = Math.floor(Math.random() * wallTiles.length);
