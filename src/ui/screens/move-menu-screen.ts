@@ -28,14 +28,30 @@ export class MoveMenuScreen extends Screen {
             const moveX = 1;
             const moveY = i + 1;
 
+          
             let bg = COLORS.DARK_GREY;
             let fg = COLORS.WHITE;
-            if(move==this.player.getSelectedMove()) {
-                bg = COLORS.MOVE_BLUE;
-                fg = COLORS.WHITE;
+
+            //iteratre through the characters in move name
+            for (let j = 0; j < moveName.length; j++) {
+                const char = moveName[j];
+
+                if(j<move.cooldown) {
+                    fg = COLORS.WHITE;
+                    bg = COLORS.RED;
+                } else {
+                    bg = COLORS.DARK_GREY;
+                    fg = COLORS.WHITE;
+                    if(move==this.player.getSelectedMove()) {
+                        bg = COLORS.MOVE_BLUE;
+                        fg = COLORS.WHITE;
+                    }
+                }
+
+                display.draw(moveX + xOffset + this.x + j, moveY + yOffset + this.y, char, fg, bg);
             }
 
-            display.drawText(moveX + xOffset + this.x, moveY + yOffset + this.y, `%c{${fg}}%b{${bg}}${moveName}`);
+            // display.drawText(moveX + xOffset + this.x, moveY + yOffset + this.y, `%c{${fg}}%b{${bg}}${moveName}`);
             i++;
         }
         

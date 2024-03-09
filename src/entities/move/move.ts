@@ -4,6 +4,7 @@ import { LevelController } from "../../level/level-controller";
 export type Move = {
     name: string;
     template: MoveTemplate;
+    cooldownOnUse: number;
     cooldown: number;
     selected: boolean;
 }
