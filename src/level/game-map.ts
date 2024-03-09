@@ -191,8 +191,8 @@ export class GameMap {
             "WWW",
             "W%W",
             "W#W",
-            "W W",
-            "W W",
+            "W#W",
+            "W#W",
             "   "
         ]
         ]
