@@ -226,19 +226,19 @@ export class EdgeRoomGameMap extends GameMap {
                 for(let j=0; j<2; j++) {
                     for(let i = -1; i < 1; i++) {
                         const nextTile = this.getTile(tile.x-1-j, tile.y+i);
-                        if(nextTile && nextTile.type === "BOUNDARY") {
+                        if(nextTile && (nextTile.type === "BOUNDARY" || nextTile.type === "BUTTON")) {
                             allFloor = false;
                         }
                     }
                 }   
 
                 if(allFloor) {
-                    this.setTile(new Tile(tile.x-1, tile.y-1, "WALL"));
-                    this.setTile(new Tile(tile.x-1, tile.y, "EXIT"));
-                    this.setTile(new Tile(tile.x-1, tile.y+1, "WALL"));
-                    this.setTile(new Tile(tile.x-2, tile.y-1, "FLOOR"));
-                    this.setTile(new Tile(tile.x-2, tile.y, "FLOOR"));
-                    this.setTile(new Tile(tile.x-2, tile.y+1, "FLOOR"));
+                    this.setTile(new Tile(tile.x-1, tile.y-1, "WALL", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-1, tile.y, "EXIT", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-1, tile.y+1, "WALL", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-2, tile.y-1, "FLOOR", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-2, tile.y, "FLOOR", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-2, tile.y+1, "FLOOR", "EXIT_TEMPLATE"));
 
                     break;
                 }

@@ -44,7 +44,7 @@ export class Tile {
     
     public procGenMetadata: {};
 
-    constructor(x:number, y:number, type:string) {
+    constructor(x:number, y:number, type:string, procGenType:string="unknown") {
         this.x = x;
         this.y = y;
 
