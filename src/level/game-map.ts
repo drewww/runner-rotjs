@@ -128,6 +128,43 @@ export class GameMap {
         }
     }
 
+    shrinkRect(rect: Rect): Rect {
+        return {
+            x: rect.x + 1,
+            y: rect.y + 1,
+            w: rect.w - 2,
+            h: rect.h - 2
+        };
+    }
+
+    shrinkRects(rects: Rect[]): Rect[] {
+        const newRects: Rect[] = [];
+        for (const rect of rects) {
+            const newRect: Rect = {
+                x: rect.x + 1,
+                y: rect.y + 1,
+                w: rect.w - 2,
+                h: rect.h - 2
+            };
+            newRects.push(newRect);
+        }
+        return newRects;
+    }
+
+    public getTilesInRect(rect: Rect): Tile[] {
+        return this.tiles.filter(tile => {
+            return tile.x >= rect.x && tile.x < rect.x + rect.w && tile.y >= rect.y && tile.y < rect.y + rect.h;
+        });
+    }
+
+    public setTileMetadata(rect: Rect, type: string, metadata: any = {}) {
+        const tiles = this.getTilesInRect(rect);
+        for (const tile of tiles) {
+            tile.procGenType = type;
+            tile.procGenMetadata = metadata;
+        }
+    }
+
     public addTilesOnRectBoundaries(rects: Rect[], tileType: string = "WALL"): void {
         for (const rect of rects) {
             for (let x = rect.x; x < rect.x + rect.w; x++) {

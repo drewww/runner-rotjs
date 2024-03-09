@@ -140,22 +140,6 @@ export class BSPGameMap extends GameMap {
         return points;
     }
 
-    
-
-    protected shrinkRects(rects: Rect[]): Rect[] {
-        const newRects: Rect[] = [];
-        for (const rect of rects) {
-            const newRect: Rect = {
-                x: rect.x + 1,
-                y: rect.y + 1,
-                w: rect.w - 2,
-                h: rect.h - 2
-            };
-            newRects.push(newRect);
-        }
-        return newRects;
-    }
-
     protected divideSpace(root: Rect): Rect[] {
         const rects: Rect[] = [];
         rects.push(root);

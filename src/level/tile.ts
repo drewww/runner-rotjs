@@ -41,6 +41,8 @@ export class Tile {
     public type: string;
 
     protected callbacks: {[key:string]: Function[]} = {};
+    
+    public procGenMetadata: {};
 
     constructor(x:number, y:number, type:string) {
         this.x = x;
@@ -60,6 +62,7 @@ export class Tile {
 
         this.procGenType = "unknown";
         this.procGenDistance = -1;
+        this.procGenMetadata = {};
         this.enabled = true;
 
         const tileType = TILE_TYPES[type as keyof typeof TILE_TYPES];

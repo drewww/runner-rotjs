@@ -84,6 +84,26 @@ export class Overlays {
         this.layers[layerName] = layer;
     }
 
+    hide(): void {
+        this.visibleCanvas.style.display = "none";
+    }
+
+    show(): void {
+        this.visibleCanvas.style.display = "block";
+    }
+
+    clear(): void {
+        const bufferCtx = this.bufferCanvas.getContext("2d");
+        const visibleCtx = this.visibleCanvas.getContext("2d");
+
+        bufferCtx?.clearRect(0, 0, this.bufferCanvas.width, this.bufferCanvas.height);
+        visibleCtx?.clearRect(0, 0, this.visibleCanvas.width, this.visibleCanvas.height);
+
+
+        this.layers = {};
+    }
+
+
     draw(): void {
         const bufferCtx = this.bufferCanvas.getContext("2d");
         const visibleCtx = this.visibleCanvas.getContext("2d");
@@ -168,6 +188,7 @@ export class Overlays {
     }
 
     disable(): void {
-        throw new Error("Method not implemented.");
+        this.visibleCanvas.remove();
+        this.bufferCanvas.remove();
     }
 }
