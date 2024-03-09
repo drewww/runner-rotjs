@@ -1,4 +1,5 @@
 import { Point, Rect } from "..";
+import { Button } from "./button";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
@@ -189,7 +190,8 @@ export class EdgeRoomGameMap extends GameMap {
         const leftEdgeTiles = this.tiles.filter(tile => tile.x === 0 && tile.type === "BOUNDARY");
 
         while(leftEdgeTiles.length > 0) {
-            const tile = leftEdgeTiles[Math.floor(Math.random() * leftEdgeTiles.length)];
+            const randomIndex = Math.floor(Math.random() * leftEdgeTiles.length);
+            const tile = leftEdgeTiles[randomIndex];
             if(tile) {
 
                 // check if the three tiles to the right of this tile are all floor tiles
@@ -197,7 +199,7 @@ export class EdgeRoomGameMap extends GameMap {
                 for(let j=0; j<2; j++) {
                     for(let i = -1; i < 1; i++) {
                         const nextTile = this.getTile(tile.x+1+j, tile.y+i);
-                        if(nextTile.type !== "FLOOR") {
+                        if(nextTile && nextTile.type !== "FLOOR") {
                             allFloor = false;
                         }
                     }
@@ -210,11 +212,13 @@ export class EdgeRoomGameMap extends GameMap {
                     break;
                 }
             }
+            leftEdgeTiles.splice(randomIndex, 1)
         }
         
         const rightEdgeTiles = this.tiles.filter(tile => tile.x === this.w-1 && tile.type === "BOUNDARY");
         while(rightEdgeTiles.length > 0) {
-            const tile = rightEdgeTiles[Math.floor(Math.random() * rightEdgeTiles.length)];
+            const randomIndex = Math.floor(Math.random() * rightEdgeTiles.length);
+            const tile = rightEdgeTiles[randomIndex];
             if(tile) {
 
                 // check if the three tiles to the right of this tile are all floor tiles
@@ -222,7 +226,7 @@ export class EdgeRoomGameMap extends GameMap {
                 for(let j=0; j<2; j++) {
                     for(let i = -1; i < 1; i++) {
                         const nextTile = this.getTile(tile.x-1-j, tile.y+i);
-                        if(nextTile.type !== "FLOOR") {
+                        if(nextTile && nextTile.type === "BOUNDARY") {
                             allFloor = false;
                         }
                     }
@@ -232,10 +236,31 @@ export class EdgeRoomGameMap extends GameMap {
                     this.setTile(new Tile(tile.x-1, tile.y-1, "WALL"));
                     this.setTile(new Tile(tile.x-1, tile.y, "EXIT"));
                     this.setTile(new Tile(tile.x-1, tile.y+1, "WALL"));
+                    this.setTile(new Tile(tile.x-2, tile.y-1, "FLOOR"));
+                    this.setTile(new Tile(tile.x-2, tile.y, "FLOOR"));
+                    this.setTile(new Tile(tile.x-2, tile.y+1, "FLOOR"));
+
                     break;
                 }
             }
+
+            rightEdgeTiles.splice(randomIndex, 1);
         }
+
+        const wallTiles = this.tiles.filter(tile => tile.type === "WALL");
+        // randomly replace 3 of them with buttons
+        for (let i = 0; i < 3; i++) {
+            const randomIndex = Math.floor(Math.random() * wallTiles.length);
+            const tile = wallTiles[randomIndex];
+            this.setTile(new Button(tile.x, tile.y));
+            wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
+        }
+
+
+        // ------------- DOORS ------------------ //
+
+
+
     }
 
     getRectForRoomId(roomId: number): Rect {
