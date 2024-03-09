@@ -1,4 +1,4 @@
-import { Rect } from "..";
+import { Point, Rect } from "..";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 
@@ -159,10 +159,20 @@ export class EdgeRoomGameMap extends GameMap {
         //---------------------------------------//
         for (let roomId = 0; roomId < this.totalRooms; roomId++) {
             let rect = this.getRectForRoomId(roomId);
-            let filler = new RowsRoomFiller(rect);
+            console.log("filling room", roomId, rect);
+            let filler: RoomFiller;
+
+            if(rect.w >= 9 && rect.h >= 9) { 
+                console.log("  choosing bracket");
+                filler = new BracketRoomFiller(rect);
+            } else {
+                console.log("   choosing rows");
+                filler = new RowsRoomFiller(rect);
+            }
+
             filler.fillRoom();
             // now take the transposed tiles out and REPLACE them on the map
-            const tiles = filler.translateTiles();
+            const tiles = filler.getTiles();
 
             for (let tile of tiles) {
                 this.setTile(tile);
@@ -189,6 +199,7 @@ interface RoomFiller {
     // takes a rect, returns a list of tiles ordered by x, then y with w and h
     // matching the rect provided.
     fillRoom(): void;
+    getTiles(): Tile[];
 }
 
 abstract class BaseRoomFiller implements RoomFiller {
@@ -206,22 +217,43 @@ abstract class BaseRoomFiller implements RoomFiller {
         }
     }
 
+    getPointsOnRectBoundaries(rect: Rect): Point[] {
+        let points: Point[] = [];
+        for (let x = rect.x; x < rect.x + rect.w; x++) {
+            points.push({ x: x, y: rect.y });
+            points.push({ x: x, y: rect.y + rect.h - 1 });
+        }
+        for (let y = rect.y; y < rect.y + rect.h; y++) {
+            points.push({ x: rect.x, y: y });
+            points.push({ x: rect.x + rect.w - 1, y: y });
+        }
+        return points;
+    }
+
     getTile(x: number, y: number): Tile {
         return this.tiles[y * this.rect.w + x];
     }
 
     setTile(x: number, y: number, tile: Tile) {
+        if(!tile) { return; }
         this.tiles[y * this.rect.w + x] = tile;
     }
 
-    translateTiles(): Tile[] {
+    translateTiles(): void{
+        // console.log(this.tiles);
         for (let tile of this.tiles) {
+            if(!tile) { continue; }
+            // console.log("tile: " + JSON.stringify(tile));
+            // console.log("rect: " + JSON.stringify(this.rect));
             tile.x = tile.x + this.rect.x;
             tile.y = tile.y + this.rect.y;
         }
+    }
 
+    getTiles(): Tile[] {
         return this.tiles;
     }
+
 
     fillRoom(): void {
         return;
@@ -229,6 +261,36 @@ abstract class BaseRoomFiller implements RoomFiller {
 
 }
 
+class BracketRoomFiller extends BaseRoomFiller {
+    fillRoom(): void {
+        var w = this.rect.w;
+        var h = this.rect.h;
+        // fill the corners with inset walls
+
+        const insetRect = this.shrinkRect(this.shrinkRect(this.rect));
+
+        // iterate through the points of insetRect
+        // for points that are greater than 2 steps away from any of the corners, skip them.
+        // otherwise, fill in with a wall tile.
+        for (const point of this.getPointsOnRectBoundaries(insetRect)) {
+            const rectPoint = { x: point.x - this.rect.x, y: point.y - this.rect.y };
+
+            if (rectPoint.x < 2 || rectPoint.y < 2) { continue; }
+            this.setTile(rectPoint.x, rectPoint.y, new Tile(rectPoint.x, rectPoint.y, "WALL"));
+        }
+
+        this.translateTiles();
+    }
+
+    shrinkRect(rect: Rect): Rect {
+        return {
+            x: rect.x + 1,
+            y: rect.y + 1,
+            w: rect.w - 2,
+            h: rect.h - 2
+        };
+    }
+}
 class RowsRoomFiller extends BaseRoomFiller {
 
     fillRoom(): void {
@@ -258,8 +320,8 @@ class RowsRoomFiller extends BaseRoomFiller {
             var cutAt = Math.floor(Math.random() * (b - 4)) + 2;
 
             for (let j = 1; j < b - 1; j++) {
-                if(guaranteeCut && j === cutAt) { continue; }
-                
+                if (guaranteeCut && j === cutAt) { continue; }
+
                 if (axis === "V") {
                     this.setTile(cursor, j, new Tile(cursor, j, "WALL"));
                 } else {
@@ -270,7 +332,7 @@ class RowsRoomFiller extends BaseRoomFiller {
 
             // chance to skip a lane
             if (Math.random() > 0.95) {
-                cursor+=2;
+                cursor += 2;
                 i++;
             }
         }
@@ -279,7 +341,7 @@ class RowsRoomFiller extends BaseRoomFiller {
         // add periodic walls.
         if (isOdd) {
             const period = Math.floor(Math.random() * 2 + 2);
-            for (let j = 1; j < b - 1; j+=period) {
+            for (let j = 1; j < b - 1; j += period) {
                 if (axis === "V") {
                     this.setTile(a - 1, j, new Tile(a - 1, j, "WALL"));
                 } else {
@@ -287,5 +349,7 @@ class RowsRoomFiller extends BaseRoomFiller {
                 }
             }
         }
+
+        this.translateTiles();
     }
 }
