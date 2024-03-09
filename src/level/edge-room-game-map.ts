@@ -212,7 +212,30 @@ export class EdgeRoomGameMap extends GameMap {
             }
         }
         
+        const rightEdgeTiles = this.tiles.filter(tile => tile.x === this.w-1 && tile.type === "BOUNDARY");
+        while(rightEdgeTiles.length > 0) {
+            const tile = rightEdgeTiles[Math.floor(Math.random() * rightEdgeTiles.length)];
+            if(tile) {
 
+                // check if the three tiles to the right of this tile are all floor tiles
+                let allFloor = true;
+                for(let j=0; j<2; j++) {
+                    for(let i = -1; i < 1; i++) {
+                        const nextTile = this.getTile(tile.x-1-j, tile.y+i);
+                        if(nextTile.type !== "FLOOR") {
+                            allFloor = false;
+                        }
+                    }
+                }   
+
+                if(allFloor) {
+                    this.setTile(new Tile(tile.x-1, tile.y-1, "WALL"));
+                    this.setTile(new Tile(tile.x-1, tile.y, "EXIT"));
+                    this.setTile(new Tile(tile.x-1, tile.y+1, "WALL"));
+                    break;
+                }
+            }
+        }
     }
 
     getRectForRoomId(roomId: number): Rect {
