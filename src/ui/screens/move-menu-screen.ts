@@ -32,6 +32,15 @@ export class MoveMenuScreen extends Screen {
             let bg = COLORS.DARK_GREY;
             let fg = COLORS.WHITE;
 
+
+            let fgDefault = COLORS.WHITE;
+            let bgDefault = COLORS.DARK_GREY;
+            if(move.cooldown > 0) {
+                fgDefault = COLORS.MID_GREY;
+            } else {
+                fgDefault = COLORS.WHITE;
+            }
+
             //iteratre through the characters in move name
             for (let j = 0; j < moveName.length; j++) {
                 const char = moveName[j];
@@ -40,8 +49,10 @@ export class MoveMenuScreen extends Screen {
                     fg = COLORS.WHITE;
                     bg = COLORS.RED;
                 } else {
-                    bg = COLORS.DARK_GREY;
-                    fg = COLORS.WHITE;
+                    // bg = COLORS.DARK_GREY;
+                    // fg = COLORS.WHITE;
+                    fg = fgDefault;
+                    bg = bgDefault;
                     if(move==this.player.getSelectedMove()) {
                         bg = COLORS.MOVE_BLUE;
                         fg = COLORS.WHITE;

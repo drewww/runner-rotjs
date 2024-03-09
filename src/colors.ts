@@ -1,6 +1,9 @@
 
 export const COLORS = {
     WHITE: "#ffffff",
+    DARK_GREY: "#333333",
+    MID_GREY: "#505050",
+    LIGHT_GREY: "#cccccc",
     BLACK: "#000000",
     RED: "#ff0000",
 
@@ -10,8 +13,7 @@ export const COLORS = {
 
     YELLOW: "#ffff00",
 
-    DARK_GREY: "#333333",
-    LIGHT_GREY: "#cccccc",
+    
 
     LASER_RED: "#a80d02",
     INVISIBLE_TILE: "#555555",
