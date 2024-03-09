@@ -275,7 +275,9 @@ class BracketRoomFiller extends BaseRoomFiller {
         for (const point of this.getPointsOnRectBoundaries(insetRect)) {
             const rectPoint = { x: point.x - this.rect.x, y: point.y - this.rect.y };
 
-            if (rectPoint.x < 2 || rectPoint.y < 2) { continue; }
+            if (rectPoint.x > 6 && rectPoint.x < insetRect.w-2) { continue; }
+            if (rectPoint.y > 6 && rectPoint.y < insetRect.h-2) { continue; }
+            
             this.setTile(rectPoint.x, rectPoint.y, new Tile(rectPoint.x, rectPoint.y, "WALL"));
         }
 
