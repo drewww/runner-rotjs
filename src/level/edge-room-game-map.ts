@@ -27,7 +27,7 @@ export class EdgeRoomGameMap extends GameMap {
         let partitionValues: number[] = [];
 
         var attempts = 0;
-        while(partitionValues.length < numPartitions) {
+        while (partitionValues.length < numPartitions) {
             let partition = Math.floor(Math.random() * (this.w - 10)) + 5;
 
             // check if it's valid
@@ -38,9 +38,9 @@ export class EdgeRoomGameMap extends GameMap {
                 }
             }
 
-            if(valid) { partitionValues.push(partition); }
+            if (valid) { partitionValues.push(partition); }
             attempts++;
-            if(attempts >= 30) {
+            if (attempts >= 30) {
                 console.log("too many attempts to find valid partition stopping");
                 break;
             }
@@ -48,7 +48,7 @@ export class EdgeRoomGameMap extends GameMap {
 
         partitionValues.sort((a, b) => a - b);
         partitionValues.push(this.w);
-        console.log("partitionValues", partitionValues );
+        console.log("partitionValues", partitionValues);
 
         var roomId = 0;
         for (let nextX of partitionValues) {
@@ -60,7 +60,7 @@ export class EdgeRoomGameMap extends GameMap {
             // use the column for something. 
             // we can split the column in 0-3 ways.
 
-            var splitsBalance = [0, 0, 1, 1, 1, 1,1, 1, 2, 2, 2, 2];
+            var splitsBalance = [0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2];
             var numSplits = splitsBalance[Math.floor(Math.random() * splitsBalance.length)];
 
             let dY: number[] = [];
@@ -68,13 +68,13 @@ export class EdgeRoomGameMap extends GameMap {
             let skipped = false;
             // numSplits = 2;
 
-            const SKIP_CHANCE= 0.5;
+            const SKIP_CHANCE = 0.5;
 
             console.log("numSplits", numSplits);
-            let rect = { x: xCursor, y: 0, w: nextX-xCursor, h: this.h };
+            let rect = { x: xCursor, y: 0, w: nextX - xCursor, h: this.h };
             switch (numSplits) {
                 case 0:
-                    rect = { x: xCursor, y: 0, w: nextX-xCursor, h: this.h };
+                    rect = { x: xCursor, y: 0, w: nextX - xCursor, h: this.h };
                     this.addTilesOnRectBoundaries([rect], "WALL");
                     this.setTileMetadata(this.shrinkRect(rect), "ROOM_" + roomId);
                     roomId++;
@@ -86,7 +86,7 @@ export class EdgeRoomGameMap extends GameMap {
 
                     skipped = false;
                     for (const y of dY) {
-                        rect = { x: xCursor, y: yCursor, w: nextX-xCursor, h: y }
+                        rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: y }
                         if (skipped || Math.random() > SKIP_CHANCE) {
                             this.addTilesOnRectBoundaries([rect], "WALL");
                         } else {
@@ -97,7 +97,7 @@ export class EdgeRoomGameMap extends GameMap {
                         roomId++;
                     }
 
-                    rect = { x: xCursor, y: yCursor, w: nextX-xCursor, h: this.h - yCursor }
+                    rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: this.h - yCursor }
                     if (skipped || Math.random() > SKIP_CHANCE) {
 
                         this.addTilesOnRectBoundaries([rect], "WALL");
@@ -117,10 +117,10 @@ export class EdgeRoomGameMap extends GameMap {
 
                     for (const y of dY) {
                         if (skipped || Math.random() > SKIP_CHANCE) {
-                            rect = { x: xCursor, y: yCursor, w: nextX-xCursor, h: y };
+                            rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: y };
                             this.addTilesOnRectBoundaries([rect], "WALL");
                             yCursor += y - 1;
-                            
+
                         } else {
                             skipped = true;
                         }
@@ -130,7 +130,7 @@ export class EdgeRoomGameMap extends GameMap {
 
                     }
 
-                    rect = { x: xCursor, y: yCursor, w: nextX-xCursor, h: this.h - yCursor };
+                    rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: this.h - yCursor };
                     if (skipped || Math.random() > 0.33) {
                         this.addTilesOnRectBoundaries([rect], "WALL");
                     }
@@ -141,9 +141,9 @@ export class EdgeRoomGameMap extends GameMap {
                 default:
                     break;
 
-                }
+            }
 
-                xCursor = nextX-1;
+            xCursor = nextX - 1;
 
 
         }
@@ -162,7 +162,7 @@ export class EdgeRoomGameMap extends GameMap {
             let filler = new RowsRoomFiller(rect);
             filler.fillRoom();
             // now take the transposed tiles out and REPLACE them on the map
-            const tiles = filler.transposeTiles();
+            const tiles = filler.translateTiles();
 
             for (let tile of tiles) {
                 this.setTile(tile);
@@ -213,9 +213,9 @@ abstract class BaseRoomFiller implements RoomFiller {
     setTile(x: number, y: number, tile: Tile) {
         this.tiles[y * this.rect.w + x] = tile;
     }
- 
-    transposeTiles(): Tile[] {
-        for(let tile of this.tiles) {
+
+    translateTiles(): Tile[] {
+        for (let tile of this.tiles) {
             tile.x = tile.x + this.rect.x;
             tile.y = tile.y + this.rect.y;
         }
@@ -240,19 +240,52 @@ class RowsRoomFiller extends BaseRoomFiller {
         // oooookay. first, pick horizontal or vertical.
         // hard code vetical for now.
 
-        // const axis = Math.random() > 0.5 ? "H" : "V";
+        const axis = Math.random() > 0.5 ? "H" : "V";
         // figure out how many columns we can do. we want to have a free edge on each side.
-        const numCols = Math.floor((w-1) / 2);
+
+        const a = axis === "V" ? w : h;
+        const b = axis === "V" ? h : w;
+
+        const numLanes = Math.floor((a - 1) / 2);
+
+        const isOdd = (a - 1) % 2 === 1;
 
         // start at 2 for a left margin of 1
         var cursor = 1;
-        for(let i = 0; i < numCols; i++) {
+        for (let i = 0; i < numLanes; i++) {
             // fill in a line of tiles
-            for(let j = 1; j < h-1; j++) {
-                this.setTile(cursor, j, new Tile(cursor, j, "WALL"));
-            }
+            const guaranteeCut = b > 4;
+            var cutAt = Math.floor(Math.random() * (b - 4)) + 2;
 
-            cursor+=2;
+            for (let j = 1; j < b - 1; j++) {
+                if(guaranteeCut && j === cutAt) { continue; }
+                
+                if (axis === "V") {
+                    this.setTile(cursor, j, new Tile(cursor, j, "WALL"));
+                } else {
+                    this.setTile(j, cursor, new Tile(j, cursor, "WALL"));
+                }
+            }
+            cursor += 2;
+
+            // chance to skip a lane
+            if (Math.random() > 0.95) {
+                cursor+=2;
+                i++;
+            }
+        }
+
+        // if we have an odd number of spaces, rather than making lanes, in the last column sometimes 
+        // add periodic walls.
+        if (isOdd) {
+            const period = Math.floor(Math.random() * 2 + 2);
+            for (let j = 1; j < b - 1; j+=period) {
+                if (axis === "V") {
+                    this.setTile(a - 1, j, new Tile(a - 1, j, "WALL"));
+                } else {
+                    this.setTile(j, a - 1, new Tile(j, a - 1, "WALL"));
+                }
+            }
         }
     }
 }
