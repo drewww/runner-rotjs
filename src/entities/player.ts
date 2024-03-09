@@ -111,6 +111,9 @@ export class Player extends Being {
             // because after the first move completes, the correct RELATIVE move is only two more steps. not three.
             
             // TODO THIS IS WHERE TO WORK
+
+            selectedMove.cooldown = selectedMove.cooldownOnUse;
+
             for(let i = 0; i < selectedMoveOption.moves.length; i++) {
                 if(this.interruptMoves) { break; }
                 let move = selectedMoveOption.moves[i];
@@ -130,6 +133,13 @@ export class Player extends Being {
 
             this.moves[index].selected = true;
             console.log("move selected: " + this.moves[index].name);
+
+             // drop out if move on cooldown
+             if(this.moves[index].cooldown > 0) { 
+                console.log("attempted move on CD. Resetting move selection.");
+                this.deselectMoves();
+                return false;
+            }
 
             const moveResults = MoveManager.moveResults(this.level!, this.moves[index].template);   
             this.selectedMoveOptions = moveResults;

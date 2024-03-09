@@ -142,6 +142,8 @@ export class GameScreen extends Screen {
             // and strings as strings others. Should be two methods, probably.
             // if this is the same as a move already selected, it will execute it.
 
+            
+
             const didMove = this.level.player!.selectMove((code - ROT.KEYS.VK_1).toString());
             
             // if a move was executed, release the lock so it "counts" as a move and lets other
