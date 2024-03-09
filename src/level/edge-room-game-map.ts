@@ -237,6 +237,11 @@ export class EdgeRoomGameMap extends GameMap {
         while(rightEdgeTiles.length > 0) {
             const randomIndex = Math.floor(Math.random() * rightEdgeTiles.length);
             const tile = rightEdgeTiles[randomIndex];
+
+            if(tile.y < 2 || tile.y > this.h-2) {
+                continue;
+            }
+
             if(tile) {
 
                 // check if the three tiles to the right of this tile are all floor tiles
@@ -244,23 +249,24 @@ export class EdgeRoomGameMap extends GameMap {
                 for(let j=0; j<2; j++) {
                     for(let i = -1; i < 1; i++) {
                         const nextTile = this.getTile(tile.x-1-j, tile.y+i);
-                        if(nextTile && (nextTile.type === "BOUNDARY" || nextTile.type === "BUTTON")) {
+                        if(nextTile && (nextTile.taype === "BOUNDARY" || nextTile.type === "BUTTON" || nextTile.procGenType==="PARTITION")) {
                             allFloor = false;
                         }
                     }
                 }   
 
                 if(allFloor) {
-                    this.setTile(new Tile(tile.x-1, tile.y-1, "WALL", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-1, tile.y-1, "BOUNDARY", "EXIT_TEMPLATE"));
                     this.setTile(new Tile(tile.x-1, tile.y, "EXIT", "EXIT_TEMPLATE"));
-                    this.setTile(new Tile(tile.x-1, tile.y+1, "WALL", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x-1, tile.y+1, "BOUNDARY", "EXIT_TEMPLATE"));
                     this.setTile(new Tile(tile.x-2, tile.y-1, "FLOOR", "EXIT_TEMPLATE"));
                     this.setTile(new Tile(tile.x-2, tile.y, "FLOOR", "EXIT_TEMPLATE"));
                     this.setTile(new Tile(tile.x-2, tile.y+1, "FLOOR", "EXIT_TEMPLATE"));
 
 
                     pathingPoints.push({x: tile.x-1, y: tile.y});
-
+                    console.log("EXIT: " + JSON.stringify({x: tile.x-1, y: tile.y}));
+                    console.log("height: " + this.h);
                     break;
                 }
             }
