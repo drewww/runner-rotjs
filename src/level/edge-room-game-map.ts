@@ -276,15 +276,53 @@ export class EdgeRoomGameMap extends GameMap {
         
         // just get the partition walls, and punch random holes in them
         // Get the partition walls
-        const partitionWalls = this.tiles.filter(tile => tile.procGenType === "PARTITION" && tile.type !== "BOUNDARY");
+        
+        const partitionWalls = this.tiles.filter(tile => tile.procGenType === "PARTITION");
 
-        // Punch random holes in the partition walls
+        // now, look for junction points. a junction point is a partition wall with 3 or 4 other partition tiles OR boundary tiles adjacent to it.
+        const junctionPoints: Point[] = [];
+
+        // Generate junction points
         for (let i = 0; i < partitionWalls.length; i++) {
             const tile = partitionWalls[i];
-            if (Math.random() > 0.90) {
-                this.setTile(new Door(tile.x, tile.y));
+
+            if(tile.x==0 || tile.x == this.w-1) { continue ;}
+
+            const adjacentTiles = this.getAdjacentTiles(tile.x, tile.y, true);
+
+            let numAdjacentWalls = 0;
+            let allBoundary = true;
+            console.log(adjacentTiles);
+            for (const adjacentTile of adjacentTiles) {
+                if (adjacentTile.procGenType === "PARTITION") {
+                    numAdjacentWalls++;
+                } 
+
+                if(adjacentTile.type !== "PARTITION") {
+                    allBoundary = false;
+                }
+            }
+
+            if(numAdjacentWalls>2 && !allBoundary) {
+                console.log(" --- JUNCTION");
+                junctionPoints.push({x: tile.x, y: tile.y});
             }
         }
+
+        console.log(junctionPoints);
+        for (const junctionPoint of junctionPoints) {
+            this.setTile(new Tile(junctionPoint.x, junctionPoint.y, "FLOOR"));
+        }
+
+
+        
+        // // Punch random holes in the partition walls
+        // for (let i = 0; i < partitionWalls.length; i++) {
+        //     const tile = partitionWalls[i];
+        //     if (Math.random() > 0.90) {
+        //         this.setTile(new Door(tile.x, tile.y));
+        //     }
+        // }
 
     }
 

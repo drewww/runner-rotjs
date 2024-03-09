@@ -426,4 +426,24 @@ export class GameMap {
     protected getTemplateDimensions(template: MapTemplate, templateIndex: number): { w: number, h: number } {
         return { w: template.templates[templateIndex][0].length, h: template.templates[templateIndex].length };
     }
+
+    public getAdjacentTiles(x: number, y: number, cardinalOnly: boolean = false): Tile[] {
+        const tiles: Tile[] = [];
+
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
+                
+                if (cardinalOnly && Math.abs(i)==1 && Math.abs(j)==1) continue;
+
+                const tile = this.getTile(x + i, y + j);
+
+                if (tile) {
+                    tiles.push(tile);
+                }
+            }
+        }
+
+        return tiles;
+    }
 }
