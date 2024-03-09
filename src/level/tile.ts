@@ -10,7 +10,7 @@ export const TILE_TYPES = {
     "BUTTON": {symbol: "○", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "EXIT_FORCEFIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},
-    "BOUNDARY": {symbol: " ", fg: COLORS.WHITE, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: true},
+    "BOUNDARY": {symbol: "#", fg: COLORS.LIGHT_GREY, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: true},
     "TALL_JUNK": {symbol: "0", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: true, solid: true, indestructable: false},
     "SHORT_JUNK": {symbol: "o", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},
 }
@@ -67,6 +67,10 @@ export class Tile {
 
         const tileType = TILE_TYPES[type as keyof typeof TILE_TYPES];
         Object.assign(this, tileType);
+
+        if(procGenType === "PARTITION" && type === "WALL") {
+            this.symbol = "+";
+        }
     }
 
     protected emit(type: string): void {

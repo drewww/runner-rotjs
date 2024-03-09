@@ -321,6 +321,8 @@ export class EdgeRoomGameMap extends GameMap {
                 { x: 0, y: -1 } // up
             ];
 
+            this.setTile(new Tile(junctionPoint.x, junctionPoint.y, "SHORT_JUNK"));
+
             for (const direction of directions) {
 
                 // decide what to do in this direction. our options are:
@@ -341,38 +343,63 @@ export class EdgeRoomGameMap extends GameMap {
                 let currentX = junctionPoint.x + direction.x;
                 let currentY = junctionPoint.y + direction.y;
 
+                const curWall :Point[] = [];
+                const tile = this.getTile(junctionPoint.x, junctionPoint.y);
+
+                // if(tile && tile.type !== "BOUNDARY") { curWall.push({x: junctionPoint.x, y: junctionPoint.y})};
+
                 while (true) {
                     const currentTile = this.getTile(currentX, currentY);
 
-                    if (!currentTile || currentTile.type === "BOUNDARY" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
+                    if(currentTile && currentTile.procGenType !== "PARTITION" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
+                        break;
+                    }
+
+                    if(currentTile && currentTile.type !== "BOUNDARY") {
+                        curWall.push({x: currentX, y: currentY});
+                    }
+
+
+                    if (!currentTile || currentTile.type === "BOUNDARY" || junctionPoints.some(point => point.x === currentX && point.y === currentY)) {
+
                         console.log("found a boundary or visited point, breaking");
+
+                        // now iterate through all the curWalls knowing the wall length
+                        for(let i = 0; i < curWall.length; i++) {
+                            const curPoint = curWall[i];
+                            
+
+                            // this.setTile(new Tile(curPoint.x, curPoint.y, "TALL_JUNK"));
+
+                            if(strategy==="BLANK") {
+                                // this.setTile(new Tile(curPoint.x, curPoint.y, "FLOOR"));
+                            } else if(strategy==="DOORS") {
+                                if(Math.random() < doorChance) {
+                                    // this.setTile(new Door(curPoint.x, curPoint.y));
+                                    doorChance = 0.05;
+                                } else {
+                                    doorChance += 0.34;
+                                }
+                            } else if(strategy==="BLANK_SECTION") {
+        
+                                if(sectionCounter >= sectionStartOffset && sectionCounter <= sectionStartOffset + sectionSize) {
+                                    // this.setTile(new Tile(curPoint.x, curPoint.y, "FLOOR"));
+                                }
+        
+                                sectionCounter++;
+                            }
+        
+                        }
+
                         break;
                     }
 
                     visitedPoints.push({ x: currentX, y: currentY });
 
-                    if(strategy==="BLANK") {
-                        this.setTile(new Tile(currentX, currentY, "FLOOR"));
-                    } else if(strategy==="DOORS") {
-                        if(Math.random() < doorChance) {
-                            this.setTile(new Door(currentX, currentY));
-                            doorChance = 0.05;
-                        } else {
-                            doorChance += 0.34;
-                        }
-                    } else if(strategy==="BLANK_SECTION") {
-
-                        if(sectionCounter >= sectionStartOffset && sectionCounter <= sectionStartOffset + sectionSize) {
-                            this.setTile(new Tile(currentX, currentY, "FLOOR"));
-                        }
-
-                        sectionCounter++;
-                    }
-
+                   
                     // if (currentTile.type === "PARTITION") {
                     //     this.setTile(new Door(currentX, currentY));
                     // }
-                    // this.setTile(new Tile(currentX, currentY, "TALL_JUNK"));
 
                     currentX += direction.x;
                     currentY += direction.y;
