@@ -241,15 +241,31 @@ abstract class BaseRoomFiller implements RoomFiller {
 
     setTile(x: number, y: number, tile: Tile) {
         if(!tile) { return; }
+
+        const index = y * this.rect.w + x;
+        if(index >= this.tiles.length) { 
+            // console.error("Got bad index: " + index + " for x: " + x + " y: " + y + " rect: " + JSON.stringify(this.rect));
+            return;
+        }
+
+        if(x > this.rect.w || y > this.rect.h) {
+            // console.error("exceeded bounds" + x + " " + y + " " + this.rect.w + " " + this.rect.h);
+            return;
+        }
+
         this.tiles[y * this.rect.w + x] = tile;
     }
 
     translateTiles(): void{
         // console.log(this.tiles);
+        // this.cleanTiles();
         for (let tile of this.tiles) {
-            if(!tile) { continue; }
+            if(!tile) { }
             // console.log("tile: " + JSON.stringify(tile));
             // console.log("rect: " + JSON.stringify(this.rect));
+
+
+
             tile.x = tile.x + this.rect.x;
             tile.y = tile.y + this.rect.y;
         }
@@ -279,7 +295,8 @@ class RandomRoomFiller extends BaseRoomFiller {
             let value = noise.get(tile.x / 5, tile.y / 5) * 255;
 
             if(value > 100) {
-                 this.setTile(tile.x, tile.y, new Tile(tile.x, tile.y, "WALL"));
+                this.setTile(tile.x, tile.y, new Tile(tile.x, tile.y, "WALL"));
+                console.log(tile);
             }
         }
 
