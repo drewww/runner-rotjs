@@ -83,7 +83,7 @@ export class LevelController implements Drawable {
                         break;
                     }
 
-                    const doorCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                const doorCell = freeCells[Math.floor(Math.random() * freeCells.length)];
                     this.map.setTile(new Door(doorCell.x, doorCell.y));
                 }
 

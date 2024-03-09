@@ -122,6 +122,7 @@ export class Player extends Being {
                     move = {x: selectedMoveOption.moves[i].x - selectedMoveOption.moves[i-1].x, y: selectedMoveOption.moves[i].y - selectedMoveOption.moves[i-1].y};
                 }
                 this.move(move.x, move.y);
+                this.updateVision();
             }
 
             // TODO execute code here
