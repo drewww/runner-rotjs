@@ -1,6 +1,7 @@
 import { Point, Rect } from "..";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
+import * as ROT from 'rot-js'; // Import the 'rot-js' package
 
 export class EdgeRoomGameMap extends GameMap {
     totalRooms: number;
@@ -162,9 +163,13 @@ export class EdgeRoomGameMap extends GameMap {
             console.log("filling room", roomId, rect);
             let filler: RoomFiller;
 
+
             if(rect.w >= 9 && rect.h >= 9) { 
                 console.log("  choosing bracket");
                 filler = new BracketRoomFiller(rect);
+            } else if(Math.random() > 0.5) {
+                console.log("Choosing random");
+                filler = new RandomRoomFiller(rect);
             } else {
                 console.log("   choosing rows");
                 filler = new RowsRoomFiller(rect);
@@ -259,6 +264,27 @@ abstract class BaseRoomFiller implements RoomFiller {
         return;
     }
 
+}
+
+class TinyRoomFiller extends BaseRoomFiller {
+
+}
+
+class RandomRoomFiller extends BaseRoomFiller {
+    fillRoom(): void {
+
+        var noise = new ROT.Noise.Simplex();
+
+        for (let tile of this.tiles) {
+            let value = noise.get(tile.x / 5, tile.y / 5) * 255;
+
+            if(value > 100) {
+                 this.setTile(tile.x, tile.y, new Tile(tile.x, tile.y, "WALL"));
+            }
+        }
+
+        this.translateTiles();
+    }
 }
 
 class BracketRoomFiller extends BaseRoomFiller {
