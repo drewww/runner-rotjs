@@ -198,7 +198,7 @@ export class GameScreen extends Screen {
             this.game.switchState(GameState.WINSCREEN);
         } else {
             // prepare another level.
-            const newLevel = new LevelController(LevelType.CAVE, 80, this.height-1, this.overlays);
+            const newLevel = new LevelController(LevelType.EDGE_ROOM, 80, this.height-1, this.overlays);
 
             this.level = newLevel;
             
