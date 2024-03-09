@@ -25,10 +25,10 @@ export class Player extends Being {
         // don't need to have a valid position for the player to make the object
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
 
-        this.moves.push({name: "(1) Jump", template:JUMP, cooldown: 3, selected:false, cooldownOnUse: 5});
-        this.moves.push({name: "(2) Wall Run", template:WALL_RUN_R, cooldown: 3, selected:false, cooldownOnUse: 5});
-        this.moves.push({name: "(3) Wall Jump", template:LONG_WALL_JUMP, cooldown: 3, selected:false, cooldownOnUse: 5});
-        this.moves.push({name: "(4) Running Jump", template:RUNNING_JUMP, cooldown: 3, selected:false, cooldownOnUse: 5})
+        this.moves.push({name: "(1) Jump----------", template:JUMP, cooldown: 3, selected:false, cooldownOnUse: 15});
+        this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 3, selected:false, cooldownOnUse: 15});
+        this.moves.push({name: "(3) Wall Jump-----", template:LONG_WALL_JUMP, cooldown: 3, selected:false, cooldownOnUse: 15});
+        this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 3, selected:false, cooldownOnUse: 15})
 
         this.selectedMoveOptions = [];
         this.triggerPulse = false;

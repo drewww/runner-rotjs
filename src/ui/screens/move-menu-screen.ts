@@ -59,6 +59,10 @@ export class MoveMenuScreen extends Screen {
                     }
                 }
 
+                if(char == "-") {
+                    fg = bg;
+                }
+
                 display.draw(moveX + xOffset + this.x + j, moveY + yOffset + this.y, char, fg, bg);
             }
 
