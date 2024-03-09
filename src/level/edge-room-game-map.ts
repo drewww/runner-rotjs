@@ -340,7 +340,9 @@ export class EdgeRoomGameMap extends GameMap {
                 var strategy = strategies[Math.floor(Math.random() * strategies.length)];
 
                 // have it go up each space and then reset after a door is placed
-                var doorChance = 0.10; 
+                var doorChance = 0.1; 
+                var placedAtLeastOneDoor = false;
+                var availableDoorTiles: Point[] = [];
 
                 var sectionSize = Math.floor(Math.random()*5);
                 var sectionCounter = 0;
@@ -348,6 +350,7 @@ export class EdgeRoomGameMap extends GameMap {
 
                 let currentX = junctionPoint.x + direction.x;
                 let currentY = junctionPoint.y + direction.y;
+
 
                 // if first Tile in this direction is floor, skip the direction.
                 const firstTile = this.getTile(currentX, currentY);
@@ -360,6 +363,16 @@ export class EdgeRoomGameMap extends GameMap {
 
                     if (!currentTile || currentTile.type === "BOUNDARY" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
                         console.log("found a boundary or visited point, breaking");
+
+                        if(!placedAtLeastOneDoor && strategy === "DOORS") {
+                            // if we didn't place a door, go back and place one
+                            if(availableDoorTiles.length > 0) {
+                                const randomIndex = Math.floor(Math.random() * availableDoorTiles.length);
+                                const doorTile = availableDoorTiles[randomIndex];
+                                this.setTile(new Door(doorTile.x, doorTile.y));
+                            }
+                        }
+
                         break;
                     }
 
@@ -368,11 +381,13 @@ export class EdgeRoomGameMap extends GameMap {
                     if(strategy==="BLANK") {
                         this.setTile(new Tile(currentX, currentY, "FLOOR"));
                     } else if(strategy==="DOORS") {
+                        availableDoorTiles.push({x: currentX, y: currentY});
                         if(Math.random() < doorChance) {
                             this.setTile(new Door(currentX, currentY));
+                            placedAtLeastOneDoor = true;
                             doorChance = 0.05;
                         } else {
-                            doorChance += 0.10;
+                            // doorChance += 0.10;
                         }
                     } else if(strategy==="BLANK_SECTION") {
 
@@ -396,15 +411,7 @@ export class EdgeRoomGameMap extends GameMap {
 
 
         // for each junction point, travel in each cardinat direction until we hit a boundary or another junction point or a visited point.
-
         
-        // // Punch random holes in the partition walls
-        // for (let i = 0; i < partitionWalls.length; i++) {
-        //     const tile = partitionWalls[i];
-        //     if (Math.random() > 0.90) {
-        //         this.setTile(new Door(tile.x, tile.y));
-        //     }
-        // }
 
     }
 
