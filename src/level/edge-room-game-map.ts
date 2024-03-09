@@ -266,21 +266,23 @@ class BracketRoomFiller extends BaseRoomFiller {
         var w = this.rect.w;
         var h = this.rect.h;
         // fill the corners with inset walls
+        var insetRect = this.shrinkRect(this.shrinkRect(this.rect));
+        for(let i = 0; i < 10; i++) {
+            if(insetRect.w < 6 && insetRect.h < 6) { break; }
+            // iterate through the points of insetRect
+            // for points that are greater than 2 steps away from any of the corners, skip them.
+            // otherwise, fill in with a wall tile.
+            for (const point of this.getPointsOnRectBoundaries(insetRect)) {
+                const rectPoint = { x: point.x - this.rect.x, y: point.y - this.rect.y };
 
-        const insetRect = this.shrinkRect(this.shrinkRect(this.rect));
+                if (rectPoint.x > (insetRect.w/5+4) && rectPoint.x < insetRect.w-(insetRect.w/5 + 2)) { continue; }
+                if (rectPoint.y > (insetRect.h/5+4) && rectPoint.y < insetRect.h-(insetRect.w/5 + 2)) { continue; }
+                
+                this.setTile(rectPoint.x, rectPoint.y, new Tile(rectPoint.x, rectPoint.y, "WALL"));
+            }
 
-        // iterate through the points of insetRect
-        // for points that are greater than 2 steps away from any of the corners, skip them.
-        // otherwise, fill in with a wall tile.
-        for (const point of this.getPointsOnRectBoundaries(insetRect)) {
-            const rectPoint = { x: point.x - this.rect.x, y: point.y - this.rect.y };
-
-            if (rectPoint.x > 6 && rectPoint.x < insetRect.w-2) { continue; }
-            if (rectPoint.y > 6 && rectPoint.y < insetRect.h-2) { continue; }
-            
-            this.setTile(rectPoint.x, rectPoint.y, new Tile(rectPoint.x, rectPoint.y, "WALL"));
-        }
-
+            insetRect = this.shrinkRect(this.shrinkRect(this.shrinkRect(insetRect)));
+        } 
         this.translateTiles();
     }
 
