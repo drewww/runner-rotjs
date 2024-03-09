@@ -489,8 +489,12 @@ abstract class BaseRoomFiller implements RoomFiller {
             return;
         }
 
-        if(x > this.rect.w || y > this.rect.h) {
+        if(x >= this.rect.w || y >= this.rect.h) {
             // console.error("exceeded bounds" + x + " " + y + " " + this.rect.w + " " + this.rect.h);
+            return;
+        }
+        
+        if(x < 0 || y < 0) {
             return;
         }
 
