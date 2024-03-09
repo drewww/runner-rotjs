@@ -60,7 +60,7 @@ export class Tile {
         this.bg = COLORS.BLACK;
         this.indestructable = false;
 
-        this.procGenType = "unknown";
+        this.procGenType = procGenType;
         this.procGenDistance = -1;
         this.procGenMetadata = {};
         this.enabled = true;

@@ -1,5 +1,6 @@
 import { Point, Rect } from "..";
 import { Button } from "./button";
+import { Door } from "./door";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
@@ -185,6 +186,20 @@ export class EdgeRoomGameMap extends GameMap {
             }
         }
 
+        var pathingPoints: Point[] = [];
+
+        // TODO don't let buttons go on the original procgen walls
+        const wallTiles = this.tiles.filter(tile => tile.type === "WALL");
+        // randomly replace 3 of them with buttons
+        for (let i = 0; i < 3; i++) {
+            const randomIndex = Math.floor(Math.random() * wallTiles.length);
+            const tile = wallTiles[randomIndex];
+            this.setTile(new Button(tile.x, tile.y));
+            wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
+
+            pathingPoints.push({x: tile.x, y: tile.y});
+        }
+
         // now look for an entrance and exit
         // first pass, place the entrance on the left edge, and the exit on the right
         const leftEdgeTiles = this.tiles.filter(tile => tile.x === 0 && tile.type === "BOUNDARY");
@@ -209,6 +224,9 @@ export class EdgeRoomGameMap extends GameMap {
                     this.setTile(new Tile(tile.x+1, tile.y-1, "WALL"));
                     this.setTile(new Tile(tile.x+1, tile.y, "ENTRANCE"));
                     this.setTile(new Tile(tile.x+1, tile.y+1, "WALL"));
+
+                    pathingPoints.push({x: tile.x+1, y: tile.y});
+
                     break;
                 }
             }
@@ -240,6 +258,9 @@ export class EdgeRoomGameMap extends GameMap {
                     this.setTile(new Tile(tile.x-2, tile.y, "FLOOR", "EXIT_TEMPLATE"));
                     this.setTile(new Tile(tile.x-2, tile.y+1, "FLOOR", "EXIT_TEMPLATE"));
 
+
+                    pathingPoints.push({x: tile.x-1, y: tile.y});
+
                     break;
                 }
             }
@@ -247,19 +268,23 @@ export class EdgeRoomGameMap extends GameMap {
             rightEdgeTiles.splice(randomIndex, 1);
         }
 
-        const wallTiles = this.tiles.filter(tile => tile.type === "WALL");
-        // randomly replace 3 of them with buttons
-        for (let i = 0; i < 3; i++) {
-            const randomIndex = Math.floor(Math.random() * wallTiles.length);
-            const tile = wallTiles[randomIndex];
-            this.setTile(new Button(tile.x, tile.y));
-            wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
-        }
+
 
 
         // ------------- DOORS ------------------ //
+        // first pass -- create a pathing agent that can got through walls and plot a course from the entrance to each button
+        
+        // just get the partition walls, and punch random holes in them
+        // Get the partition walls
+        const partitionWalls = this.tiles.filter(tile => tile.procGenType === "PARTITION" && tile.type !== "BOUNDARY");
 
-
+        // Punch random holes in the partition walls
+        for (let i = 0; i < partitionWalls.length; i++) {
+            const tile = partitionWalls[i];
+            if (Math.random() > 0.90) {
+                this.setTile(new Door(tile.x, tile.y));
+            }
+        }
 
     }
 

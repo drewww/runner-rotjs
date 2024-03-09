@@ -168,12 +168,12 @@ export class GameMap {
     public addTilesOnRectBoundaries(rects: Rect[], tileType: string = "WALL"): void {
         for (const rect of rects) {
             for (let x = rect.x; x < rect.x + rect.w; x++) {
-                this.setTile(new Tile(x, rect.y, tileType));
-                this.setTile(new Tile(x, rect.y + rect.h - 1, tileType));
+                this.setTile(new Tile(x, rect.y, tileType, "PARTITION"));
+                this.setTile(new Tile(x, rect.y + rect.h - 1, tileType, "PARTITION"));
             }
             for (let y = rect.y; y < rect.y + rect.h; y++) {
-                this.setTile(new Tile(rect.x, y, tileType));
-                this.setTile(new Tile(rect.x + rect.w - 1, y, tileType));
+                this.setTile(new Tile(rect.x, y, tileType, "PARTITION"));
+                this.setTile(new Tile(rect.x + rect.w - 1, y, tileType, "PARTITION"));
             }
         }
     }
