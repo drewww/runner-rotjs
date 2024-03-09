@@ -5,7 +5,7 @@ import { Player } from "../entities/player";
 export const TILE_TYPES = {
     "FLOOR": {symbol: ".", fg: COLORS.WHITE, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: false},
     "WALL": {symbol: " ", fg: COLORS.LIGHT_GREY, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
-    "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: false, indestructable: true, enabled:true},
+    "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: true, enabled:false, power:3},
     "ENTRANCE": {symbol: "%", fg: COLORS.DARK_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: true, enabled:false},
     "BUTTON": {symbol: "○", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
     "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
@@ -28,6 +28,8 @@ export class Tile {
     public symbol:string;
     public fg:string;
     public bg:string;
+
+    public power: number;
 
     public visible:boolean;
     public discovered:boolean;
@@ -64,6 +66,8 @@ export class Tile {
         this.procGenDistance = -1;
         this.procGenMetadata = {};
         this.enabled = true;
+
+        this.power = 0;
 
         const tileType = TILE_TYPES[type as keyof typeof TILE_TYPES];
         Object.assign(this, tileType);

@@ -142,65 +142,65 @@ export class LevelController implements Drawable {
         this.map.getAllTiles().forEach(tile => {
             if (tile instanceof Button) {
                 tile.addListener("button", (tile: Button) => {
-                    const forcefields = this.map.getAllTiles().filter(t => t.type === "EXIT_FORCEFIELD");
+                    // const forcefields = this.map.getAllTiles().filter(t => t.type === "EXIT_FORCEFIELD");
 
-                    // for a random forecfield tile, turn it into a floor tile.
-                    const t = forcefields[Math.floor(Math.random() * forcefields.length)];
-                    if (t) {
-                        const position = { x: t.x, y: t.y };
-                        this.map.setTile(new Tile(position.x, position.y, "FLOOR"));
-                    }
+                    const exitTile = this.map.getAllTiles().find(tile => tile.type === "EXIT");
 
-                    // if this was the last one ...
-                    if (forcefields.length == 1) {
-                        this.overlays?.addLayer("path-to-exit");
-                        const exitTile = this.map.getAllTiles().find(tile => tile.type === "EXIT");
-                        var timesCalled = 0;
+                    if (exitTile) {
 
-                        if (exitTile) {
-                            // this is the DESTINATION that we pass in here
-                            const path = new ROT.Path.AStar(exitTile.x, exitTile.y, (x, y) => {
-                                // ignore the actual map, the point is not to show the path just to make an animation
-                                return true;
-                            });
+                        exitTile.power--;
+                        if (exitTile.power == 0) {
+                            exitTile.enabled = true;
+                            exitTile.solid = false;
 
-                            if (path) {
-                                var revealedExit = false;
-                                path.compute(this.player!.x, this.player!.y, (x, y) => {
-                                    timesCalled++;
-                                    setTimeout(() => {
-
-                                        if (!this.overlays) { return; }
-
-                                        this.overlays.setValueOnLayer("path-to-exit", x, y, COLORS.LIGHT_GREEN + "80");
-                                        this.overlays.draw();
-
-                                        const distanceToExit = Math.floor(Math.sqrt(Math.pow(Math.abs(exitTile.x - x), 2) +
-                                            Math.pow(Math.abs(exitTile.y - y), 2)));
-
-                                        if (distanceToExit <= 1 && !revealedExit) {
-                                            // this.map.setTile(new Tile(exitTile.x, exitTile.y, "EXIT", true, true));
-                                            for (let dx = -1; dx <= 1; dx++) {
-                                                for (let dy = -1; dy <= 1; dy++) {
-                                                    const adjacentTile = this.map.getTile(exitTile.x + dx, exitTile.y + dy);
-                                                    if (adjacentTile) {
-                                                        adjacentTile.discovered = true;
-                                                        adjacentTile.visible = true;
+                            this.overlays?.addLayer("path-to-exit");
+                            var timesCalled = 0;
+    
+                            if (exitTile) {
+                                // this is the DESTINATION that we pass in here
+                                const path = new ROT.Path.AStar(exitTile.x, exitTile.y, (x, y) => {
+                                    // ignore the actual map, the point is not to show the path just to make an animation
+                                    return true;
+                                });
+    
+                                if (path) {
+                                    var revealedExit = false;
+                                    path.compute(this.player!.x, this.player!.y, (x, y) => {
+                                        timesCalled++;
+                                        setTimeout(() => {
+    
+                                            if (!this.overlays) { return; }
+    
+                                            this.overlays.setValueOnLayer("path-to-exit", x, y, COLORS.LIGHT_GREEN + "80");
+                                            this.overlays.draw();
+    
+                                            const distanceToExit = Math.floor(Math.sqrt(Math.pow(Math.abs(exitTile.x - x), 2) +
+                                                Math.pow(Math.abs(exitTile.y - y), 2)));
+    
+                                            if (distanceToExit <= 1 && !revealedExit) {
+                                                // this.map.setTile(new Tile(exitTile.x, exitTile.y, "EXIT", true, true));
+                                                for (let dx = -1; dx <= 1; dx++) {
+                                                    for (let dy = -1; dy <= 1; dy++) {
+                                                        const adjacentTile = this.map.getTile(exitTile.x + dx, exitTile.y + dy);
+                                                        if (adjacentTile) {
+                                                            adjacentTile.discovered = true;
+                                                            adjacentTile.visible = true;
+                                                        }
                                                     }
                                                 }
+    
+                                                revealedExit = true;
                                             }
-
-                                            revealedExit = true;
-                                        }
-                                    }, timesCalled * 10 + 100);
-                                });
-                                setTimeout(() => {
-                                    this.overlays?.startLayerFade("path-to-exit", 1000, 10, 0.9);
-                                }, 1000);
+                                        }, timesCalled * 10 + 100);
+                                    });
+                                    setTimeout(() => {
+                                        this.overlays?.startLayerFade("path-to-exit", 1000, 10, 0.9);
+                                    }, 1000);
+                                }
                             }
+    
                         }
                     }
-
                 });
             }
         });
