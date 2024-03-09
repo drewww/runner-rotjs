@@ -184,6 +184,35 @@ export class EdgeRoomGameMap extends GameMap {
             }
         }
 
+        // now look for an entrance and exit
+        // first pass, place the entrance on the left edge, and the exit on the right
+        const leftEdgeTiles = this.tiles.filter(tile => tile.x === 0 && tile.type === "BOUNDARY");
+
+        while(leftEdgeTiles.length > 0) {
+            const tile = leftEdgeTiles[Math.floor(Math.random() * leftEdgeTiles.length)];
+            if(tile) {
+
+                // check if the three tiles to the right of this tile are all floor tiles
+                let allFloor = true;
+                for(let j=0; j<2; j++) {
+                    for(let i = -1; i < 1; i++) {
+                        const nextTile = this.getTile(tile.x+1+j, tile.y+i);
+                        if(nextTile.type !== "FLOOR") {
+                            allFloor = false;
+                        }
+                    }
+                }   
+
+                if(allFloor) {
+                    this.setTile(new Tile(tile.x+1, tile.y-1, "WALL"));
+                    this.setTile(new Tile(tile.x+1, tile.y, "ENTRANCE"));
+                    this.setTile(new Tile(tile.x+1, tile.y+1, "WALL"));
+                    break;
+                }
+            }
+        }
+        
+
     }
 
     getRectForRoomId(roomId: number): Rect {
@@ -282,9 +311,9 @@ abstract class BaseRoomFiller implements RoomFiller {
 
 }
 
-class TinyRoomFiller extends BaseRoomFiller {
+// class TinyRoomFiller extends BaseRoomFiller {
 
-}
+// }
 
 class RandomRoomFiller extends BaseRoomFiller {
     fillRoom(): void {
@@ -306,8 +335,6 @@ class RandomRoomFiller extends BaseRoomFiller {
 
 class BracketRoomFiller extends BaseRoomFiller {
     fillRoom(): void {
-        var w = this.rect.w;
-        var h = this.rect.h;
         // fill the corners with inset walls
         var insetRect = this.shrinkRect(this.shrinkRect(this.rect));
         for(let i = 0; i < 10; i++) {
