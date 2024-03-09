@@ -340,7 +340,7 @@ export class EdgeRoomGameMap extends GameMap {
                 var strategy = strategies[Math.floor(Math.random() * strategies.length)];
 
                 // have it go up each space and then reset after a door is placed
-                var doorChance = 0.33; 
+                var doorChance = 0.10; 
 
                 var sectionSize = Math.floor(Math.random()*5);
                 var sectionCounter = 0;
@@ -349,8 +349,14 @@ export class EdgeRoomGameMap extends GameMap {
                 let currentX = junctionPoint.x + direction.x;
                 let currentY = junctionPoint.y + direction.y;
 
+                // if first Tile in this direction is floor, skip the direction.
+                const firstTile = this.getTile(currentX, currentY);
+                if(firstTile && (firstTile.type === "FLOOR" || firstTile.type === "BOUNDARY")) { continue; }
+
                 while (true) {
                     const currentTile = this.getTile(currentX, currentY);
+
+                    // this.setTile(new Tile(currentX, currentY, "TALL_JUNK"));
 
                     if (!currentTile || currentTile.type === "BOUNDARY" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
                         console.log("found a boundary or visited point, breaking");
@@ -366,7 +372,7 @@ export class EdgeRoomGameMap extends GameMap {
                             this.setTile(new Door(currentX, currentY));
                             doorChance = 0.05;
                         } else {
-                            doorChance += 0.34;
+                            doorChance += 0.10;
                         }
                     } else if(strategy==="BLANK_SECTION") {
 
