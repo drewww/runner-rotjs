@@ -1,7 +1,7 @@
 
 export const COLORS = {
     WHITE: "#ffffff",
-    DARK_GREY: "#333333",
+    DARK_GREY: "#111111",
     MID_GREY: "#505050",
     LIGHT_GREY: "#cccccc",
     BLACK: "#000000",
@@ -16,9 +16,14 @@ export const COLORS = {
     
 
     LASER_RED: "#a80d02",
-    INVISIBLE_TILE: "#555555",
+    
+    INVISIBLE_TILE: "#333333",
+    VISIBLE_WALL: "#999999",
+    
     HEALTH_RED: "#ff0000",
 
     MOVE_BLUE: "#4444ff",
     MOVE_LIGHT_BLUE: "#8888ff",
+
+
 };

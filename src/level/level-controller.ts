@@ -346,11 +346,21 @@ export class LevelController implements Drawable {
             } else {
                 bg = COLORS.BLACK;
             }
+
+            if(tile.type === "BOUNDARY" || tile.type === "WALL") {
+                fg = COLORS.MID_GREY;
+            }
         } else {
             // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
             // fgHSL[2] = fgHSL[2]-0.5;  
             // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
-            fg = COLORS.INVISIBLE_TILE;
+            if(tile.opaque) {
+                fg = tile.fg
+
+               
+            } else {
+                fg = COLORS.INVISIBLE_TILE;
+            }
         }
 
         if (tile.opaque) {
