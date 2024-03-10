@@ -22,7 +22,7 @@ export class GameScreen extends Screen {
 
     overlays: Overlays;
 
-    constructor(game: IGame) {
+    constructor(game: IGame, levelType: LevelType) {
         super();
 
         // starter level. eventually this should be the "intro" level, but for now use the tutorial cave.
@@ -31,7 +31,7 @@ export class GameScreen extends Screen {
         // careful, the height here relates to the screen height.
         this.overlays = new Overlays(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        this.level = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
+        this.level = new LevelController(levelType, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
         this.level.x = 1;
         this.level.y = 1;
         this.x = 0;

@@ -29,6 +29,7 @@ export enum LevelType {
     RANDOM = "RANDOM",   // a random map with random bots and tiles
     BSP = "BSP",
     EDGE_ROOM = "EDGE_ROOM",
+    TUTORIAL = "TUTORIAL",
     // add other level generator types here
     // can also add a sequence of tutorial levels here
 }
@@ -39,6 +40,7 @@ export enum GameState {
     KILLSCREEN = "KILLSCREEN",
     WINSCREEN = "WINSCREEN",
     MAP_EXPLORE = "MAP_EXPLORE",
+    TUTORIAL = "TUTORIAL",
 }
 
 export interface Drawable {

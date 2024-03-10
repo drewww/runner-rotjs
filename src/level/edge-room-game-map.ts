@@ -17,10 +17,10 @@ export class EdgeRoomGameMap extends GameMap {
 
         var valid = false;
         do {
-            console.log("generating level");
+            // console.log("generating level");
             this.generateLevel();
             valid = this.validDesign();
-            console.error("actually valid? " + valid);
+            // console.error("actually valid? " + valid);
 
             // valid = true;
             // console.log("valid? " + valid);
@@ -70,7 +70,7 @@ export class EdgeRoomGameMap extends GameMap {
 
         partitionValues.sort((a, b) => a - b);
         partitionValues.push(this.w);
-        console.log("partitionValues", partitionValues);
+        // console.log("partitionValues", partitionValues);
 
         var roomId = 0;
         for (let nextX of partitionValues) {
@@ -90,7 +90,7 @@ export class EdgeRoomGameMap extends GameMap {
             // numSplits = 2;
             const SKIP_CHANCE = 0.0;
 
-            console.log("numSplits", numSplits);
+            // console.log("numSplits", numSplits);
             let rect = { x: xCursor, y: 0, w: nextX - xCursor, h: this.h };
             switch (numSplits) {
                 case 0:
@@ -289,9 +289,6 @@ export class EdgeRoomGameMap extends GameMap {
 
 
                     pathingPoints.push({ x: tile.x - 1, y: tile.y });
-                    // exitPoint = { x: tile.x - 1, y: tile.y };
-                    console.log("EXIT: " + JSON.stringify({ x: tile.x - 1, y: tile.y }));
-                    console.log("height: " + this.h);
                     break;
                 }
             }
@@ -380,7 +377,7 @@ export class EdgeRoomGameMap extends GameMap {
 
                     // this.setTile(new Tile(currentX, currentY, "TALL_JUNK"));
                     if (!currentTile || currentTile.type === "BOUNDARY" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
-                        console.log("found a boundary or visited point, breaking");
+                        // console.log("found a boundary or visited point, breaking");
 
                         if (!placedAtLeastOneDoor && strategy === "DOORS") {
                             // if we didn't place a door, go back and place one
@@ -486,7 +483,7 @@ export class EdgeRoomGameMap extends GameMap {
             path.compute(objectivePoint.x, objectivePoint.y, (x, y) => {
                 // console.log(`at point ${x},${y} looking for ${entrance!.x},${entrance!.y}`);
                 if (x === entrance!.x && y === entrance!.y) {
-                    console.log("found a path to the objective point: " + JSON.stringify(objectivePoint));
+                    // console.log("found a path to the objective point: " + JSON.stringify(objectivePoint));
                     validObjective = true;
                 }
             });

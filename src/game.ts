@@ -3,7 +3,7 @@ import * as ROT from 'rot-js';
 import { Screen } from './ui/screen';
 import { KillScreen } from './ui/screens/kill-screen';
 import { WinScreen } from './ui/screens/win-screen';
-import { GameState, IGame, SCREEN_HEIGHT, SCREEN_WIDTH } from '.';
+import { GameState, IGame, LevelType, SCREEN_HEIGHT, SCREEN_WIDTH } from '.';
 import { Player } from './entities/player';
 import { GameScreen } from './ui/screens/game-screen';
 import { TitleScreen } from './ui/screens/title-screen';
@@ -29,6 +29,7 @@ export class Game implements IGame {
     killScreen!: KillScreen;
     winScreen!: WinScreen;
     mapExploreScreen!: MapExploreScreen;
+    tutorialScreen!: GameScreen; 
 
     constructor() {
         console.log("Game created!");
@@ -60,10 +61,10 @@ export class Game implements IGame {
         this.mapExploreScreen = new MapExploreScreen(this);
         this.screen = this.titleScreen;
 
-        this.gameScreen = new GameScreen(this);
+        this.tutorialScreen = new GameScreen(this, LevelType.TUTORIAL);
 
-        this.player = new Player();
-        this.gameScreen.setPlayer(this.player);
+        this.gameScreen = new GameScreen(this, LevelType.EDGE_ROOM);
+
         this.state = GameState.TITLE;
 
         this.refreshDisplay();
@@ -92,17 +93,29 @@ export class Game implements IGame {
                 // intercept any key to start the game
                 if (e.keyCode == ROT.KEYS.VK_M) {
                     this.switchState(GameState.MAP_EXPLORE);
+                } else if (e.keyCode == ROT.KEYS.VK_T) {
+                    console.log("got T");
+                    // const loadedGameScreen: GameScreen = <GameScreen>this.tutorialScreen;
+
+                    this.switchState(GameState.TUTORIAL);
+                    // loadedGameScreen.level.setPlayer(this.player!);
+
+                    // eat the event
+                    return;
                 } else if (e.keyCode == ROT.KEYS.VK_I) {
                     // a bit odd ... this just falls through into the handle for the screen itself, which
                     // will turn itself into the "information" version
                 } else {
                     this.switchState(GameState.GAME);
                     
+                    // consider setting player on game??
+
                     // event is handled, don't pass it to the screen
                     return;
                 }
                 
                 break;
+            case GameState.TUTORIAL:
             case GameState.GAME:
                 break;
             case GameState.KILLSCREEN:
@@ -124,7 +137,7 @@ export class Game implements IGame {
     }
 
     public switchState(newState: GameState) {
-        console.log("Switching to state: " + newState + " FROM " + this.state);
+        console.log("Switching to state: " + newState + " from " + this.state);
         this.display.clear();
 
         // animations can check this to cancel out
@@ -136,6 +149,8 @@ export class Game implements IGame {
                 this.screen = this.titleScreen;
                 break;
             case GameState.GAME:
+                this.player = new Player();
+                this.gameScreen.setPlayer(this.player!);
                 this.player!.updateVision();
                 this.screen = this.gameScreen;                
                 break;
@@ -147,6 +162,13 @@ export class Game implements IGame {
                 break;
             case GameState.MAP_EXPLORE:
                 this.screen = this.mapExploreScreen;
+                break;
+            case GameState.TUTORIAL:
+                this.player = new Player();
+
+                this.tutorialScreen.setPlayer(this.player!);
+                this.player!.updateVision();
+                this.screen = this.tutorialScreen;
                 break;
         }
         this.refreshDisplay();
