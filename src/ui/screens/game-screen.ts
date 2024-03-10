@@ -7,8 +7,9 @@ import { Interactable } from "../../level/tile";
 import { Screen } from "../screen";
 import { MoveMenuScreen } from './move-menu-screen';
 import { Overlays } from "../overlays";
+import { TextBox } from "../elements/text-box";
 
-const RIGHT_MENU_WIDTH: number= 20;
+const RIGHT_MENU_WIDTH: number = 20;
 
 export class GameScreen extends Screen {
     public level: LevelController;
@@ -21,6 +22,7 @@ export class GameScreen extends Screen {
     moveMenu: any;
 
     overlays: Overlays;
+    triggered: string[] = [];
 
     constructor(game: IGame, levelType: LevelType) {
         super();
@@ -31,7 +33,7 @@ export class GameScreen extends Screen {
         // careful, the height here relates to the screen height.
         this.overlays = new Overlays(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        this.level = new LevelController(levelType, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
+        this.level = new LevelController(levelType, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
         this.level.x = 1;
         this.level.y = 1;
         this.x = 0;
@@ -42,13 +44,13 @@ export class GameScreen extends Screen {
         // this.overlays.addListener("draw", () => {
         //     this.game.refreshDisplay();
         // });
-        
+
         this.elements!.push(this.level);
         // this.elements!.push(this.overlays);
 
         this.engine = new ROT.Engine(this.level.scheduler);
     }
-    
+
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
         super.draw(display, xOffset, yOffset);
@@ -79,7 +81,7 @@ export class GameScreen extends Screen {
 
         var code = e.keyCode;
         console.log("CODE: " + code);
-        
+
 
         // set lastKeyUse to "keypad" if the keycode is in one of the VK_NUMPAD* codes, but if it's letters
         // W,E,D,C,X,Z,A, or Q, set it to "letters".
@@ -93,13 +95,13 @@ export class GameScreen extends Screen {
         console.log("lastKeyStyle: " + this.level.lastKeyStyle);
 
         // first, short circuit other detection. if we have a move selected, there are different options.
-        if(this.player?.getSelectedMove()) {
-            if(e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
+        if (this.player?.getSelectedMove()) {
+            if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
                 this.level.player!.deselectMoves();
                 return;
 
             } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9) {
-                            
+
                 this.level.player!.deselectMoves();
                 return;
             } else if (code in keyMap) {
@@ -107,29 +109,29 @@ export class GameScreen extends Screen {
                 // this has gotten VERY stupid but we're going to see it through to finish up for the night.
 
                 var didMove = false;
-                if(this.level.lastKeyStyle === "letters") {
+                if (this.level.lastKeyStyle === "letters") {
                     didMove = this.level.player!.selectMove(String.fromCharCode(code));
-                } else if(this.level.lastKeyStyle === "keypad") {
+                } else if (this.level.lastKeyStyle === "keypad") {
                     didMove = this.level.player!.selectMove((code - ROT.KEYS.VK_NUMPAD0).toString());
                 }
 
                 releaseLockAfterHandling = didMove;
 
                 // gross repetition here. should refactor this whole block eventually.
-                if(this.engine && releaseLockAfterHandling) {
+                if (this.engine && releaseLockAfterHandling) {
                     console.log("releasing lock");
                     this.engine.unlock();
                 }
-    
+
                 return;
             }
-        } 
+        }
 
 
         if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
-            
+
             // check for adjacent interactables. 
             const playerPos = this.level.player!.getPosition();
 
@@ -152,17 +154,17 @@ export class GameScreen extends Screen {
             // do this so pauses advance the turn counter
             this.level.player!.move(0, 0);
 
-        } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9){
+        } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9) {
             console.log("move key pressed");
 
             // TODO refactor this, it's a mess that we're passing in numbers as strings sometimes
             // and strings as strings others. Should be two methods, probably.
             // if this is the same as a move already selected, it will execute it.
 
-            
+
 
             const didMove = this.level.player!.selectMove((code - ROT.KEYS.VK_1).toString());
-            
+
             // if a move was executed, release the lock so it "counts" as a move and lets other
             // entities act. otherwise, hold the lock because it was just a UI manipulation.            
             releaseLockAfterHandling = didMove;
@@ -170,8 +172,8 @@ export class GameScreen extends Screen {
         } else if (code in keyMap) {
 
             var diff = ROT.DIRS[8][keyMap[code]];
-            console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);        
-            this.level.player!.move(diff[0], diff[1]);  
+            console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);
+            this.level.player!.move(diff[0], diff[1]);
             this.level.player!.deselectMoves();
 
         } else if (code == ROT.KEYS.VK_ESCAPE) {
@@ -189,14 +191,14 @@ export class GameScreen extends Screen {
 
         //-------------------//
         const curTile = this.level.map.getTile(this.level.player!.x, this.level.player!.y);
-        
+
         // stupid that this depends on a specific character
         if (curTile && curTile.symbol === '%' && curTile.enabled) {
             console.log("player on exit " + JSON.stringify(curTile));
             this.advanceDepth();
         }
 
-        if(this.engine && releaseLockAfterHandling) {
+        if (this.engine && releaseLockAfterHandling) {
             console.log("releasing lock");
             this.engine.unlock();
         } else {
@@ -213,19 +215,19 @@ export class GameScreen extends Screen {
 
     advanceDepth(): void {
         this.level.player!.depth++;
-        if(this.level.player!.depth >= 0) {
+        if (this.level.player!.depth >= 0) {
             this.game.switchState(GameState.WINSCREEN);
         } else {
             this.level.disable();
             // prepare another level.
-            const newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
+            const newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
             newLevel.x = 1;
             newLevel.y = 1;
 
             this.elements = [];
 
             this.level = newLevel;
-            
+
             // does this prepend? tbd.
             this.elements = [this.level, this.statusBar!, this.moveMenu!];
 
@@ -234,15 +236,15 @@ export class GameScreen extends Screen {
                 return tile.type === "ENTRANCE";
             });
 
-            if(!tile) {
+            if (!tile) {
                 console.error("No entrance tile found.");
             }
             this.player!.setPosition(tile!);
             this.player!.resetCooldowns();
-            
+
             this.level.setPlayer(this.player!);
             this.player!.updateVision();
-    
+
             this.game.refreshDisplay();
 
             this.engine = new ROT.Engine(this.level.scheduler);
@@ -266,18 +268,18 @@ export class GameScreen extends Screen {
         const playerCell = freeCells[Math.floor(Math.random() * freeCells.length)];
         player.setPosition(playerCell);
 
-        this.level.setPlayer(player);   
-        
-        if(!this.statusBar) {
-            this.statusBar = new StatusBar(this.width-RIGHT_MENU_WIDTH, this.height - 1, RIGHT_MENU_WIDTH, 1, player!);
+        this.level.setPlayer(player);
+
+        if (!this.statusBar) {
+            this.statusBar = new StatusBar(this.width - RIGHT_MENU_WIDTH, this.height - 1, RIGHT_MENU_WIDTH, 1, player!);
             this.elements!.push(this.statusBar);
         } else {
             this.statusBar.player = player;
         }
 
-        if(!this.moveMenu) {
+        if (!this.moveMenu) {
             this.moveMenu = new MoveMenuScreen(0, 0, player);
-            
+
             this.moveMenu.x = this.width - RIGHT_MENU_WIDTH;
             this.moveMenu.y = 0;
             this.moveMenu.width = RIGHT_MENU_WIDTH;
@@ -287,12 +289,32 @@ export class GameScreen extends Screen {
             this.moveMenu.setPlayer(player);
         }
 
-        this.player.addListener("act", (player:Player) => {
+        this.player.addListener("act", (player: Player) => {
             this.engine.lock();
         });
 
-        this.player.addListener("death", (player:Player) => {
+        this.player.addListener("death", (player: Player) => {
             this.game.switchState(GameState.KILLSCREEN);
+        });
+
+        this.player.addListener("move", (player: Player) => {
+            // see if we need to trigger a notice
+            const tile = this.level.map.getTile(this.player!.x, this.player!.y);
+            if (tile.triggerMetadata) {
+                const trigger: { trigger: string, text: string } = tile.triggerMetadata;
+
+                if (!this.triggered.includes(trigger.trigger)) {
+                    this.triggered.push(trigger.trigger);
+                    // console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
+
+                    const textBox = new TextBox(this.player!.x, this.player!.y + 5 , 30, 5, trigger.text);
+                    this.elements.push(textBox);
+
+                    setTimeout(() => {
+                        this.elements.splice(this.elements.indexOf(textBox), 1);
+                    }, 3000);
+                }
+            }
         });
     }
 }

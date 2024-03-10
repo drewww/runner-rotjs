@@ -190,4 +190,6 @@ export class Overlays {
         this.visibleCanvas.remove();
         this.bufferCanvas.remove();
     }
+
+    
 }

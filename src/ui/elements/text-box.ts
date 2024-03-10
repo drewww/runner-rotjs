@@ -42,8 +42,8 @@ export class TextBox extends UIBox implements Drawable {
         // need to have some way to de-register the animation.
         if(!this.animate) {
             let padding = `%c{${this.bg}}%b{${this.bg}}`;
-            padding += "-".repeat(this.w - this.text.length);
-            display.drawText(xOffset+this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text + padding}`);
+            padding += "-".repeat(Math.max(this.w - this.text.length, 0));
+            display.drawText(xOffset+this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text + padding}`, this.w);
         } else {
             // drop out if we've gotten the signal to disable this element
             if(this.startDelay > 0) {
