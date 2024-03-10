@@ -9,6 +9,7 @@ import { MoveMenuScreen } from './move-menu-screen';
 import { Overlays } from "../overlays";
 import { TextBox } from "../elements/text-box";
 import { COLORS } from "../../colors";
+import { Hunter } from "../../entities/hunter";
 
 const RIGHT_MENU_WIDTH: number = 20;
 
@@ -25,6 +26,7 @@ export class GameScreen extends Screen {
     overlays: Overlays;
     triggered: string[] = [];
     currentTriggerTextBox: TextBox | undefined;
+    hunterDetect: any;
 
     constructor(game: IGame, levelType: LevelType) {
         super();
@@ -55,6 +57,24 @@ export class GameScreen extends Screen {
 
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
+
+        // absolutely heinous but 
+        if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
+            this.hunterDetect = true;
+
+            const text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING`;
+            const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, text , COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
+            this.elements.push(textBox);
+            this.currentTriggerTextBox = textBox;
+
+            setTimeout(() => {
+                if (this.elements.includes(textBox)) {
+                    this.elements.splice(this.elements.indexOf(textBox), 1);
+                    this.currentTriggerTextBox = undefined;
+                }
+            }, 6000);
+        }
+
         super.draw(display, xOffset, yOffset);
     }
 

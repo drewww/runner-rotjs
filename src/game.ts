@@ -31,6 +31,8 @@ export class Game implements IGame {
     mapExploreScreen!: MapExploreScreen;
     tutorialScreen!: GameScreen; 
 
+    hunterDetect: boolean = false;
+
     constructor() {
         console.log("Game created!");
         
@@ -74,7 +76,7 @@ export class Game implements IGame {
 
     refreshDisplay() {
         this.display.clear();
-
+        
         try {
             this.screen.draw(this.display);
         } catch(e) {
