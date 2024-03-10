@@ -107,7 +107,7 @@ const levels: { [key: string]: StaticLevel } = {
                 "#...3...-2......-4.....-5......#",
                 "#...#####2......#4.....#5......#",
                 "#-#######.......####s#####sss#-#",
-                "#11...0@#....p..#..............#",
+                "#11...0@#....p..#............66#",
                 "#11...00#.......#..............#",
                 "################################",
                 "#..............................#",
@@ -122,6 +122,7 @@ const levels: { [key: string]: StaticLevel } = {
             "3": "Close that door behind you! What kind of runner leaves open doors behind them?",
             "4": "This is where your implants come in handy. Walk up to the sentry vision and jump over it with (1), then selecting the direction.",
             "5": "One sentry is nothing. This is more common in the field. Use '(2) wall run' or '(3) wall jump' to get past them.",
+            "6": "Time to do it again. Try a different move this time; you won't always have time to wait for your moves to cooldown."
         }
     }
 }

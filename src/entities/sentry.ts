@@ -46,6 +46,8 @@ export class SentryBot extends Enemy {
             }
         }
 
+        points.push({x: this.x, y: this.y}); // add the current location to the list
+
         // now check that none of them are opaque or solid
         // it may be you only want to check for opaque and not solid for things like windows. TBD.
         // you may not need to do this check at all if you simply reject light on tiles that are solid

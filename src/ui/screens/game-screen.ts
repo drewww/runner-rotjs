@@ -318,8 +318,10 @@ export class GameScreen extends Screen {
                     this.currentTriggerTextBox = textBox;
 
                     setTimeout(() => {
-                        this.elements.splice(this.elements.indexOf(textBox), 1);
-                        this.currentTriggerTextBox = undefined;
+                        if(this.elements.includes(textBox)) {
+                            this.elements.splice(this.elements.indexOf(textBox), 1);
+                            this.currentTriggerTextBox = undefined;
+                        }
                     }, 5000);
                 }
             }
