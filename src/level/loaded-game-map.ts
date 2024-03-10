@@ -41,6 +41,10 @@ export class LoadedGameMap extends GameMap {
                     case "8":
                     case "9":
                         // todo something special with these later
+                        const triggerTile = new Tile(x, y, "FLOOR");
+                        triggerTile.triggerMetadata = { trigger: tileChar, text: staticMap.text[tileChar] };
+                        this.setTile(triggerTile);
+                        break;
                     case " ":
                     case ".":
                         this.setTile(new Tile(x, y, "FLOOR"));

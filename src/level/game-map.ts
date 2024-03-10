@@ -157,11 +157,10 @@ export class GameMap {
         });
     }
 
-    public setTileMetadata(rect: Rect, type: string, metadata: any = {}) {
+    public setTileMetadata(rect: Rect, type: string) {
         const tiles = this.getTilesInRect(rect);
         for (const tile of tiles) {
             tile.procGenType = type;
-            tile.procGenMetadata = metadata;
         }
     }
 

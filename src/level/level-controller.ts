@@ -39,6 +39,8 @@ export class LevelController implements Drawable {
 
     public lastKeyStyle: string = "";
 
+    triggered: string[] = [];
+
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number, overlays: Overlays | null = null) {
         this.beings = [];
@@ -559,7 +561,17 @@ export class LevelController implements Drawable {
         this.player.addListener("move", () => {
             this.map.latestPlayerPosition = { x: this.player!.x, y: this.player!.y };
 
+            // see if we need to trigger a notice
+            const tile = this.map.getTile(this.player!.x, this.player!.y);
+            if (tile.triggerMetadata) {
+                const trigger: { trigger: string, text: string } = tile.triggerMetadata;
 
+                if (!this.triggered.includes(trigger.trigger)) {
+                    this.triggered.push(trigger.trigger);
+                    console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
+                }
+            }
+            
             // if the player did a burrow, leave behind a door.
             // humiliating string comparison here
             if(this.player!.lastMoveName==="(6) Burrow--------") {

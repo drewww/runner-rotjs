@@ -44,7 +44,7 @@ export class Tile {
 
     protected callbacks: {[key:string]: Function[]} = {};
     
-    public procGenMetadata: {};
+    public triggerMetadata: {trigger: string, text: string} | null;
 
     constructor(x:number, y:number, type:string, procGenType:string="unknown") {
         this.x = x;
@@ -64,7 +64,7 @@ export class Tile {
 
         this.procGenType = procGenType;
         this.procGenDistance = -1;
-        this.procGenMetadata = {};
+        this.triggerMetadata = null;
         this.enabled = true;
 
         this.power = 0;
