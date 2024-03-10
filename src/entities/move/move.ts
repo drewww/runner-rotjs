@@ -135,6 +135,9 @@ export class MoveManager {
                         const tile = level.map.getTile(vectorToTile.x + level.player!.x,
                             (vectorToTile.y) + level.player!.y);
 
+                        const enemy = level.getBeings().find(being => being.x === (vectorToTile.x + level.player!.x) && being.y === (vectorToTile.y + level.player!.y));
+
+
                         // we may not get a valid tile back from the map, in which case the move is touching
                         // an out of bound space and is invalid.
                         if (!tile) {
@@ -160,6 +163,9 @@ export class MoveManager {
                                 // as a move step. the i-frames essentially. but you can't phase
                                 // through a wall.
 
+                                // make sure there is not a being on the other side
+                                if(enemy) { validFlip = false; break; }
+
                                 // check that it's passable
                                 if (!tile.solid) { break; }
                                 else { validFlip = false; break; }
@@ -171,6 +177,16 @@ export class MoveManager {
                                 // you can't jump off a bot currently. but you could!
                                 if (tile.solid) { break; }
                                 else { validFlip = false; break; }
+                            case 'E':
+                                // must be an enemy
+                                // search through the list of beings on the level to see
+                                // if any are in this spot.
+                                // must be an enemy
+                                // search through the list of beings on the level to see
+                                // if any are in this spot.
+                                if (enemy) { break; }
+                                else { validFlip = false; break; }
+                                break;
                         }
 
                     }
@@ -248,14 +264,18 @@ export const LONG_WALL_JUMP: MoveTemplate = [
     '1',
     '0',
     '0',
+    '0',
+    '0',
     '@',
     'W'
 ]
 
 export const RUNNING_JUMP: MoveTemplate = [
+    '4',
+    '0',
+    '0',
+    '0',
     '3',
-    '0',
-    '0',
     '2',
     '1',
     '@'
@@ -264,5 +284,15 @@ export const RUNNING_JUMP: MoveTemplate = [
 export const BURROW: MoveTemplate = [
     '1',
     'W',
+    '@'
+]
+
+export const HUNTER_JUMP: MoveTemplate = [
+    '1',
+    '0',
+    '0',
+    'E',
+    '0',
+    '0',
     '@'
 ]
