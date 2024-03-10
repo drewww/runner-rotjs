@@ -165,16 +165,16 @@ const levels: { [key: string]: StaticLevel } = {
         text: {
             "0": `Welcome, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. I see you can move, at least.`,
             "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{} to wait & use adjacent objects.`,
-            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{} to wait for an opportune moment to run past.`,
+            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{#ffffff} to wait for an opportune moment to run past.`,
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
-            "4": `This is where your implants come in handy. Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then selecting the direction.`,
+            "4": `This is where your implants come in handy. Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then selecting the  direction.`,
             "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{} or %c{${COLORS.MOVE_LIGHT_BLUE}}(3) wall jump %c{}to get past them.`,
             "6": `Time to do it again. Try a different move this time; you won't always have time to wait for your moves to cooldown.`,
             "7": `Nominal performance. Let's try your last two moves.`,
             "8": `Dead end? Not for you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{} to dig through the wall south.`,
-            "9": `Wait for the right moment, standing %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them.`,
-            "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}hunter%c{}. It's relentless, and can sense you from any distance.`,
-            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
+            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them.`,
+            "A": `Now, meet your antagonist. The %c{${COLORS.LIGHT_LASER_RED}}HUNTER%c{}. It's relentless, and  can sense you from any distance.`,
+            "B": `%c{${COLORS.LIGHT_LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
         }
     }
 }
