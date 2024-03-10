@@ -140,8 +140,8 @@ const levels: { [key: string]: StaticLevel } = {
 
             [
                 "################################",
-                "#...3...-2......-4.....-5x.....#",
-                "#...#####2......#4.....#5......#",
+                "#...3...-2......-4.x...-5x.....#",
+                "#...#####2......#4.x...##x.....#",
                 "#-#######.......####s#####sss#-#",
                 "#11...0@#....p..######7777...6x#",
                 "#11...00#.......######.#77...6x#",
@@ -164,7 +164,7 @@ const levels: { [key: string]: StaticLevel } = {
 
         text: {
             "0": `Welcome, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. I see you can move, at least.`,
-            "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{} to wait & use adjaecnt objects.`,
+            "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{} to wait & use adjacent objects.`,
             "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{} to wait for an opportune moment to run past.`,
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
             "4": `This is where your implants come in handy. Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then selecting the direction.`,
@@ -174,7 +174,7 @@ const levels: { [key: string]: StaticLevel } = {
             "8": `Dead end? Not for you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{} to dig through the wall south.`,
             "9": `Wait for the right moment, standing %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them.`,
             "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}hunter%c{}. It's relentless, and can sense you from any distance.`,
-            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit%c{}.`,
+            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
         }
     }
 }
