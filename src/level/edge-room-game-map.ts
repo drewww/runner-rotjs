@@ -212,7 +212,11 @@ export class EdgeRoomGameMap extends GameMap {
             const randomIndex = Math.floor(Math.random() * leftEdgeTiles.length);
             const tile = leftEdgeTiles[randomIndex];
             if(tile) {
+                if(tile.y < 2 || tile.y > this.h-3) {
+                    continue;
+                }
 
+                console.error("tile.y: " + tile.y);
                 // check if the three tiles to the right of this tile are all floor tiles
                 let openSpaces = 0;
                 for(let i = -1; i < 1; i++) {
@@ -245,7 +249,7 @@ export class EdgeRoomGameMap extends GameMap {
             const randomIndex = Math.floor(Math.random() * rightEdgeTiles.length);
             const tile = rightEdgeTiles[randomIndex];
 
-            if(tile.y < 2 && tile.y < this.h-2) {
+            if(tile.y < 2 || tile.y > this.h-3) {
                 continue;
             }
 
