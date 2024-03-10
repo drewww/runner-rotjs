@@ -37,6 +37,11 @@ export class Player extends Being {
         this.interruptMoves = false;
     }
 
+    resetLevelCallbacks() {
+        this.callbacks["move"] = [];
+        this.callbacks["damage"] = [];
+    }
+
 
     addListener(type: string, callback: Function): void {
         let values = this.callbacks[type];

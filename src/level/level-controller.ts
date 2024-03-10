@@ -220,6 +220,7 @@ export class LevelController implements Drawable {
         being.setLevel(this);
         this.beings.push(being);
         this.scheduler.add(being, true);
+        console.log("adding beings to level, scheduler.length = " + this.scheduler._repeat.length);
     }
 
     public removeBeing(being: Being): void {
@@ -525,6 +526,7 @@ export class LevelController implements Drawable {
 
     public setPlayer(player: Player): void {
         this.player = player;
+        this.player.resetLevelCallbacks();
         this.player.setLevel(this);
 
         // look for if the level has an entrance. if it does, move the player there.
@@ -622,6 +624,7 @@ export class LevelController implements Drawable {
         //     this.scheduler.remove(being);
         // }
 
+        console.log("CLEARING SCHEDULER");
         this.scheduler.clear();
         this.hunter?.disable();
         this.hunter = null;

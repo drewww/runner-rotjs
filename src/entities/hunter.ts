@@ -123,4 +123,7 @@ export class Hunter extends Enemy {
 
         return this.pointsInVision;
     }
+
+    public disable(): void {
+    }
 }

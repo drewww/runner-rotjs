@@ -199,12 +199,12 @@ export class GameScreen extends Screen {
         if(this.level.player!.depth >= 0) {
             this.game.switchState(GameState.WINSCREEN);
         } else {
+            this.level.disable();
             // prepare another level.
             const newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
             newLevel.x = 1;
             newLevel.y = 1;
 
-            this.level.disable();
             this.elements = [];
 
             this.level = newLevel;
@@ -227,8 +227,6 @@ export class GameScreen extends Screen {
             this.player!.updateVision();
     
             this.game.refreshDisplay();
-
-            this.level.scheduler.clear();
 
             this.engine = new ROT.Engine(this.level.scheduler);
             this.engine.start();
