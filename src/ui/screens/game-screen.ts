@@ -9,7 +9,6 @@ import { MoveMenuScreen } from './move-menu-screen';
 import { Overlays } from "../overlays";
 import { TextBox } from "../elements/text-box";
 import { COLORS } from "../../colors";
-import { Hunter } from "../../entities/hunter";
 
 const RIGHT_MENU_WIDTH: number = 20;
 
@@ -261,8 +260,6 @@ export class GameScreen extends Screen {
 
         this.player = player;
 
-
-
         const freeCells = this.level.getEmptyPoints();
         if (!freeCells) {
             console.error("No free cells to place player.");
@@ -329,6 +326,11 @@ export class GameScreen extends Screen {
                     // if they have, activate it.
                     if(trigger.trigger==="A") {
                         this.level.activateHunter();
+                    }
+
+                    if(trigger.trigger==="B") {
+                        // trigger the objective lines
+                        this.level.showObjectivePathOverlays();
                     }
                 }
             }

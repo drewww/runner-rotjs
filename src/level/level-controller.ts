@@ -39,6 +39,8 @@ export class LevelController implements Drawable {
 
     public lastKeyStyle: string = "";
 
+    public suppressObjectives: boolean = false;
+
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number, overlays: Overlays | null = null) {
         this.beings = [];
@@ -86,7 +88,7 @@ export class LevelController implements Drawable {
                         break;
                     }
 
-                const doorCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                    const doorCell = freeCells[Math.floor(Math.random() * freeCells.length)];
                     this.map.setTile(new Door(doorCell.x, doorCell.y));
                 }
 
@@ -147,6 +149,8 @@ export class LevelController implements Drawable {
 
                 this.hunter = this.map.getBeings().find(being => being instanceof Hunter) as Hunter;
 
+                this.suppressObjectives = true;
+                
                 break;
         }
 
@@ -168,28 +172,28 @@ export class LevelController implements Drawable {
 
                             this.overlays?.addLayer("path-to-exit");
                             var timesCalled = 0;
-    
+
                             if (exitTile) {
                                 // this is the DESTINATION that we pass in here
                                 const path = new ROT.Path.AStar(exitTile.x, exitTile.y, (x, y) => {
                                     // ignore the actual map, the point is not to show the path just to make an animation
                                     return true;
                                 });
-    
+
                                 if (path) {
                                     var revealedExit = false;
                                     path.compute(this.player!.x, this.player!.y, (x, y) => {
                                         timesCalled++;
                                         setTimeout(() => {
-    
+
                                             if (!this.overlays) { return; }
-    
+
                                             this.overlays.setValueOnLayer("path-to-exit", x, y, COLORS.LIGHT_GREEN + "80");
                                             this.overlays.draw();
-    
+
                                             const distanceToExit = Math.floor(Math.sqrt(Math.pow(Math.abs(exitTile.x - x), 2) +
                                                 Math.pow(Math.abs(exitTile.y - y), 2)));
-    
+
                                             if (distanceToExit <= 1 && !revealedExit) {
                                                 // this.map.setTile(new Tile(exitTile.x, exitTile.y, "EXIT", true, true));
                                                 for (let dx = -1; dx <= 1; dx++) {
@@ -201,7 +205,7 @@ export class LevelController implements Drawable {
                                                         }
                                                     }
                                                 }
-    
+
                                                 revealedExit = true;
                                             }
                                         }, timesCalled * 10 + 100);
@@ -211,7 +215,7 @@ export class LevelController implements Drawable {
                                     }, 1000);
                                 }
                             }
-    
+
                         }
                     }
                 });
@@ -246,6 +250,43 @@ export class LevelController implements Drawable {
         return this.beings;
     }
 
+    public showObjectivePathOverlays(): void {
+        if (!this.overlays) { return; }
+
+        const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
+
+        this.overlays.addLayer("button-pathing");
+        for (var button of buttons) {
+            // kick off a pathing animation
+
+            // this is the DESTINATION that we pass in here
+            const path = new ROT.Path.AStar(button.x, button.y, (x, y) => {
+                // ignore the actual map, the point is not to show the path just to make an animation
+                return true;
+            });
+
+            var timesCalled = 0;
+            path.compute(this.player!.x, this.player!.y, (x, y) => {
+                timesCalled++;
+                setTimeout(() => {
+                    if (!this.overlays) { return; }
+
+                    this.overlays.setValueOnLayer("button-pathing", x, y, COLORS.LIGHT_GREEN + "80");
+                    this.overlays.draw();
+                }, timesCalled * 10 + 100);
+            });
+
+            setTimeout(() => {
+                if (!this.overlays) { return; }
+
+                this.overlays.startLayerFade("button-pathing", 1000, 10, 0.9);
+            }, 1000);
+
+            button.discovered = true;
+            button.visible = true;
+        }
+    }
+
     public draw(display: ROT.Display, xOffset: number, yOffset: number, bg: string): void {
         const tiles = this.map.getAllTiles();
         const lightMap = this.mergeLightMaps();
@@ -255,44 +296,14 @@ export class LevelController implements Drawable {
 
         if (this.turnCounter == 0 && !this.firstTurnRender) {
             // draw a path from the player to each of the buttons
-            const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
 
-            if (!this.overlays) { return; }
+            if(!this.suppressObjectives) {this.showObjectivePathOverlays()};
 
-            this.overlays.addLayer("button-pathing");
-            for (var button of buttons) {
-                // kick off a pathing animation
 
-                // this is the DESTINATION that we pass in here
-                const path = new ROT.Path.AStar(button.x, button.y, (x, y) => {
-                    // ignore the actual map, the point is not to show the path just to make an animation
-                    return true;
-                });
-
-                var timesCalled = 0;
-                path.compute(this.player!.x, this.player!.y, (x, y) => {
-                    timesCalled++;
-                    setTimeout(() => {
-                        if (!this.overlays) { return; }
-
-                        this.overlays.setValueOnLayer("button-pathing", x, y, COLORS.LIGHT_GREEN + "80");
-                        this.overlays.draw();
-                    }, timesCalled * 10 + 100);
-                });
-
-                setTimeout(() => {
-                    if (!this.overlays) { return; }
-
-                    this.overlays.startLayerFade("button-pathing", 1000, 10, 0.9);
-                }, 1000);
-
-                button.discovered = true;
-                button.visible = true;
-
-                this.firstTurnRender = true;
-                this.draw(display, xOffset, yOffset, bg);
-            }
+            this.firstTurnRender = true;
+            this.draw(display, xOffset, yOffset, bg);
         }
+
 
         if (this.player && this.player.triggerPulse && this.hunter?.active()) {
             // look for hunter.
@@ -360,17 +371,17 @@ export class LevelController implements Drawable {
                 bg = COLORS.BLACK;
             }
 
-            if(tile.type === "BOUNDARY" || tile.type === "WALL") {
+            if (tile.type === "BOUNDARY" || tile.type === "WALL") {
                 fg = COLORS.MID_GREY;
             }
         } else {
             // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
             // fgHSL[2] = fgHSL[2]-0.5;  
             // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
-            if(tile.opaque) {
+            if (tile.opaque) {
                 fg = tile.fg
 
-               
+
             } else {
                 fg = COLORS.INVISIBLE_TILE;
             }
@@ -561,17 +572,17 @@ export class LevelController implements Drawable {
         this.player.addListener("move", () => {
             this.map.latestPlayerPosition = { x: this.player!.x, y: this.player!.y };
 
-            
-            
+
+
             // if the player did a burrow, leave behind a door.
             // humiliating string comparison here
-            if(this.player!.lastMoveName==="(6) Burrow--------") {
+            if (this.player!.lastMoveName === "(6) Burrow--------") {
 
                 // another humiliating move
                 this.player!.lastMoveName = "";
-                const moveVector = {x: this.player!.x - this.player!.lastPosition.x, y: this.player!.y - this.player!.lastPosition.y};
-                
-                this.map.setTile(new Door(this.player!.x - moveVector.x/2, this.player!.y - moveVector.y/2));
+                const moveVector = { x: this.player!.x - this.player!.lastPosition.x, y: this.player!.y - this.player!.lastPosition.y };
+
+                this.map.setTile(new Door(this.player!.x - moveVector.x / 2, this.player!.y - moveVector.y / 2));
             }
 
             this.turnCounter++;
@@ -664,7 +675,7 @@ export class LevelController implements Drawable {
         this.beings = [];
     }
 
-    public activateHunter() :void {
+    public activateHunter(): void {
         this.hunter?.enable();
     }
 }

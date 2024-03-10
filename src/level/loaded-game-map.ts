@@ -5,6 +5,7 @@ import { Door } from "./door";
 import { SentryBot } from "../entities/sentry";
 import { COLORS } from "../colors";
 import { Hunter } from "../entities/hunter";
+import { Button } from "./button";
 
 
 export class LoadedGameMap extends GameMap {
@@ -14,6 +15,8 @@ export class LoadedGameMap extends GameMap {
         this.disableHunter = true;
 
         this.loadMap(name);
+
+
     }
 
     protected loadMap(name: string) {
@@ -91,11 +94,18 @@ export class LoadedGameMap extends GameMap {
                     case "-":
                         this.setTile(new Door(x, y));
                         break;
+                    case "b":
+                        const button = new Button(x, y);
+                        this.setTile(button);
+                        break;
                     case "H":
                         this.setTile(new Tile(x, y, "FLOOR"));
                         const hunter = new Hunter(x, y, this);
                         hunter.disable();
                         this.beings.push(hunter);
+                        break;
+                    case "%":
+                        this.setTile(new Tile(x, y, "EXIT"));
                         break;
                     default:
                         console.error("unrecognized tile character: " + tileChar);
@@ -133,30 +143,23 @@ const levels: { [key: string]: StaticLevel } = {
                 "#...3...-2......-4.....-5......#",
                 "#...#####2......#4.....#5......#",
                 "#-#######.......####s#####sss#-#",
-                "#11...0@#....p..######7777...66#",
-                "#11...00#.......######.#77.....#",
+                "#11...0@#....p..######7777...6x#",
+                "#11...00#.......######.#77...6x#",
                 "######################-#########",
                 "#...................##8##......#",
                 "#...................##8##......#",
                 "################################",
-                "#H......##....#######.##......#",
+                "#H.......##....#######.##......#",
                 "#.......A#######p#####.##......#",
                 "#.......A-.........x9-.##......#",
                 "#.......A#######.########......#",
-                "#..............#################",
-                "#..............................#",
-                "#..............................#",
-                "#..............................#",
-                "#..............................#",
-                "#..............................#",
+                "#######-##.....#####b###########",
+                "#.....BBB...#..................#",
+                "#...........###########.......##",
+                "#...........###########.......%#",
+                "#...........#.................##",
+                "#................#b#.....#b#...#",
                 "################################",
-
-
-                // "#####################...########",
-                // "#.......................p#....#",
-                // "#..............................#",
-                // "#..............................#",
-                // "################################",
             ],
 
         text: {
@@ -170,7 +173,8 @@ const levels: { [key: string]: StaticLevel } = {
             "7": "Nominal performance. Let's try your last two moves.",
             "8": "Dead end? Not for you. Use (6) burrow to dig through the wall south.",
             "9": "Wait for the right moment, standing 3 spaces from the enemy. Then use (5) enemy jump to jump over them.",
-            "A": "Now, meet your antagonist. The hunter. It's relentless, and if you're carrying company property, it can sense you.",
+            "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}hunter%c{}. It's relentless, and if you're carrying company property, it can sense you.`,
+            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit%c{}.`,
         }
     }
 }
