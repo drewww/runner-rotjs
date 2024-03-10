@@ -449,6 +449,62 @@ export class EdgeRoomGameMap extends GameMap {
         }
         return rect;
     }
+
+    async validDesign(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+
+            const entrance = this.tiles.find(tile => tile.type === "ENTRANCE");
+            if (!entrance) {
+                resolve(false);
+            }
+
+            const objectivePoints: Point[] = this.tiles.filter(tile => tile.type === "BUTTON" || tile.type === "EXIT").map(tile => { return { x: tile.x, y: tile.y }; });
+
+            const promises: Promise<void>[] = [];
+
+            const path = new ROT.Path.AStar(entrance!.x, entrance!.y, (x, y) => {
+                const tile = this.getTile(x, y);
+                if (tile) {
+                    if (tile.type == "DOOR" || tile.type == "ENTRANCE") {
+                        return true;
+                    } else {
+                        return !tile.solid;
+                    }
+                } else {
+                    return false;
+                }
+            });
+
+            for (const objectivePoint of objectivePoints) {
+                const promise = new Promise<void>((resolve, reject) => {
+                    var validDesign = false;
+
+                    path.compute(objectivePoint.x, objectivePoint.y, (x, y) => {
+                        if (x === objectivePoint.x && y === objectivePoint.y) {
+                            validDesign = true;
+                            resolve();
+                        }
+                    });
+
+                    // set a timeout to just fail the promise if it takes too long; presume that means 
+                    // there is no path.
+                    setTimeout(() => {
+                        if(!validDesign) { resolve(); }
+                    }, 250);
+                });
+
+                promises.push(promise);
+            }
+
+            Promise.all(promises)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        });
+    }
 }
 
 interface RoomFiller {
@@ -534,50 +590,6 @@ abstract class BaseRoomFiller implements RoomFiller {
     fillRoom(): void {
         return;
     }
-
-    validDesign() : boolean {
-        // start at the entrance, and then calculate paths
-        // to the key points. buttons and exit.
-        // I think it is transitive that if entrance -> button is clear
-        // and entrance -> exit is clear, then button -> exit is clear. 
-        // so we'll do it simply.
-
-        const entrance = this.tiles.find(tile => tile.type === "ENTRANCE");
-        if(!entrance) { return false; }
-
-        var path = new ROT.Path.AStar(entrance?.x, entrance.y, (x, y) => {
-            const tile = this.getTile(x, y);
-            // console.log(`${x},${y}`);
-            if(tile) {
-                // consider doors "passable"
-                if(tile.type=="DOOR" || tile.type=="ENTRANCE") {
-                    return true;
-                } else {
-                    return !tile.solid;
-                }
-            } else {
-                return false;
-            }
-        });
-
-        const objectivePoints: Point[] = this.tiles.filter(tile => tile.type === "BUTTON" || tile.type === "EXIT").map(tile => { return {x: tile.x, y: tile.y}; });
-
-        for(const objectivePoint of objectivePoints) {
-            var found = false;
-            path.compute(entrance.x, entrance.y, (x, y) => {
-                if(x === objectivePoint.x && y === objectivePoint.y) {
-                    found = true;
-                }
-            });
-
-            if(!found) {
-                return false;
-            }
-        }
-
-
-        return true;
-    }
 }
 
 // class TinyRoomFiller extends BaseRoomFiller {
@@ -594,7 +606,7 @@ class RandomRoomFiller extends BaseRoomFiller {
 
             if(value > 100) {
                 this.setTile(tile.x, tile.y, new Tile(tile.x, tile.y, "WALL"));
-                console.log(tile);
+                // console.log(tile);
             }
         }
 

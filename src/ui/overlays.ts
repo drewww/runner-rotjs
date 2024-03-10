@@ -77,7 +77,6 @@ export class Overlays {
     fillLayerWithValue(layerName: string, color: string) {
         const layer = [];
         for (let i = 0; i < this.width * this.height; i++) {
-            // last two 00s are the alpha channel
             layer.push(color);
         }
 

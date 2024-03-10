@@ -22,6 +22,7 @@ export class MapExploreScreen extends Screen {
         this.levelType = LevelType.EDGE_ROOM;
         this.overlays = new Overlays(0, 0, this.width, this.height);
         this.overlays.hide();
+
         this.level = this.generateLevelType(this.levelType);
     }
 
@@ -48,26 +49,38 @@ export class MapExploreScreen extends Screen {
 
         this.elements.push(level);
 
+
         // iterate through every tile in the map, and add a colored tile to the overlay based on the tile's ROOM_ID number if it has one.
         if(type===LevelType.EDGE_ROOM) {
             const edgeRoomLevel = <EdgeRoomGameMap>level.map;
-            this.overlays.addLayer("rooms");
-            const maxRoomId = edgeRoomLevel.totalRooms;
 
-            let colors: string[] = [];
-            for (let roomId = 0; roomId < maxRoomId; roomId++) {
-                colors.push(ROT.Color.toHex([roomId*10, roomId*10, roomId*10]) + "EE");
-            }
-
-            level.map.getAllTiles().forEach((tile: Tile) => {
-                // split the tile procgentype on underscores. if it splits successfully and the first part is ROOM, then parse the second
-                // part to get a roomId.
-                const parts = tile.procGenType.split('_');
-                if (parts.length > 1 && parts[0] === 'ROOM') {
-                    const roomId = parseInt(parts[1]);
-                    this.overlays.setValueOnLayer("rooms", tile.x-1, tile.y-1, colors[roomId]);
+            this.overlays.clear();
+            edgeRoomLevel.validDesign().then((valid) => {
+                if(!valid) {
+                    console.error("-----Invalid design.------");
+                    this.overlays.addLayer("invalid-design");
+                    this.overlays.fillLayerWithValue("invalid-design", "#FFAA00AA");
+                    this.overlays.draw();
                 }
             });
+
+            // this.overlays.addLayer("rooms");
+            // const maxRoomId = edgeRoomLevel.totalRooms;
+
+            // let colors: string[] = [];
+            // for (let roomId = 0; roomId < maxRoomId; roomId++) {
+            //     colors.push(ROT.Color.toHex([roomId*10, roomId*10, roomId*10]) + "EE");
+            // }
+
+            // level.map.getAllTiles().forEach((tile: Tile) => {
+            //     // split the tile procgentype on underscores. if it splits successfully and the first part is ROOM, then parse the second
+            //     // part to get a roomId.
+            //     const parts = tile.procGenType.split('_');
+            //     if (parts.length > 1 && parts[0] === 'ROOM') {
+            //         const roomId = parseInt(parts[1]);
+            //         this.overlays.setValueOnLayer("rooms", tile.x-1, tile.y-1, colors[roomId]);
+            //     }
+            // });
 
             this.overlays.draw();
         }
