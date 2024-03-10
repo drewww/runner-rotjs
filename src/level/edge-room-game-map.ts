@@ -535,6 +535,49 @@ abstract class BaseRoomFiller implements RoomFiller {
         return;
     }
 
+    validDesign() : boolean {
+        // start at the entrance, and then calculate paths
+        // to the key points. buttons and exit.
+        // I think it is transitive that if entrance -> button is clear
+        // and entrance -> exit is clear, then button -> exit is clear. 
+        // so we'll do it simply.
+
+        const entrance = this.tiles.find(tile => tile.type === "ENTRANCE");
+        if(!entrance) { return false; }
+
+        var path = new ROT.Path.AStar(entrance?.x, entrance.y, (x, y) => {
+            const tile = this.getTile(x, y);
+            // console.log(`${x},${y}`);
+            if(tile) {
+                // consider doors "passable"
+                if(tile.type=="DOOR" || tile.type=="ENTRANCE") {
+                    return true;
+                } else {
+                    return !tile.solid;
+                }
+            } else {
+                return false;
+            }
+        });
+
+        const objectivePoints: Point[] = this.tiles.filter(tile => tile.type === "BUTTON" || tile.type === "EXIT").map(tile => { return {x: tile.x, y: tile.y}; });
+
+        for(const objectivePoint of objectivePoints) {
+            var found = false;
+            path.compute(entrance.x, entrance.y, (x, y) => {
+                if(x === objectivePoint.x && y === objectivePoint.y) {
+                    found = true;
+                }
+            });
+
+            if(!found) {
+                return false;
+            }
+        }
+
+
+        return true;
+    }
 }
 
 // class TinyRoomFiller extends BaseRoomFiller {
