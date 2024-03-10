@@ -61,6 +61,8 @@ export class MapExploreScreen extends Screen {
                     this.overlays.addLayer("invalid-design");
                     this.overlays.fillLayerWithValue("invalid-design", "#FFAA00AA");
                     this.overlays.draw();
+                } else {
+                    console.error("-----Valid design.------");
                 }
             });
 

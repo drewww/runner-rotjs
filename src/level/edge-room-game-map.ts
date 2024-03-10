@@ -163,18 +163,18 @@ export class EdgeRoomGameMap extends GameMap {
         //---------------------------------------//
         for (let roomId = 0; roomId < this.totalRooms; roomId++) {
             let rect = this.getRectForRoomId(roomId);
-            console.log("filling room", roomId, rect);
+            // console.log("filling room", roomId, rect);m
             let filler: RoomFiller;
 
 
             if(rect.w >= 9 && rect.h >= 9) { 
-                console.log("  choosing bracket");
+                // console.log("  choosing bracket");
                 filler = new BracketRoomFiller(rect);
             } else if(Math.random() > 0.5) {
-                console.log("Choosing random");
+                // console.log("Choosing random");
                 filler = new RandomRoomFiller(rect);
             } else {
-                console.log("   choosing rows");
+                // console.log("   choosing rows");
                 filler = new RowsRoomFiller(rect);
             }
 
@@ -216,7 +216,6 @@ export class EdgeRoomGameMap extends GameMap {
                     continue;
                 }
 
-                console.error("tile.y: " + tile.y);
                 // check if the three tiles to the right of this tile are all floor tiles
                 let openSpaces = 0;
                 for(let i = -1; i < 1; i++) {
@@ -469,7 +468,7 @@ export class EdgeRoomGameMap extends GameMap {
             const path = new ROT.Path.AStar(entrance!.x, entrance!.y, (x, y) => {
                 const tile = this.getTile(x, y);
                 if (tile) {
-                    if (tile.type == "DOOR" || tile.type == "ENTRANCE") {
+                    if (tile.type == "DOOR" || tile.type == "ENTRANCE" || tile.type == "EXIT" || tile.type == "BUTTON") {
                         return true;
                     } else {
                         return !tile.solid;
@@ -484,7 +483,9 @@ export class EdgeRoomGameMap extends GameMap {
                     var validDesign = false;
 
                     path.compute(objectivePoint.x, objectivePoint.y, (x, y) => {
-                        if (x === objectivePoint.x && y === objectivePoint.y) {
+                        // console.log(`at point ${x},${y} looking for ${entrance!.x},${entrance!.y}`);
+                        if (x === entrance!.x && y === entrance!.y) {
+                            console.log("found a path to the objective point: " + JSON.stringify(objectivePoint));
                             validDesign = true;
                             resolve();
                         }
@@ -493,9 +494,14 @@ export class EdgeRoomGameMap extends GameMap {
                     // set a timeout to just fail the promise if it takes too long; presume that means 
                     // there is no path.
                     setTimeout(() => {
-                        if(!validDesign) { resolve(); }
-                    }, 250);
+                        console.log("timing out: " + validDesign);
+                        if(!validDesign) {
+                            reject();
+                        }
+                    }, 400);
                 });
+
+                
 
                 promises.push(promise);
             }
