@@ -12,6 +12,6 @@ export class KillScreen extends Screen {
             `%c{${COLORS.WHITE}}%b{${COLORS.LASER_RED}}RUNNER TERMINATED`);
 
         display.drawText(12+xOffset + this.x, Math.floor(this.height/2)+3 + yOffset + this.y,
-            `%c{${COLORS.LIGHT_GREY}%b{${COLORS.BLACK}}press any key to restart`);
+            `%c{${COLORS.LIGHT_GREY}%b{${COLORS.BLACK}}refresh page to reset`);
     }
 }
