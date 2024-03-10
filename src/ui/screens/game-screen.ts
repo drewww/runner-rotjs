@@ -24,6 +24,7 @@ export class GameScreen extends Screen {
 
     overlays: Overlays;
     triggered: string[] = [];
+    currentTriggerTextBox: TextBox | undefined;
 
     constructor(game: IGame, levelType: LevelType) {
         super();
@@ -305,14 +306,20 @@ export class GameScreen extends Screen {
                 const trigger: { trigger: string, text: string } = tile.triggerMetadata;
 
                 if (!this.triggered.includes(trigger.trigger)) {
+                    if(this.currentTriggerTextBox) {
+                        this.elements.splice(this.elements.indexOf(this.currentTriggerTextBox), 1);
+                    }
+
                     this.triggered.push(trigger.trigger);
                     // console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
 
                     const textBox = new TextBox(this.player!.x, this.player!.y + 5 , 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, true,0, 20);
                     this.elements.push(textBox);
+                    this.currentTriggerTextBox = textBox;
 
                     setTimeout(() => {
                         this.elements.splice(this.elements.indexOf(textBox), 1);
+                        this.currentTriggerTextBox = undefined;
                     }, 3000);
                 }
             }

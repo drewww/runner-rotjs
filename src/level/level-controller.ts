@@ -574,7 +574,7 @@ export class LevelController implements Drawable {
 
             this.turnCounter++;
 
-            if (this.turnCounter == 20) {
+            if (this.turnCounter >= 20 && !this.map.disableHunter) {
                 console.log("-----------HUNTER ENTERING----------");
 
                 const entranceTiles = this.map.getAllTiles().filter(tile => tile.type === "ENTRANCE");

@@ -20,6 +20,8 @@ export class GameMap {
 
     public latestPlayerPosition: Point;
 
+    disableHunter: boolean = false;
+
     constructor(protected w: number, protected h: number) {
         this.w = w;
         this.h = h;

@@ -7,6 +7,9 @@ import { Door } from "./door";
 export class LoadedGameMap extends GameMap {
     constructor(name: string) {
         super(0, 0);
+
+        this.disableHunter = true;
+        
         this.loadMap(name);
     }
 
@@ -87,10 +90,6 @@ type StaticLevel = {
     text: { [key: string]: string };
 };
 
-
-
-
-
 const levels: { [key: string]: StaticLevel } = {
     "tutorial1":
     {
@@ -98,12 +97,12 @@ const levels: { [key: string]: StaticLevel } = {
 
             [
                 "################################",
-                "#@.1-......-...................#",
-                "#..1#......#...................#",
-                "#####...p..#...................#",
-                "#...#......#...................#",
-                "#...#......#...................#",
-                "#...########...................#",
+                "#@.1-..3-2......-..............#",
+                "#..1#####2......#..............#",
+                "#########.......#..............#",
+                "#.......#....p..#..............#",
+                "#.......#.......#..............#",
+                "#.......#########..............#",
                 "#..............................#",
                 "#..............................#",
                 "################################",
@@ -111,6 +110,8 @@ const levels: { [key: string]: StaticLevel } = {
 
         text: {
             "1": "This is a door. Open it by waiting ('s' or 5) next to it. ",
+            "2": "Watch out! Patrol bot ahead.  Use wait until you can run behind it to the door.",
+            "3": "Close that door behind you! Go back and wait next to it to   close it.",
         }
     }
 }
