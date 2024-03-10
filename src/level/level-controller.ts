@@ -40,6 +40,7 @@ export class LevelController implements Drawable {
     public lastKeyStyle: string = "";
 
     public suppressObjectives: boolean = false;
+    public type: LevelType;
 
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number, overlays: Overlays | null = null) {
@@ -51,6 +52,8 @@ export class LevelController implements Drawable {
         this.overlays = overlays;
 
         this.turnCounter = 0;
+
+        this.type = type;
 
         // TODO move all this into separate GameMap extending classes
         switch (type) {
@@ -560,6 +563,10 @@ export class LevelController implements Drawable {
         }
 
         console.log("placed player: " + player.x + "," + player.y);
+
+        if(this.type === LevelType.TUTORIAL) {
+            this.player.depth = -4;
+        }
 
         this.scheduler.add(player, true);
         this.beings.push(player);

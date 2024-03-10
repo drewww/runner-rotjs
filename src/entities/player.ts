@@ -27,12 +27,12 @@ export class Player extends Being {
         // don't need to have a valid position for the player to make the object
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
 
-        this.moves.push({name: "(1) Jump----------", template:JUMP, cooldown: 3, selected:false, cooldownOnUse: 30});
-        this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 3, selected:false, cooldownOnUse: 10});
-        this.moves.push({name: "(3) Wall Jump-----", template:LONG_WALL_JUMP, cooldown: 3, selected:false, cooldownOnUse: 5});
-        this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 3, selected:false, cooldownOnUse: 30});
-        this.moves.push({name: "(5) Enemy Jump----", template:ENEMY_JUMP, cooldown: 3, selected:false, cooldownOnUse: 30});
-        this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 10, selected:false, cooldownOnUse: 100});
+        this.moves.push({name: "(1) Jump----------", template:JUMP, cooldown: 0, selected:false, cooldownOnUse: 20});
+        this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 0, selected:false, cooldownOnUse: 10});
+        this.moves.push({name: "(3) Wall Jump-----", template:LONG_WALL_JUMP, cooldown: 0, selected:false, cooldownOnUse: 5});
+        this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30});
+        this.moves.push({name: "(5) Enemy Jump----", template:ENEMY_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30});
+        this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 0, selected:false, cooldownOnUse: 100});
 
         this.selectedMoveOptions = [];
         this.triggerPulse = false;
