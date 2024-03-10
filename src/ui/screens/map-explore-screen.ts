@@ -52,19 +52,19 @@ export class MapExploreScreen extends Screen {
 
         // iterate through every tile in the map, and add a colored tile to the overlay based on the tile's ROOM_ID number if it has one.
         if(type===LevelType.EDGE_ROOM) {
-            const edgeRoomLevel = <EdgeRoomGameMap>level.map;
+            // const edgeRoomLevel = <EdgeRoomGameMap>level.map;
 
-            this.overlays.clear();
-            edgeRoomLevel.validDesign().then((valid) => {
-                if(!valid) {
-                    console.error("-----Invalid design.------");
-                    this.overlays.addLayer("invalid-design");
-                    this.overlays.fillLayerWithValue("invalid-design", "#FFAA00AA");
-                    this.overlays.draw();
-                } else {
-                    console.error("-----Valid design.------");
-                }
-            });
+            // this.overlays.clear();
+            // const validDesign = edgeRoomLevel.validDesign()
+
+            // if(!validDesign) {
+            //     console.error("-----Invalid design.------");
+            //     this.overlays.addLayer("invalid-design");
+            //     this.overlays.fillLayerWithValue("invalid-design", "#FFAA00AA");
+            //     this.overlays.draw();
+            // } else {
+            //     console.error("-----Valid design.------");
+            // }
 
             // this.overlays.addLayer("rooms");
             // const maxRoomId = edgeRoomLevel.totalRooms;

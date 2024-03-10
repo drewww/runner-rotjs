@@ -13,6 +13,25 @@ export class EdgeRoomGameMap extends GameMap {
     constructor(protected w: number, protected h: number) {
         super(w, h);
 
+        this.totalRooms = 0;
+
+        var valid = false;
+        do {
+            console.log("generating level");
+            this.generateLevel();
+            valid = this.validDesign();
+            console.error("actually valid? " + valid);
+
+            // valid = true;
+            // console.log("valid? " + valid);
+        } while (!valid);
+    }
+
+    private generateLevel() {
+
+        this.tiles = []
+        this.beings = [];
+
         this.fillMapWithTile("FLOOR");
 
         // first, do it entirely with horizontal movement.
@@ -22,7 +41,6 @@ export class EdgeRoomGameMap extends GameMap {
 
         // partition the space 0 to this.w into between 3 and 6 sections. each partition should be at least five wide.
         // implement this as a binary space partition in one dimension.
-
         const partitionWeights = [1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4];
         const numPartitions = partitionWeights[Math.floor(Math.random() * partitionWeights.length)];
 
@@ -63,7 +81,6 @@ export class EdgeRoomGameMap extends GameMap {
             // } else {
             // use the column for something. 
             // we can split the column in 0-3 ways.
-
             var splitsBalance = [0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2];
             var numSplits = splitsBalance[Math.floor(Math.random() * splitsBalance.length)];
 
@@ -71,7 +88,6 @@ export class EdgeRoomGameMap extends GameMap {
             let yCursor = 0;
             let skipped = false;
             // numSplits = 2;
-
             const SKIP_CHANCE = 0.0;
 
             console.log("numSplits", numSplits);
@@ -90,7 +106,7 @@ export class EdgeRoomGameMap extends GameMap {
 
                     skipped = false;
                     for (const y of dY) {
-                        rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: y }
+                        rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: y };
                         if (skipped || Math.random() > SKIP_CHANCE) {
                             this.addTilesOnRectBoundaries([rect], "WALL");
                         } else {
@@ -101,7 +117,7 @@ export class EdgeRoomGameMap extends GameMap {
                         roomId++;
                     }
 
-                    rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: this.h - yCursor }
+                    rect = { x: xCursor, y: yCursor, w: nextX - xCursor, h: this.h - yCursor };
                     if (skipped || Math.random() > SKIP_CHANCE) {
 
                         this.addTilesOnRectBoundaries([rect], "WALL");
@@ -153,7 +169,6 @@ export class EdgeRoomGameMap extends GameMap {
         }
 
         // 
-
         // do this last so it ovewrites any "wall" types on the edges
         this.addTilesOnRectBoundaries([{ x: 0, y: 0, w: this.w, h: this.h }], "BOUNDARY");
         this.totalRooms = roomId;
@@ -167,10 +182,10 @@ export class EdgeRoomGameMap extends GameMap {
             let filler: RoomFiller;
 
 
-            if(rect.w >= 9 && rect.h >= 9) { 
+            if (rect.w >= 9 && rect.h >= 9) {
                 // console.log("  choosing bracket");
                 filler = new BracketRoomFiller(rect);
-            } else if(Math.random() > 0.5) {
+            } else if (Math.random() > 0.5) {
                 // console.log("Choosing random");
                 filler = new RandomRoomFiller(rect);
             } else {
@@ -190,7 +205,7 @@ export class EdgeRoomGameMap extends GameMap {
         var pathingPoints: Point[] = [];
 
         // TODO don't let buttons go on the original procgen walls
-        const wallTiles = this.tiles.filter(tile => tile.type === "WALL" && tile.procGenType !== "PARTITION" );
+        const wallTiles = this.tiles.filter(tile => tile.type === "WALL" && tile.procGenType !== "PARTITION");
         // randomly replace 3 of them with buttons
         for (let i = 0; i < 3; i++) {
             const randomIndex = Math.floor(Math.random() * wallTiles.length);
@@ -198,7 +213,7 @@ export class EdgeRoomGameMap extends GameMap {
             this.setTile(new Button(tile.x, tile.y));
             wallTiles.splice(randomIndex, 1); // remove the wall tile from the array
 
-            pathingPoints.push({x: tile.x, y: tile.y});
+            pathingPoints.push({ x: tile.x, y: tile.y });
         }
 
         // now look for an entrance and exit
@@ -206,77 +221,76 @@ export class EdgeRoomGameMap extends GameMap {
         const leftEdgeTiles = this.tiles.filter(tile => tile.x === 0 && tile.type === "BOUNDARY");
 
 
-        var entrancePoint = {x: -1, y: -1};
+        var entrancePoint = { x: -1, y: -1 };
 
-        while(leftEdgeTiles.length > 0) {
+        while (leftEdgeTiles.length > 0) {
             const randomIndex = Math.floor(Math.random() * leftEdgeTiles.length);
             const tile = leftEdgeTiles[randomIndex];
-            if(tile) {
-                if(tile.y < 2 || tile.y > this.h-3) {
+            if (tile) {
+                if (tile.y < 2 || tile.y > this.h - 3) {
                     continue;
                 }
 
                 // check if the three tiles to the right of this tile are all floor tiles
                 let openSpaces = 0;
-                for(let i = -1; i < 1; i++) {
-                    const nextTile = this.getTile(tile.x+2, tile.y+i);
-                    if(nextTile && nextTile.type === "FLOOR") {
+                for (let i = -1; i < 1; i++) {
+                    const nextTile = this.getTile(tile.x + 2, tile.y + i);
+                    if (nextTile && nextTile.type === "FLOOR") {
                         openSpaces++;
                     }
                 }
-                
+
                 // const exitTile = this.getTile(tile.x+1, tile.y);
+                if (openSpaces >= 1) {
+                    this.setTile(new Tile(tile.x + 1, tile.y - 1, "BOUNDARY"));
+                    this.setTile(new Tile(tile.x + 1, tile.y, "ENTRANCE"));
+                    this.setTile(new Tile(tile.x + 1, tile.y + 1, "BOUNDARY"));
 
-                if(openSpaces >= 1) {
-                    this.setTile(new Tile(tile.x+1, tile.y-1, "BOUNDARY"));
-                    this.setTile(new Tile(tile.x+1, tile.y, "ENTRANCE"));
-                    this.setTile(new Tile(tile.x+1, tile.y+1, "BOUNDARY"));
-
-                    pathingPoints.push({x: tile.x+1, y: tile.y});
-                    entrancePoint = {x: tile.x+1, y: tile.y};
+                    pathingPoints.push({ x: tile.x + 1, y: tile.y });
+                    entrancePoint = { x: tile.x + 1, y: tile.y };
                     break;
                 }
             }
-            leftEdgeTiles.splice(randomIndex, 1)
+            leftEdgeTiles.splice(randomIndex, 1);
         }
-        
 
-        var exitPoint = {x: -1, y: -1};
 
-        const rightEdgeTiles = this.tiles.filter(tile => tile.x === this.w-1 && tile.type === "BOUNDARY");
-        while(rightEdgeTiles.length > 0) {
+        var exitPoint = { x: -1, y: -1 };
+
+        const rightEdgeTiles = this.tiles.filter(tile => tile.x === this.w - 1 && tile.type === "BOUNDARY");
+        while (rightEdgeTiles.length > 0) {
             const randomIndex = Math.floor(Math.random() * rightEdgeTiles.length);
             const tile = rightEdgeTiles[randomIndex];
 
-            if(tile.y < 2 || tile.y > this.h-3) {
+            if (tile.y < 2 || tile.y > this.h - 3) {
                 continue;
             }
 
-            if(tile) {
+            if (tile) {
 
                 // check if the three tiles to the right of this tile are all floor tiles
                 let allFloor = true;
-                for(let j=0; j<2; j++) {
-                    for(let i = -1; i < 1; i++) {
-                        const nextTile = this.getTile(tile.x-1-j, tile.y+i);
-                        if(nextTile && (nextTile.type === "BOUNDARY" || nextTile.type === "BUTTON" || nextTile.procGenType==="PARTITION")) {
+                for (let j = 0; j < 2; j++) {
+                    for (let i = -1; i < 1; i++) {
+                        const nextTile = this.getTile(tile.x - 1 - j, tile.y + i);
+                        if (nextTile && (nextTile.type === "BOUNDARY" || nextTile.type === "BUTTON" || nextTile.procGenType === "PARTITION")) {
                             allFloor = false;
                         }
                     }
-                }   
+                }
 
-                if(allFloor) {
-                    this.setTile(new Tile(tile.x-1, tile.y-1, "BOUNDARY", "EXIT_TEMPLATE"));
-                    this.setTile(new Tile(tile.x-1, tile.y, "EXIT", "EXIT_TEMPLATE"));
-                    this.setTile(new Tile(tile.x-1, tile.y+1, "BOUNDARY", "EXIT_TEMPLATE"));
-                    this.setTile(new Tile(tile.x-2, tile.y-1, "FLOOR", "EXIT_TEMPLATE"));
-                    this.setTile(new Tile(tile.x-2, tile.y, "FLOOR", "EXIT_TEMPLATE"));
-                    this.setTile(new Tile(tile.x-2, tile.y+1, "FLOOR", "EXIT_TEMPLATE"));
+                if (allFloor) {
+                    this.setTile(new Tile(tile.x - 1, tile.y - 1, "BOUNDARY", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x - 1, tile.y, "EXIT", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x - 1, tile.y + 1, "BOUNDARY", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x - 2, tile.y - 1, "FLOOR", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x - 2, tile.y, "FLOOR", "EXIT_TEMPLATE"));
+                    this.setTile(new Tile(tile.x - 2, tile.y + 1, "FLOOR", "EXIT_TEMPLATE"));
 
 
-                    pathingPoints.push({x: tile.x-1, y: tile.y});
-                    exitPoint = {x: tile.x-1, y: tile.y};
-                    console.log("EXIT: " + JSON.stringify({x: tile.x-1, y: tile.y}));
+                    pathingPoints.push({ x: tile.x - 1, y: tile.y });
+                    exitPoint = { x: tile.x - 1, y: tile.y };
+                    console.log("EXIT: " + JSON.stringify({ x: tile.x - 1, y: tile.y }));
                     console.log("height: " + this.h);
                     break;
                 }
@@ -290,10 +304,8 @@ export class EdgeRoomGameMap extends GameMap {
 
         // ------------- DOORS ------------------ //
         // first pass -- create a pathing agent that can got through walls and plot a course from the entrance to each button
-        
         // just get the partition walls, and punch random holes in them
         // Get the partition walls
-        
         const partitionWalls = this.tiles.filter(tile => tile.procGenType === "PARTITION");
 
         // now, look for junction points. a junction point is a partition wall with 3 or 4 other partition tiles OR boundary tiles adjacent to it.
@@ -303,26 +315,26 @@ export class EdgeRoomGameMap extends GameMap {
         for (let i = 0; i < partitionWalls.length; i++) {
             const tile = partitionWalls[i];
 
-            if(tile.x==0 || tile.x == this.w-1) { continue ;}
+            if (tile.x == 0 || tile.x == this.w - 1) { continue; }
 
             const adjacentTiles = this.getAdjacentTiles(tile.x, tile.y, true);
 
             let numAdjacentWalls = 0;
             let allBoundary = true;
             for (const adjacentTile of adjacentTiles) {
-                if(!adjacentTile) { continue; }
+                if (!adjacentTile) { continue; }
 
                 if (adjacentTile.procGenType === "PARTITION") {
                     numAdjacentWalls++;
-                } 
+                }
 
-                if(adjacentTile.type !== "PARTITION") {
+                if (adjacentTile.type !== "PARTITION") {
                     allBoundary = false;
                 }
             }
 
-            if(numAdjacentWalls>2 && !allBoundary) {
-                junctionPoints.push({x: tile.x, y: tile.y});
+            if (numAdjacentWalls > 2 && !allBoundary) {
+                junctionPoints.push({ x: tile.x, y: tile.y });
             }
         }
 
@@ -337,23 +349,21 @@ export class EdgeRoomGameMap extends GameMap {
             ];
 
             // this.setTile(new Tile(junctionPoint.x, junctionPoint.y, "SHORT_JUNK"));
-
             for (const direction of directions) {
 
                 // decide what to do in this direction. our options are:
                 // -- blank the entire wall
                 // -- blank a section of wall
                 // -- add N random doors
-
-                var strategies:string[] = ["BLANK", "DOORS", "BLANK_SECTION"];
+                var strategies: string[] = ["BLANK", "DOORS", "BLANK_SECTION"];
                 var strategy = strategies[Math.floor(Math.random() * strategies.length)];
 
                 // have it go up each space and then reset after a door is placed
-                var doorChance = 0.1; 
+                var doorChance = 0.1;
                 var placedAtLeastOneDoor = false;
                 var availableDoorTiles: Point[] = [];
 
-                var sectionSize = Math.floor(Math.random()*5);
+                var sectionSize = Math.floor(Math.random() * 5);
                 var sectionCounter = 0;
                 var sectionStartOffset = 2;
 
@@ -363,19 +373,18 @@ export class EdgeRoomGameMap extends GameMap {
 
                 // if first Tile in this direction is floor, skip the direction.
                 const firstTile = this.getTile(currentX, currentY);
-                if(firstTile && (firstTile.type === "FLOOR" || firstTile.type === "BOUNDARY")) { continue; }
+                if (firstTile && (firstTile.type === "FLOOR" || firstTile.type === "BOUNDARY")) { continue; }
 
                 while (true) {
                     const currentTile = this.getTile(currentX, currentY);
 
                     // this.setTile(new Tile(currentX, currentY, "TALL_JUNK"));
-
                     if (!currentTile || currentTile.type === "BOUNDARY" || visitedPoints.some(point => point.x === currentX && point.y === currentY)) {
                         console.log("found a boundary or visited point, breaking");
 
-                        if(!placedAtLeastOneDoor && strategy === "DOORS") {
+                        if (!placedAtLeastOneDoor && strategy === "DOORS") {
                             // if we didn't place a door, go back and place one
-                            if(availableDoorTiles.length > 0) {
+                            if (availableDoorTiles.length > 0) {
                                 const randomIndex = Math.floor(Math.random() * availableDoorTiles.length);
                                 const doorTile = availableDoorTiles[randomIndex];
                                 this.setTile(new Door(doorTile.x, doorTile.y));
@@ -387,20 +396,20 @@ export class EdgeRoomGameMap extends GameMap {
 
                     visitedPoints.push({ x: currentX, y: currentY });
 
-                    if(strategy==="BLANK") {
+                    if (strategy === "BLANK") {
                         this.setTile(new Tile(currentX, currentY, "FLOOR"));
-                    } else if(strategy==="DOORS") {
-                        availableDoorTiles.push({x: currentX, y: currentY});
-                        if(Math.random() < doorChance) {
+                    } else if (strategy === "DOORS") {
+                        availableDoorTiles.push({ x: currentX, y: currentY });
+                        if (Math.random() < doorChance) {
                             this.setTile(new Door(currentX, currentY));
                             placedAtLeastOneDoor = true;
                             doorChance = 0.05;
                         } else {
                             // doorChance += 0.10;
                         }
-                    } else if(strategy==="BLANK_SECTION") {
+                    } else if (strategy === "BLANK_SECTION") {
 
-                        if(sectionCounter >= sectionStartOffset && sectionCounter <= sectionStartOffset + sectionSize) {
+                        if (sectionCounter >= sectionStartOffset && sectionCounter <= sectionStartOffset + sectionSize) {
                             this.setTile(new Tile(currentX, currentY, "FLOOR"));
                         }
 
@@ -411,7 +420,6 @@ export class EdgeRoomGameMap extends GameMap {
                     //     this.setTile(new Door(currentX, currentY));
                     // }
                     // this.setTile(new Tile(currentX, currentY, "TALL_JUNK"));
-
                     currentX += direction.x;
                     currentY += direction.y;
                 }
@@ -421,12 +429,8 @@ export class EdgeRoomGameMap extends GameMap {
 
         // for each junction point, travel in each cardinat direction until we hit a boundary or another junction point or a visited point.
         // first just place enemies randomly
-
         // compute a* pathing distance to all the tiles and make sure there are no bots immediately near you at the start
-
-
-    
-        for(var i = 0; i < 15; i++) {
+        for (var i = 0; i < 15; i++) {
             const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" || tile.solid));
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
 
@@ -453,67 +457,50 @@ export class EdgeRoomGameMap extends GameMap {
         return rect;
     }
 
-    async validDesign(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+    validDesign(): boolean {
+        const entrance = this.tiles.find(tile => tile.type === "ENTRANCE");
+        if (!entrance) {
+            return false;
+        }
 
-            const entrance = this.tiles.find(tile => tile.type === "ENTRANCE");
-            if (!entrance) {
-                resolve(false);
-            }
+        const objectivePoints: Point[] = this.tiles.filter(tile => tile.type === "BUTTON" || tile.type === "EXIT").map(tile => { return { x: tile.x, y: tile.y }; });
 
-            const objectivePoints: Point[] = this.tiles.filter(tile => tile.type === "BUTTON" || tile.type === "EXIT").map(tile => { return { x: tile.x, y: tile.y }; });
-
-            const promises: Promise<void>[] = [];
-
-            const path = new ROT.Path.AStar(entrance!.x, entrance!.y, (x, y) => {
-                const tile = this.getTile(x, y);
-                if (tile) {
-                    if (tile.type == "DOOR" || tile.type == "ENTRANCE" || tile.type == "EXIT" || tile.type == "BUTTON") {
-                        return true;
-                    } else {
-                        return !tile.solid;
-                    }
+        const path = new ROT.Path.AStar(entrance!.x, entrance!.y, (x, y) => {
+            const tile = this.getTile(x, y);
+            if (tile) {
+                if (tile.type == "DOOR" || tile.type == "ENTRANCE" || tile.type == "EXIT" || tile.type == "BUTTON") {
+                    return true;
                 } else {
-                    return false;
+                    return !tile.solid;
+                }
+            } else {
+                return false;
+            }
+        });
+
+
+        var validDesign = true;
+        for (const objectivePoint of objectivePoints) {
+            var validObjective = false;
+
+            path.compute(objectivePoint.x, objectivePoint.y, (x, y) => {
+                // console.log(`at point ${x},${y} looking for ${entrance!.x},${entrance!.y}`);
+                if (x === entrance!.x && y === entrance!.y) {
+                    console.log("found a path to the objective point: " + JSON.stringify(objectivePoint));
+                    validObjective = true;
                 }
             });
 
-            for (const objectivePoint of objectivePoints) {
-                const promise = new Promise<void>((resolve, reject) => {
-                    var validDesign = false;
-
-                    path.compute(objectivePoint.x, objectivePoint.y, (x, y) => {
-                        // console.log(`at point ${x},${y} looking for ${entrance!.x},${entrance!.y}`);
-                        if (x === entrance!.x && y === entrance!.y) {
-                            console.log("found a path to the objective point: " + JSON.stringify(objectivePoint));
-                            validDesign = true;
-                            resolve();
-                        }
-                    });
-
-                    // set a timeout to just fail the promise if it takes too long; presume that means 
-                    // there is no path.
-                    setTimeout(() => {
-                        console.log("timing out: " + validDesign);
-                        if(!validDesign) {
-                            reject();
-                        }
-                    }, 400);
-                });
-
-                
-
-                promises.push(promise);
+            if (validObjective) {
+                console.log("synchronously valid design: " + JSON.stringify(objectivePoint) + " " + validObjective);
             }
 
-            Promise.all(promises)
-                .then(() => {
-                    resolve(true);
-                })
-                .catch(() => {
-                    resolve(false);
-                });
-        });
+            if(!validObjective) {
+                validDesign = false;
+            }
+        }
+
+        return validDesign;
     }
 }
 
@@ -557,31 +544,31 @@ abstract class BaseRoomFiller implements RoomFiller {
     }
 
     setTile(x: number, y: number, tile: Tile) {
-        if(!tile) { return; }
+        if (!tile) { return; }
 
         const index = y * this.rect.w + x;
-        if(index >= this.tiles.length) { 
+        if (index >= this.tiles.length) {
             // console.error("Got bad index: " + index + " for x: " + x + " y: " + y + " rect: " + JSON.stringify(this.rect));
             return;
         }
 
-        if(x >= this.rect.w || y >= this.rect.h) {
+        if (x >= this.rect.w || y >= this.rect.h) {
             // console.error("exceeded bounds" + x + " " + y + " " + this.rect.w + " " + this.rect.h);
             return;
         }
-        
-        if(x < 0 || y < 0) {
+
+        if (x < 0 || y < 0) {
             return;
         }
 
         this.tiles[y * this.rect.w + x] = tile;
     }
 
-    translateTiles(): void{
+    translateTiles(): void {
         // console.log(this.tiles);
         // this.cleanTiles();
         for (let tile of this.tiles) {
-            if(!tile) { }
+            if (!tile) { }
             // console.log("tile: " + JSON.stringify(tile));
             // console.log("rect: " + JSON.stringify(this.rect));
 
@@ -614,7 +601,7 @@ class RandomRoomFiller extends BaseRoomFiller {
         for (let tile of this.tiles) {
             let value = noise.get(tile.x / 5, tile.y / 5) * 255;
 
-            if(value > 100) {
+            if (value > 100) {
                 this.setTile(tile.x, tile.y, new Tile(tile.x, tile.y, "WALL"));
                 // console.log(tile);
             }
@@ -628,22 +615,22 @@ class BracketRoomFiller extends BaseRoomFiller {
     fillRoom(): void {
         // fill the corners with inset walls
         var insetRect = this.shrinkRect(this.shrinkRect(this.rect));
-        for(let i = 0; i < 10; i++) {
-            if(insetRect.w < 6 && insetRect.h < 6) { break; }
+        for (let i = 0; i < 10; i++) {
+            if (insetRect.w < 6 && insetRect.h < 6) { break; }
             // iterate through the points of insetRect
             // for points that are greater than 2 steps away from any of the corners, skip them.
             // otherwise, fill in with a wall tile.
             for (const point of this.getPointsOnRectBoundaries(insetRect)) {
                 const rectPoint = { x: point.x - this.rect.x, y: point.y - this.rect.y };
 
-                if (rectPoint.x > (insetRect.w/5+4) && rectPoint.x < insetRect.w-(insetRect.w/5 + 2)) { continue; }
-                if (rectPoint.y > (insetRect.h/5+4) && rectPoint.y < insetRect.h-(insetRect.w/5 + 2)) { continue; }
-                
+                if (rectPoint.x > (insetRect.w / 5 + 4) && rectPoint.x < insetRect.w - (insetRect.w / 5 + 2)) { continue; }
+                if (rectPoint.y > (insetRect.h / 5 + 4) && rectPoint.y < insetRect.h - (insetRect.w / 5 + 2)) { continue; }
+
                 this.setTile(rectPoint.x, rectPoint.y, new Tile(rectPoint.x, rectPoint.y, "WALL"));
             }
 
             insetRect = this.shrinkRect(this.shrinkRect(this.shrinkRect(insetRect)));
-        } 
+        }
         this.translateTiles();
     }
 
