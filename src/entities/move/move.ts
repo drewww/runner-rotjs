@@ -287,7 +287,7 @@ export const BURROW: MoveTemplate = [
     '@'
 ]
 
-export const HUNTER_JUMP: MoveTemplate = [
+export const ENEMY_JUMP: MoveTemplate = [
     '1',
     '0',
     '0',
