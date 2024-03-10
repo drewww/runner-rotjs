@@ -50,7 +50,7 @@ export class TextBox extends UIBox implements Drawable {
                 setTimeout(this.draw.bind(this), this.startDelay, display, xOffset, yOffset);
                 this.startDelay = 0;
             } else {
-                display.drawText(xOffset + this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text.substring(0, this.counter+1)}`);
+                display.drawText(xOffset + this.x, yOffset + this.y, `%c{${this.fg}}%b{${this.bg}}${this.text.substring(0, this.counter+1)}`, this.w);
 
                 this.counter++;
                 if(this.counter<this.text.length) {

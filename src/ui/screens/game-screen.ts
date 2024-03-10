@@ -8,6 +8,7 @@ import { Screen } from "../screen";
 import { MoveMenuScreen } from './move-menu-screen';
 import { Overlays } from "../overlays";
 import { TextBox } from "../elements/text-box";
+import { COLORS } from "../../colors";
 
 const RIGHT_MENU_WIDTH: number = 20;
 
@@ -307,7 +308,7 @@ export class GameScreen extends Screen {
                     this.triggered.push(trigger.trigger);
                     // console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
 
-                    const textBox = new TextBox(this.player!.x, this.player!.y + 5 , 30, 5, trigger.text);
+                    const textBox = new TextBox(this.player!.x, this.player!.y + 5 , 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, true,0, 20);
                     this.elements.push(textBox);
 
                     setTimeout(() => {
