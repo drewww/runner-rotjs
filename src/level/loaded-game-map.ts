@@ -4,6 +4,7 @@ import { Tile } from "./tile";
 import { Door } from "./door";
 import { SentryBot } from "../entities/sentry";
 import { COLORS } from "../colors";
+import { Hunter } from "../entities/hunter";
 
 
 export class LoadedGameMap extends GameMap {
@@ -11,7 +12,7 @@ export class LoadedGameMap extends GameMap {
         super(0, 0);
 
         this.disableHunter = true;
-        
+
         this.loadMap(name);
     }
 
@@ -45,10 +46,29 @@ export class LoadedGameMap extends GameMap {
                     case "7":
                     case "8":
                     case "9":
+                    case "A":
+                    case "B":
+                    case "A":
+                    case "B":
+                    case "C":
+                    case "D":
+                    case "E":
+                    case "F":
+                    case "G":
+                    case "I":
+                        // case "H": RESERVED FOR HUNTER
+                    case "J":
+                    case "K":
+
                         // todo something special with these later
                         const triggerTile = new Tile(x, y, "FLOOR");
                         triggerTile.triggerMetadata = { trigger: tileChar, text: staticMap.text[tileChar] };
                         this.setTile(triggerTile);
+                        break;
+                    case "x":
+                        const spotTile = new Tile(x, y, "FLOOR");
+                        spotTile.symbol = "x";
+                        this.setTile(spotTile);
                         break;
                     case " ":
                     case ".":
@@ -59,17 +79,23 @@ export class LoadedGameMap extends GameMap {
                         break;
                     case "s":
                         this.setTile(new Tile(x, y, "FLOOR"));
-                        const s = new SentryBot(x, y,0);
+                        const s = new SentryBot(x, y, 0);
                         this.beings.push(s);
                         break;
                     case "p":
                         this.setTile(new Tile(x, y, "FLOOR"));
                         const p = new PatrolBot(x, y, "flip");
-                        p.facing = Math.PI/2;
+                        p.facing = Math.PI / 2;
                         this.beings.push(p);
                         break;
                     case "-":
                         this.setTile(new Door(x, y));
+                        break;
+                    case "H":
+                        this.setTile(new Tile(x, y, "FLOOR"));
+                        const hunter = new Hunter(x, y, this);
+                        hunter.disable();
+                        this.beings.push(hunter);
                         break;
                     default:
                         console.error("unrecognized tile character: " + tileChar);
@@ -107,12 +133,30 @@ const levels: { [key: string]: StaticLevel } = {
                 "#...3...-2......-4.....-5......#",
                 "#...#####2......#4.....#5......#",
                 "#-#######.......####s#####sss#-#",
-                "#11...0@#....p..#............66#",
-                "#11...00#.......#..............#",
+                "#11...0@#....p..######7777...66#",
+                "#11...00#.......######.#77.....#",
+                "######################-#########",
+                "#...................##8##......#",
+                "#...................##8##......#",
                 "################################",
+                "#H......##....#######.##......#",
+                "#.......A#######p#####.##......#",
+                "#.......A-.........x9-.##......#",
+                "#.......A#######.########......#",
+                "#..............#################",
                 "#..............................#",
                 "#..............................#",
+                "#..............................#",
+                "#..............................#",
+                "#..............................#",
                 "################################",
+
+
+                // "#####################...########",
+                // "#.......................p#....#",
+                // "#..............................#",
+                // "#..............................#",
+                // "################################",
             ],
 
         text: {
@@ -122,7 +166,11 @@ const levels: { [key: string]: StaticLevel } = {
             "3": "Close that door behind you! What kind of runner leaves open doors behind them?",
             "4": "This is where your implants come in handy. Walk up to the sentry vision and jump over it with (1), then selecting the direction.",
             "5": "One sentry is nothing. This is more common in the field. Use '(2) wall run' or '(3) wall jump' to get past them.",
-            "6": "Time to do it again. Try a different move this time; you won't always have time to wait for your moves to cooldown."
+            "6": "Time to do it again. Try a different move this time; you won't always have time to wait for your moves to cooldown.",
+            "7": "Nominal performance. Let's try your last two moves.",
+            "8": "Dead end? Not for you. Use (6) burrow to dig through the wall south.",
+            "9": "Wait for the right moment, standing 3 spaces from the enemy. Then use (5) enemy jump to jump over them.",
+            "A": "Now, meet your antagonist. The hunter. It's relentless, and if you're carrying company property, it can sense you.",
         }
     }
 }

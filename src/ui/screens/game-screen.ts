@@ -9,6 +9,7 @@ import { MoveMenuScreen } from './move-menu-screen';
 import { Overlays } from "../overlays";
 import { TextBox } from "../elements/text-box";
 import { COLORS } from "../../colors";
+import { Hunter } from "../../entities/hunter";
 
 const RIGHT_MENU_WIDTH: number = 20;
 
@@ -306,23 +307,29 @@ export class GameScreen extends Screen {
                 const trigger: { trigger: string, text: string } = tile.triggerMetadata;
 
                 if (!this.triggered.includes(trigger.trigger)) {
-                    if(this.currentTriggerTextBox) {
+                    if (this.currentTriggerTextBox) {
                         this.elements.splice(this.elements.indexOf(this.currentTriggerTextBox), 1);
                     }
 
                     this.triggered.push(trigger.trigger);
                     // console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
 
-                    const textBox = new TextBox(this.player!.x, this.player!.y + 5 , 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, true,0, 20);
+                    const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
                     this.elements.push(textBox);
                     this.currentTriggerTextBox = textBox;
 
                     setTimeout(() => {
-                        if(this.elements.includes(textBox)) {
+                        if (this.elements.includes(textBox)) {
                             this.elements.splice(this.elements.indexOf(textBox), 1);
                             this.currentTriggerTextBox = undefined;
                         }
                     }, 5000);
+
+                    // hack! but check and see if there's a stunned hunter and if the player has triggered A.
+                    // if they have, activate it.
+                    if(trigger.trigger==="A") {
+                        this.level.activateHunter();
+                    }
                 }
             }
         });

@@ -145,6 +145,8 @@ export class LevelController implements Drawable {
                     this.addBeing(being);
                 });
 
+                this.hunter = this.map.getBeings().find(being => being instanceof Hunter) as Hunter;
+
                 break;
         }
 
@@ -292,7 +294,7 @@ export class LevelController implements Drawable {
             }
         }
 
-        if (this.player && this.player.triggerPulse) {
+        if (this.player && this.player.triggerPulse && this.hunter?.active()) {
             // look for hunter.
             if (this.hunter) {
                 //calculate distance
@@ -660,5 +662,9 @@ export class LevelController implements Drawable {
         this.beings = [];
         this.map.clear();
         this.beings = [];
+    }
+
+    public activateHunter() :void {
+        this.hunter?.enable();
     }
 }

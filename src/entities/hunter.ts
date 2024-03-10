@@ -125,5 +125,14 @@ export class Hunter extends Enemy {
     }
 
     public disable(): void {
+        this.stunned = 100000;
+    }
+
+    enable() : void {
+        this.stunned = 0;
+    }
+
+    active(): boolean {
+        return this.stunned == 0;
     }
 }
