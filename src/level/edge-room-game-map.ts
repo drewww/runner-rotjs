@@ -245,7 +245,7 @@ export class EdgeRoomGameMap extends GameMap {
             const randomIndex = Math.floor(Math.random() * rightEdgeTiles.length);
             const tile = rightEdgeTiles[randomIndex];
 
-            if(tile.y < 2 || tile.y > this.h-2) {
+            if(tile.y < 2 && tile.y < this.h-2) {
                 continue;
             }
 
