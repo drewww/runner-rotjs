@@ -50,7 +50,9 @@ export class LoadedGameMap extends GameMap {
                         break;
                     case "p":
                         this.setTile(new Tile(x, y, "FLOOR"));
-                        this.beings.push(new PatrolBot(x, y));
+                        const p = new PatrolBot(x, y, "flip");
+                        p.facing = Math.PI/2;
+                        this.beings.push(p);
                         break;
                     case "-":
                         this.setTile(new Door(x, y));
@@ -96,8 +98,8 @@ const levels: { [key: string]: StaticLevel } = {
                 "#..1#......#...................#",
                 "#####...p..#...................#",
                 "#...#......#...................#",
+                "#...#......#...................#",
                 "#...########...................#",
-                "#..............................#",
                 "#..............................#",
                 "#..............................#",
                 "################################",
