@@ -320,7 +320,7 @@ export class GameScreen extends Screen {
                             this.elements.splice(this.elements.indexOf(textBox), 1);
                             this.currentTriggerTextBox = undefined;
                         }
-                    }, 5000);
+                    }, 10000);
 
                     // hack! but check and see if there's a stunned hunter and if the player has triggered A.
                     // if they have, activate it.
