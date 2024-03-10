@@ -57,9 +57,15 @@ export class GameScreen extends Screen {
 
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
+        super.draw(display, xOffset, yOffset);
 
-        // absolutely heinous but 
-        if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
+         // absolutely heinous but 
+         if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
+            const hunter = this.level.getBeings().find((being) => being instanceof Hunter) as Hunter;    
+            
+            if(hunter && !hunter.active()) { return; }
+            if(this.level.type===LevelType.TUTORIAL) { return; }
+
             this.hunterDetect = true;
 
             const text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING`;
@@ -74,8 +80,6 @@ export class GameScreen extends Screen {
                 }
             }, 6000);
         }
-
-        super.draw(display, xOffset, yOffset);
     }
 
     handleEvent(e: KeyboardEvent): void {
@@ -238,7 +242,11 @@ export class GameScreen extends Screen {
     advanceDepth(): void {
         this.level.player!.depth++;
         if (this.level.player!.depth >= 0) {
-            this.game.switchState(GameState.WINSCREEN);
+            if(this.level.type === LevelType.TUTORIAL) {
+                this.game.switchState(GameState.TITLE);
+            } else {
+                this.game.switchState(GameState.WINSCREEN);
+            }
         } else {
             this.level.disable();
             // prepare another level.

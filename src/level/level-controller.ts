@@ -590,7 +590,7 @@ export class LevelController implements Drawable {
         console.log("placed player: " + player.x + "," + player.y);
 
         if (this.type === LevelType.TUTORIAL) {
-            this.player.depth = -4;
+            this.player.depth = -1;
         } else {
             this.player.depth = -4;
         }
