@@ -54,7 +54,6 @@ export class LoadedGameMap extends GameMap {
                     case "A":
                     case "B":
                     case "C":
-                    case "D":
                     case "E":
                     case "F":
                     case "G":
@@ -62,7 +61,6 @@ export class LoadedGameMap extends GameMap {
                         // case "H": RESERVED FOR HUNTER
                     case "J":
                     case "K":
-
                         // todo something special with these later
                         const triggerTile = new Tile(x, y, "FLOOR");
                         triggerTile.triggerMetadata = { trigger: tileChar, text: staticMap.text[tileChar] };
@@ -103,6 +101,14 @@ export class LoadedGameMap extends GameMap {
                         const hunter = new Hunter(x, y, this);
                         hunter.disable();
                         this.beings.push(hunter);
+                        break;
+                    case "D":
+                        const amuletTile = new Tile(x, y, "FLOOR");
+                        amuletTile.symbol = "*";
+                        amuletTile.fg = COLORS.GOLD;
+                        amuletTile.bg = COLORS.GOLD;
+                        amuletTile.triggerMetadata = { trigger: tileChar, text: staticMap.text[tileChar] };
+                        this.setTile(amuletTile);
                         break;
                     case "%":
                         this.setTile(new Tile(x, y, "EXIT"));
@@ -154,10 +160,10 @@ const levels: { [key: string]: StaticLevel } = {
                 "#.......A-.........x9-.##......#",
                 "#.......A#######.########......#",
                 "#######-##.....#####b###########",
-                "#.....BBB...#..................#",
-                "#...........###########......###",
-                "#...........###########......C%#",
-                "#...........#................###",
+                "#.....BBB...#..............#####",
+                "#...........###########....#####",
+                "#...........###########....C..%#",
+                "#...........#..............#####",
                 "#................#b#.....#b#...#",
                 "################################",
             ],
@@ -179,40 +185,40 @@ const levels: { [key: string]: StaticLevel } = {
         }
     },
 
-    "intro":
-    {
-        map: [
-            "#################",
-            "#@...0....-1...%#",
-            "#####0....#######",
-            "####B.....#######",
-            "######B##B#######",
-            "#################"
-        ],
+    // "intro":
+    // {
+    //     map: [
+    //         "#################",
+    //         "#@...0....-1...%#",
+    //         "#####0....#######",
+    //         "####B.....#######",
+    //         "######B##B#######",
+    //         "#################"
+    //     ],
 
-        text: {
-            "0":"You're almost there,  %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. Punch those buttons to activate the elevator to the vault.",
-            "1":"",
-            "2":""
-        }
-    },
+    //     text: {
+    //         "0":"You're almost there,  %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. Punch those buttons to activate the elevator to the vault.",
+    //         "1":"",
+    //         "2":""
+    //     }
+    // },
 
     "vault":
     {
         map: [
             "###################",
-            "#.................#",
-            "##0.....###....22##",
-            "#@0......D.....22%#",
-            "##0.....###....22##",
-            "#.................#",
+            "##................#",
+            "##0.....###..2222##",
+            "#@0......D...2222%#",
+            "##0.....###..2222##",
+            "##................#",
             "###################",
         ],
 
         text: {
-            "0":`There it is! %c{${COLORS.RAINBOW_0}}a%c{${COLORS.RAINBOW_1}}m%c{${COLORS.RAINBOW_2}}u%c{${COLORS.RAINBOW_3}}l%c{${COLORS.RAINBOW_4}}e%c{${COLORS.RAINBOW_5}}t.dat! Grab it!`,
-            "D":`%c{${COLORS.LIGHT_LASER_RED}}RUNNER DETECTED. HUNTER ACTIVATED`,
-            "2":`Time to %c{${COLORS.MOVE_LIGHT_BLUE}run%c{}. Three floors of security between you and the exit. Good luck, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}.`
+            "0":`There it is! %c{${COLORS.RAINBOW_0}}a%c{${COLORS.RAINBOW_1}}m%c{${COLORS.RAINBOW_2}}u%c{${COLORS.RAINBOW_3}}l%c{${COLORS.RAINBOW_4}}e%c{${COLORS.RAINBOW_5}}t%c{}.dat! Grab it!`,
+            "D":`ALERT: %c{${COLORS.LASER_RED}}RUNNER DETECTED. HUNTER ACTIVATED`,
+            "2":`Time to %c{${COLORS.MOVE_LIGHT_BLUE}}run%c{#fff}. Three floors of security between you and the exit. Good luck, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. See  you on the other side.`
         }
     }
 }

@@ -63,7 +63,7 @@ export class Game implements IGame {
 
         this.tutorialScreen = new GameScreen(this, LevelType.TUTORIAL);
 
-        this.gameScreen = new GameScreen(this, LevelType.EDGE_ROOM);
+        this.gameScreen = new GameScreen(this, LevelType.VAULT);
 
         this.state = GameState.TITLE;
 

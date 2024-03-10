@@ -30,6 +30,8 @@ export enum LevelType {
     BSP = "BSP",
     EDGE_ROOM = "EDGE_ROOM",
     TUTORIAL = "TUTORIAL",
+    INTRO = "INTRO",
+    VAULT = "VAULT",
     // add other level generator types here
     // can also add a sequence of tutorial levels here
 }

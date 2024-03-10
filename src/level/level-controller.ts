@@ -153,7 +153,32 @@ export class LevelController implements Drawable {
                 this.hunter = this.map.getBeings().find(being => being instanceof Hunter) as Hunter;
 
                 this.suppressObjectives = true;
-                
+                break;
+            case LevelType.INTRO:
+                this.map = new LoadedGameMap("intro1");
+
+                this.map.getBeings().forEach(being => {
+                    this.addBeing(being);
+                });
+
+                // this.hunter = this.map.getBeings().find(being => being instanceof Hunter) as Hunter;
+                this.suppressObjectives = false;
+                break;
+
+            case LevelType.VAULT:
+                this.map = new LoadedGameMap("vault");
+                this.map.getBeings().forEach(being => {
+                    this.addBeing(being);
+                });
+                this.suppressObjectives = false;
+
+                const exitTile = this.map.getAllTiles().find(tile => tile.type === "EXIT");
+                if (exitTile) {
+                    exitTile.power = 0;
+                    exitTile.enabled = true;
+                    exitTile.solid = false;
+                }
+
                 break;
         }
 
@@ -300,7 +325,7 @@ export class LevelController implements Drawable {
         if (this.turnCounter == 0 && !this.firstTurnRender) {
             // draw a path from the player to each of the buttons
 
-            if(!this.suppressObjectives) {this.showObjectivePathOverlays()};
+            if (!this.suppressObjectives) { this.showObjectivePathOverlays() };
 
 
             this.firstTurnRender = true;
@@ -564,7 +589,9 @@ export class LevelController implements Drawable {
 
         console.log("placed player: " + player.x + "," + player.y);
 
-        if(this.type === LevelType.TUTORIAL) {
+        if (this.type === LevelType.TUTORIAL) {
+            this.player.depth = -4;
+        } else {
             this.player.depth = -4;
         }
 
@@ -616,6 +643,13 @@ export class LevelController implements Drawable {
         });
 
         this.player.addListener("move", (player: Player) => {
+
+            // amulet special case
+            const tile = this.map.getTile(player.x, player.y);
+            if (tile && tile.symbol === "*") {
+                tile.symbol = ".";
+            }
+
             console.log("checking move damage safety");
             if (this.getEnemyVisiblePoints().includes(`${player.x},${player.y}`)) {
                 // find the nearest enemy that is doing the shooting
