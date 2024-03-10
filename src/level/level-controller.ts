@@ -577,7 +577,7 @@ export class LevelController implements Drawable {
 
     public setPlayer(player: Player): void {
         this.player = player;
-        // this.player.resetLevelCallbacks();
+        this.player.resetLevelCallbacks();
         this.player.setLevel(this);
 
         // look for if the level has an entrance. if it does, move the player there.
@@ -611,12 +611,18 @@ export class LevelController implements Drawable {
             // if the player did a burrow, leave behind a door.
             // humiliating string comparison here
             if (this.player!.lastMoveName === "(6) Burrow--------") {
-
                 // another humiliating move
                 this.player!.lastMoveName = "";
                 const moveVector = { x: this.player!.x - this.player!.lastPosition.x, y: this.player!.y - this.player!.lastPosition.y };
 
-                this.map.setTile(new Door(this.player!.x - moveVector.x / 2, this.player!.y - moveVector.y / 2));
+                console.log("BURROWED: " + moveVector.x + "," + moveVector.y);
+
+                const doorPosition = { x: this.player!.x - (moveVector.x / 2), y: this.player!.y - (moveVector.y / 2) };
+                console.log("POSITION: ", doorPosition.x, doorPosition.y);
+
+                this.map.setTile(new Door(doorPosition.x, doorPosition.y));
+
+                console.log(this.map.getTile(doorPosition.x, doorPosition.y));
             }
 
             this.turnCounter++;

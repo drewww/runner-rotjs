@@ -68,7 +68,7 @@ export class GameScreen extends Screen {
 
             this.hunterDetect = true;
 
-            const text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING`;
+            const text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR`;
             const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, text , COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
             this.elements.push(textBox);
             this.currentTriggerTextBox = textBox;
