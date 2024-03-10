@@ -23,7 +23,9 @@ export abstract class Being implements Drawable {
     move(dX:number, dY:number): boolean {
         if(!this.level) { return false; }
 
-        if(this.level.pointPassable(this.x + dX, this.y + dY) === false) { return false; }
+        if(this.level.pointPassable(this.x + dX, this.y + dY) === false) {
+            return false;
+        }
 
         this.x += dX;
         this.y += dY;

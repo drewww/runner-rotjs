@@ -171,7 +171,7 @@ const levels: { [key: string]: StaticLevel } = {
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
             "4": `This is where your implants come in handy. Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then select the direction.`,
             "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{} to get past them.`,
-            "6": `You won't always have time to wait for your moves to cooldown; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) Jump off wall%c{} this time.`,
+            "6": `You won't always have time to wait for your moves to cooldown; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) Jump off wall%c{} on this wall to get past these sentries.`,
             "7": `Nominal performance. Let's try your last two moves.`,
             "8": `Dead end? Not for you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{} to dig through the wall south.`,
             "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them.`,

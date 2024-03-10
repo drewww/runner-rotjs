@@ -32,7 +32,7 @@ export class Player extends Being {
         this.moves.push({name: "(3) Jump off wall-", template:LONG_WALL_JUMP, cooldown: 0, selected:false, cooldownOnUse: 5});
         this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30});
         this.moves.push({name: "(5) Enemy Jump----", template:ENEMY_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30});
-        this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 0, selected:false, cooldownOnUse: 2});
+        this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 0, selected:false, cooldownOnUse: 100});
 
         this.selectedMoveOptions = [];
         this.triggerPulse = false;
@@ -80,7 +80,6 @@ export class Player extends Being {
         if(superDidMove || (dX==0 && dY==0)) {
             this.emit("move");
         }
-
         
         if(dX==0 && dY == 0) {
             this.triggerPulse = true;
