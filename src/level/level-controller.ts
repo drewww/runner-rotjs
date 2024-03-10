@@ -36,6 +36,8 @@ export class LevelController implements Drawable {
     hunter: Hunter | null = null;
     overlays: Overlays | null = null;
 
+    public lastKeyStyle: string = "";
+
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number, overlays: Overlays | null = null) {
         this.beings = [];

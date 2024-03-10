@@ -166,7 +166,7 @@ export class Player extends Being {
                 return false;
             }
 
-            const moveResults = MoveManager.moveResults(this.level!, this.moves[index].template);   
+            const moveResults = MoveManager.moveResults(this.level!, this.moves[index].template, this.level!.lastKeyStyle);   
             this.selectedMoveOptions = moveResults;
             
             return false;

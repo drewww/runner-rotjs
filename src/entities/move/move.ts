@@ -17,7 +17,7 @@ export type MoveOption = {
 export class MoveManager {
 
 
-    public static moveResults(level: LevelController, template: MoveTemplate): MoveOption[] {
+    public static moveResults(level: LevelController, template: MoveTemplate, keyStyle: string): MoveOption[] {
         // this method will a list of points that this moveTemplate would
         // move the player to. expressed in player-relative vector locations.
 
@@ -32,7 +32,9 @@ export class MoveManager {
 
         // TODO swap between keypad and keyboard symbols dynamically based
         // on what player used last. For now, just use keyboard.
-        const symbol_map = ["W", "D", "X", "A"];
+        const symbol_map: {[key:string] : string[]} = {};
+        symbol_map["letters"] = ["W", "D", "X", "A"];
+        symbol_map["keypad"] = ["8", "6", "2", "4"];
 
         for (let i of validRotations) {
             let thisRotation = [];
@@ -43,7 +45,7 @@ export class MoveManager {
                 thisRotation.push(step);
             }
 
-            output.push({ symbol: symbol_map[i], moves: thisRotation });
+            output.push({ symbol: symbol_map[keyStyle][i], moves: thisRotation });
         }
 
         return output;

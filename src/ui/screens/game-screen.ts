@@ -81,6 +81,17 @@ export class GameScreen extends Screen {
         console.log("CODE: " + code);
         
 
+        // set lastKeyUse to "keypad" if the keycode is in one of the VK_NUMPAD* codes, but if it's letters
+        // W,E,D,C,X,Z,A, or Q, set it to "letters".
+
+        if (code >= ROT.KEYS.VK_A && code <= ROT.KEYS.VK_Z) {
+            this.level.lastKeyStyle = "letters";
+        } else if (code >= ROT.KEYS.VK_NUMPAD0 && code <= ROT.KEYS.VK_NUMPAD9) {
+            this.level.lastKeyStyle = "keypad";
+        }
+
+        console.log("lastKeyStyle: " + this.level.lastKeyStyle);
+
         // first, short circuit other detection. if we have a move selected, there are different options.
         if(this.player?.getSelectedMove()) {
             if(e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
@@ -94,7 +105,13 @@ export class GameScreen extends Screen {
             } else if (code in keyMap) {
                 // call select move again, but we need to pass the string version of the key character.
                 // this has gotten VERY stupid but we're going to see it through to finish up for the night.
-                const didMove = this.level.player!.selectMove(String.fromCharCode(code));
+
+                var didMove = false;
+                if(this.level.lastKeyStyle === "letters") {
+                    didMove = this.level.player!.selectMove(String.fromCharCode(code));
+                } else if(this.level.lastKeyStyle === "keypad") {
+                    didMove = this.level.player!.selectMove((code - ROT.KEYS.VK_NUMPAD0).toString());
+                }
 
                 releaseLockAfterHandling = didMove;
 

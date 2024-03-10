@@ -4,7 +4,6 @@ import { LevelController } from "../../level/level-controller";
 import { Tile } from "../../level/tile";
 import { Screen } from "../screen";
 import { Overlays } from "../overlays";
-import { EdgeRoomGameMap } from "../../level/edge-room-game-map";
 
 export class MapExploreScreen extends Screen {
 
