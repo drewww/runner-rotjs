@@ -11,12 +11,8 @@ import { Button } from "./button";
 export class LoadedGameMap extends GameMap {
     constructor(name: string) {
         super(0, 0);
-
         this.disableHunter = true;
-
         this.loadMap(name);
-
-
     }
 
     protected loadMap(name: string) {

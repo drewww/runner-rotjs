@@ -178,7 +178,7 @@ export class LevelController implements Drawable {
                     exitTile.enabled = true;
                     exitTile.solid = false;
                 }
-
+                
                 break;
         }
 
@@ -647,6 +647,8 @@ export class LevelController implements Drawable {
             // amulet special case
             const tile = this.map.getTile(player.x, player.y);
             if (tile && tile.symbol === "*") {
+                this.map.disableHunter = false;
+                this.turnCounter = 19;
                 tile.symbol = ".";
             }
 
