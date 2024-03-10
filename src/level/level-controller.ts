@@ -543,6 +543,19 @@ export class LevelController implements Drawable {
 
         this.player.addListener("move", () => {
             this.map.latestPlayerPosition = { x: this.player!.x, y: this.player!.y };
+
+
+            // if the player did a burrow, leave behind a door.
+            // humiliating string comparison here
+            if(this.player!.lastMoveName==="(6) Burrow--------") {
+
+                // another humiliating move
+                this.player!.lastMoveName = "";
+                const moveVector = {x: this.player!.x - this.player!.lastPosition.x, y: this.player!.y - this.player!.lastPosition.y};
+                
+                this.map.setTile(new Door(this.player!.x - moveVector.x/2, this.player!.y - moveVector.y/2));
+            }
+
             this.turnCounter++;
 
             if (this.turnCounter == 20) {

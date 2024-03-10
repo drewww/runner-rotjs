@@ -3,7 +3,7 @@ import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
 import { BURROW, ENEMY_JUMP, JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
-import { Light } from '../index.ts';
+import { Light, Point } from '../index.ts';
 
 export class Player extends Being {
 
@@ -20,6 +20,8 @@ export class Player extends Being {
     public selectedMoveOptions: MoveOption[];
     protected interruptMoves: boolean;
     triggerPulse: boolean;
+    lastMoveName: string;
+    lastPosition: Point;
 
     constructor() {
         // don't need to have a valid position for the player to make the object
@@ -35,6 +37,9 @@ export class Player extends Being {
         this.selectedMoveOptions = [];
         this.triggerPulse = false;
         this.interruptMoves = false;
+        this.lastPosition = {x: -1, y: -1};
+
+        this.lastMoveName = "";
     }
 
     resetLevelCallbacks() {
@@ -68,6 +73,8 @@ export class Player extends Being {
     }
 
     move(dX: number, dY: number): boolean {
+        this.lastPosition = {x: this.x, y: this.y};
+
         const superDidMove = super.move(dX, dY);
 
         if(superDidMove || (dX==0 && dY==0)) {
@@ -133,6 +140,10 @@ export class Player extends Being {
                 if(i>0) {
                     move = {x: selectedMoveOption.moves[i].x - selectedMoveOption.moves[i-1].x, y: selectedMoveOption.moves[i].y - selectedMoveOption.moves[i-1].y};
                 }
+
+                this.lastMoveName = selectedMove.name;
+
+
                 this.move(move.x, move.y);
                 this.updateVision();
             }
