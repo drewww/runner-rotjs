@@ -106,7 +106,7 @@ export class LevelController implements Drawable {
                 break;
 
             case LevelType.EDGE_ROOM:
-                this.map = new EdgeRoomGameMap(this.w, this.h);
+                this.map = new EdgeRoomGameMap(this.w, this.h, 0);
                 this.map.getBeings().forEach(being => {
                     this.addBeing(being);
                 });

@@ -10,7 +10,7 @@ export class EdgeRoomGameMap extends GameMap {
     totalRooms: number;
 
 
-    constructor(protected w: number, protected h: number) {
+    constructor(protected w: number, protected h: number, difficulty:number) {
         super(w, h);
 
         this.totalRooms = 0;
@@ -18,7 +18,7 @@ export class EdgeRoomGameMap extends GameMap {
         var valid = false;
         do {
             // console.log("generating level");
-            this.generateLevel();
+            this.generateLevel(difficulty);
             valid = this.validDesign();
             // console.error("actually valid? " + valid);
 
@@ -27,7 +27,7 @@ export class EdgeRoomGameMap extends GameMap {
         } while (!valid);
     }
 
-    private generateLevel() {
+    private generateLevel(difficulty:number) {
 
         this.tiles = []
         this.beings = [];

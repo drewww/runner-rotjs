@@ -26,5 +26,11 @@ export const COLORS = {
     MOVE_BLUE: "#4444ff",
     MOVE_LIGHT_BLUE: "#8888ff",
 
+    RAINBOW_0: "#ff0000",
+    RAINBOW_1: "#ff7f00",
+    RAINBOW_2: "#ffff00",
+    RAINBOW_3: "#00ff00",
+    RAINBOW_4: "#0000ff",
+    RAINBOW_5: "#8b00ff",
 
 };

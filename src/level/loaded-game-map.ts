@@ -141,10 +141,10 @@ const levels: { [key: string]: StaticLevel } = {
             [
                 "################################",
                 "#...3...-2......-4.x...-5x.....#",
-                "#...#####2......#4.x...##x.....#",
+                "#...#####2......#4.x...###.....#",
                 "#-#######.......####s#####sss#-#",
                 "#11...0@#....p..######7777...6x#",
-                "#11...00#.......######.#77...6x#",
+                "#11...00#.......######.###...###",
                 "######################-#########",
                 "#..H................##8##......#",
                 "#...................##8##......#",
@@ -155,9 +155,9 @@ const levels: { [key: string]: StaticLevel } = {
                 "#.......A#######.########......#",
                 "#######-##.....#####b###########",
                 "#.....BBB...#..................#",
-                "#...........###########.......##",
-                "#...........###########.......%#",
-                "#...........#.................##",
+                "#...........###########......###",
+                "#...........###########......C%#",
+                "#...........#................###",
                 "#................#b#.....#b#...#",
                 "################################",
             ],
@@ -168,13 +168,51 @@ const levels: { [key: string]: StaticLevel } = {
             "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{#ffffff} to wait for an opportune moment to run past.`,
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
             "4": `This is where your implants come in handy. Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then selecting the  direction.`,
-            "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{} or %c{${COLORS.MOVE_LIGHT_BLUE}}(3) wall jump %c{}to get past them.`,
-            "6": `Time to do it again. Try a different move this time; you won't always have time to wait for your moves to cooldown.`,
+            "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{} to get past them.`,
+            "6": `You won't always have time to wait for your moves to cooldown; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) wall jump %c{} this time.`,
             "7": `Nominal performance. Let's try your last two moves.`,
             "8": `Dead end? Not for you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{} to dig through the wall south.`,
             "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them.`,
             "A": `Now, meet your antagonist. The %c{${COLORS.LIGHT_LASER_RED}}HUNTER%c{}. It's relentless, and  can sense you from any distance.`,
             "B": `%c{${COLORS.LIGHT_LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
+            "C": `Acceptable job, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. Don't embarrass me on the job.`,
+        }
+    },
+
+    "intro":
+    {
+        map: [
+            "#################",
+            "#@...0....-1...%#",
+            "#####0....#######",
+            "####B.....#######",
+            "######B##B#######",
+            "#################"
+        ],
+
+        text: {
+            "0":"You're almost there,  %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. Punch those buttons to activate the elevator to the vault.",
+            "1":"",
+            "2":""
+        }
+    },
+
+    "vault":
+    {
+        map: [
+            "###################",
+            "#.................#",
+            "##0.....###....22##",
+            "#@0......D.....22%#",
+            "##0.....###....22##",
+            "#.................#",
+            "###################",
+        ],
+
+        text: {
+            "0":`There it is! %c{${COLORS.RAINBOW_0}}a%c{${COLORS.RAINBOW_1}}m%c{${COLORS.RAINBOW_2}}u%c{${COLORS.RAINBOW_3}}l%c{${COLORS.RAINBOW_4}}e%c{${COLORS.RAINBOW_5}}t.dat! Grab it!`,
+            "D":`%c{${COLORS.LIGHT_LASER_RED}}RUNNER DETECTED. HUNTER ACTIVATED`,
+            "2":`Time to %c{${COLORS.MOVE_LIGHT_BLUE}run%c{}. Three floors of security between you and the exit. Good luck, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}.`
         }
     }
 }
