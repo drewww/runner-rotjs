@@ -200,26 +200,35 @@ export class GameScreen extends Screen {
             this.game.switchState(GameState.WINSCREEN);
         } else {
             // prepare another level.
-            const newLevel = new LevelController(LevelType.EDGE_ROOM, 80, this.height-1, this.overlays);
+            const newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH-RIGHT_MENU_WIDTH-2, SCREEN_HEIGHT-2, this.overlays);
+            newLevel.x = 1;
+            newLevel.y = 1;
+
+            this.level.disable();
+            this.elements = [];
 
             this.level = newLevel;
             
             // does this prepend? tbd.
-            this.elements = [this.level, this.statusBar!];
+            this.elements = [this.level, this.statusBar!, this.moveMenu!];
 
             // why do I keep rewriting this code -- abstract this at some point
-            const freeCells = this.level.getEmptyPoints();
-            if (!freeCells) {
-                console.error("No free cells to place player.");
-                return;
-            } else {
-                this.player!.setPosition(freeCells[Math.floor(Math.random() * freeCells.length)]);
+            const tile = this.level.map.getAllTiles().find((tile) => {
+                return tile.type === "ENTRANCE";
+            });
+
+            if(!tile) {
+                console.error("No entrance tile found.");
             }
+            this.player!.setPosition(tile!);
+            this.player!.resetCooldowns();
             
             this.level.setPlayer(this.player!);
             this.player!.updateVision();
     
             this.game.refreshDisplay();
+
+            this.level.scheduler.clear();
 
             this.engine = new ROT.Engine(this.level.scheduler);
             this.engine.start();

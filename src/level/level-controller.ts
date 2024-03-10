@@ -621,7 +621,12 @@ export class LevelController implements Drawable {
         // for (const being of this.beings) {
         //     this.scheduler.remove(being);
         // }
+
+        this.scheduler.clear();
+        this.hunter?.disable();
+        this.hunter = null;
+        this.beings = [];
+        this.map.clear();
+        this.beings = [];
     }
-
-
 }

@@ -183,6 +183,11 @@ export class GameMap {
         return tile && !tile.opaque;
     }
 
+    public clear() {
+        this.tiles = [];
+        this.beings = [];
+    }
+
 
     static EXIT: MapTemplate = {
         name: "EXIT",
