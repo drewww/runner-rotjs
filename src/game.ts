@@ -148,6 +148,7 @@ export class Game implements IGame {
         this.state = newState;
         switch(newState) {
             case GameState.TITLE:
+            
                 this.screen = this.titleScreen;
                 break;
             case GameState.GAME:

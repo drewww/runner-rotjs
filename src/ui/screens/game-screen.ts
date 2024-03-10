@@ -240,17 +240,20 @@ export class GameScreen extends Screen {
     }
 
     advanceDepth(): void {
+        this.triggered = [];
         this.level.player!.depth++;
         if (this.level.player!.depth >= 0) {
-            if(this.level.type === LevelType.TUTORIAL) {
-                this.game.switchState(GameState.TITLE);
-            } else {
-                this.game.switchState(GameState.WINSCREEN);
-            }
+            this.game.switchState(GameState.WINSCREEN);
         } else {
             this.level.disable();
             // prepare another level.
-            const newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
+            var newLevel;
+            if(this.level.player!.depth>=-3) {
+                newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
+            } else {
+                newLevel = new LevelController(LevelType.VAULT, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
+            }
+            
             newLevel.x = 1;
             newLevel.y = 1;
 
