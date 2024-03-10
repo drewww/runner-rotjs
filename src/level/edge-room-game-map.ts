@@ -255,7 +255,7 @@ export class EdgeRoomGameMap extends GameMap {
         }
 
 
-        var exitPoint = { x: -1, y: -1 };
+//         var exitPoint = { x: -1, y: -1 };
 
         const rightEdgeTiles = this.tiles.filter(tile => tile.x === this.w - 1 && tile.type === "BOUNDARY");
         while (rightEdgeTiles.length > 0) {
@@ -289,7 +289,7 @@ export class EdgeRoomGameMap extends GameMap {
 
 
                     pathingPoints.push({ x: tile.x - 1, y: tile.y });
-                    exitPoint = { x: tile.x - 1, y: tile.y };
+                    // exitPoint = { x: tile.x - 1, y: tile.y };
                     console.log("EXIT: " + JSON.stringify({ x: tile.x - 1, y: tile.y }));
                     console.log("height: " + this.h);
                     break;
