@@ -2,6 +2,7 @@ import { PatrolBot } from "../entities/patrol-bot";
 import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 import { Door } from "./door";
+import { SentryBot } from "../entities/sentry";
 
 
 export class LoadedGameMap extends GameMap {
@@ -55,6 +56,11 @@ export class LoadedGameMap extends GameMap {
                     case "@":
                         this.setTile(new Tile(x, y, "ENTRANCE"));
                         break;
+                    case "s":
+                        this.setTile(new Tile(x, y, "FLOOR"));
+                        const s = new SentryBot(x, y,0);
+                        this.beings.push(s);
+                        break;
                     case "p":
                         this.setTile(new Tile(x, y, "FLOOR"));
                         const p = new PatrolBot(x, y, "flip");
@@ -97,12 +103,12 @@ const levels: { [key: string]: StaticLevel } = {
 
             [
                 "################################",
-                "#@.1-..3-2......-..............#",
-                "#..1#####2......#..............#",
-                "#########.......#..............#",
+                "#@.1-..3-2......-4.............#",
+                "#..1#####2......#4.............#",
+                "#########.......####s###########",
                 "#.......#....p..#..............#",
                 "#.......#.......#..............#",
-                "#.......#########..............#",
+                "#.......########################",
                 "#..............................#",
                 "#..............................#",
                 "################################",
@@ -112,6 +118,7 @@ const levels: { [key: string]: StaticLevel } = {
             "1": "This is a door. Open it by waiting ('s' or 5) next to it. ",
             "2": "Watch out! Patrol bot ahead.  Use wait until you can run behind it to the door.",
             "3": "Close that door behind you! Go back and wait next to it to   close it.",
+            "4": "Uh oh, this one's trapped. Press '1' next to its vision to 'jump.' Then select the direction.",
         }
     }
 }
