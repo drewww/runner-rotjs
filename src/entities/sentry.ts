@@ -1,6 +1,5 @@
 import { Point } from "..";
 import { Enemy } from "./enemy";
-import { PatrolBot } from "./patrol-bot";
 
 
 export class SentryBot extends Enemy {

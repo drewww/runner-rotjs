@@ -3,6 +3,7 @@ import { GameMap } from "./game-map";
 import { Tile } from "./tile";
 import { Door } from "./door";
 import { SentryBot } from "../entities/sentry";
+import { COLORS } from "../colors";
 
 
 export class LoadedGameMap extends GameMap {
@@ -103,22 +104,24 @@ const levels: { [key: string]: StaticLevel } = {
 
             [
                 "################################",
-                "#@.1-..3-2......-4.............#",
-                "#..1#####2......#4.............#",
-                "#########.......####s###########",
-                "#.......#....p..#..............#",
-                "#.......#.......#..............#",
-                "#.......########################",
+                "#...3...-2......-4.....-5......#",
+                "#...#####2......#4.....#5......#",
+                "#-#######.......####s#####sss#-#",
+                "#11...0@#....p..#..............#",
+                "#11...00#.......#..............#",
+                "################################",
                 "#..............................#",
                 "#..............................#",
                 "################################",
             ],
 
         text: {
-            "1": "This is a door. Open it by waiting ('s' or 5) next to it. ",
-            "2": "Watch out! Patrol bot ahead.  Use wait until you can run behind it to the door.",
-            "3": "Close that door behind you! Go back and wait next to it to   close it.",
-            "4": "Uh oh, this one's trapped. Press '1' next to its vision to 'jump.' Then select the direction.",
+            "0": `Welcome, %c{${COLORS.MOVE_BLUE}}runner%c{}. I see you can move, at least.`,
+            "1": "Proceed through the door. Press (NUM 5/s) to wait & use adjaecnt objects.",
+            "2": "Patrol bot ahead. If you move into its vision, it'll shoot you. Use (NUM 5/s) to wait for an opportune moment to run past.",
+            "3": "Close that door behind you! What kind of runner leaves open doors behind them?",
+            "4": "This is where your implants come in handy. Walk up to the sentry vision and jump over it with (1), then selecting the direction.",
+            "5": "One sentry is nothing. This is more common in the field. Use '(2) wall run' or '(3) wall jump' to get past them.",
         }
     }
 }
