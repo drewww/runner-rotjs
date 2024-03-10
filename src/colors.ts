@@ -10,6 +10,7 @@ export const COLORS = {
     GREEN: "#00ff00",
     LIGHT_GREEN: "#00BB00",
     DARK_GREEN: "#005500",
+    FAINT_GREEN: "#00EE00",
 
     YELLOW: "#ffff00",
 

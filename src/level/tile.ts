@@ -8,7 +8,7 @@ export const TILE_TYPES = {
     "EXIT": {symbol: "%", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: true, enabled:false, power:3},
     "ENTRANCE": {symbol: "%", fg: COLORS.DARK_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: true, enabled:false},
     "BUTTON": {symbol: "○", fg: COLORS.BLACK, bg: COLORS.LIGHT_GREEN, opaque: true, solid: true, indestructable: false},
-    "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: false},
+    "DOOR": {symbol: "-", fg: COLORS.BLACK, bg: COLORS.FAINT_GREEN, opaque: true, solid: true, indestructable: false},
     "EXIT_FORCEFIELD": {symbol: "#", fg: COLORS.LIGHT_GREEN, bg: COLORS.BLACK, opaque: false, solid: true, indestructable: false},
     "BOUNDARY": {symbol: "#", fg: COLORS.LIGHT_GREY, bg: COLORS.WHITE, opaque: true, solid: true, indestructable: true},
     "TALL_JUNK": {symbol: "0", fg: COLORS.LIGHT_GREY, bg: COLORS.BLACK, opaque: true, solid: true, indestructable: false},
