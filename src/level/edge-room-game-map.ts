@@ -214,20 +214,20 @@ export class EdgeRoomGameMap extends GameMap {
             if(tile) {
 
                 // check if the three tiles to the right of this tile are all floor tiles
-                let allFloor = true;
-                for(let j=0; j<2; j++) {
-                    for(let i = -1; i < 1; i++) {
-                        const nextTile = this.getTile(tile.x+1+j, tile.y+i);
-                        if(nextTile && nextTile.type !== "FLOOR") {
-                            allFloor = false;
-                        }
+                let openSpaces = 0;
+                for(let i = -1; i < 1; i++) {
+                    const nextTile = this.getTile(tile.x+2, tile.y+i);
+                    if(nextTile && nextTile.type === "FLOOR") {
+                        openSpaces++;
                     }
-                }   
+                }
+                
+                // const exitTile = this.getTile(tile.x+1, tile.y);
 
-                if(allFloor) {
-                    this.setTile(new Tile(tile.x+1, tile.y-1, "WALL"));
+                if(openSpaces >= 1) {
+                    this.setTile(new Tile(tile.x+1, tile.y-1, "BOUNDARY"));
                     this.setTile(new Tile(tile.x+1, tile.y, "ENTRANCE"));
-                    this.setTile(new Tile(tile.x+1, tile.y+1, "WALL"));
+                    this.setTile(new Tile(tile.x+1, tile.y+1, "BOUNDARY"));
 
                     pathingPoints.push({x: tile.x+1, y: tile.y});
                     entrancePoint = {x: tile.x+1, y: tile.y};
