@@ -44,7 +44,7 @@ export class Tile {
 
     protected callbacks: {[key:string]: Function[]} = {};
     
-    public triggerMetadata: {trigger: string, text: string} | null;
+    public triggerMetadata: {trigger: string, text: strin44g} | null;
 
     constructor(x:number, y:number, type:string, procGenType:string="unknown") {
         this.x = x;
@@ -74,6 +74,14 @@ export class Tile {
 
         if(procGenType === "PARTITION" && type === "WALL") {
             this.symbol = "#";
+        }
+
+        // a stupid hardcode here but it's simpler than abstracting
+        if(this.type === "FLOOR") {
+            //override the bg color by selecting a black
+            this.bg = COLORS.BLACKS[Math.floor(Math.random()*COLORS.BLACKS.length)];
+        } else if (this.type === "WALL") {
+            this.bg = COLORS.WHITES[Math.floor(Math.random()*COLORS.WHITES.length)];
         }
     }
 

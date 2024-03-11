@@ -36,4 +36,23 @@ export const COLORS = {
 
     GOLD: "#ffd700",
 
+
+    BLACKS: [
+        "#030300",
+        "#020002",
+        "#020205",
+        "#040400",
+        "#010202",
+        "#050003",
+        "#101010"
+    ],
+
+    WHITES: [
+        "#FDFDFF",
+        "#FAFFFE",
+        "#FCFDFA",
+        "#FCFAFF",
+        "#FDDFFD",
+        "#DFDFDF"
+    ]
 };

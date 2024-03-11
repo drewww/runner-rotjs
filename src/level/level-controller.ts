@@ -396,7 +396,7 @@ export class LevelController implements Drawable {
             if (key in lightMap) {
                 bg = lightMap[`${tile.x},${tile.y}`].color;
             } else {
-                bg = COLORS.BLACK;
+                bg = tile.bg;
             }
 
             if (tile.type === "BOUNDARY" || tile.type === "WALL") {
@@ -406,19 +406,25 @@ export class LevelController implements Drawable {
             // let fgHSL = ROT.Color.rgb2hsl(ROT.Color.fromString(fg));
             // fgHSL[2] = fgHSL[2]-0.5;  
             // fg = ROT.Color.hsl2rgb(fgHSL).toString();  
-            if (tile.opaque) {
-                fg = tile.fg
+            // if (tile.opaque) {
+            //     fg = tile.fg
 
-
-            } else {
-                fg = COLORS.INVISIBLE_TILE;
-            }
+            // } else {
+            //     fg = COLORS.INVISIBLE_TILE;
+            // }
+            bg = COLORS.BLACK;
+            fg = COLORS.INVISIBLE_TILE;
         }
 
         if (tile.opaque) {
             bg = tile.bg;
         }
 
+
+        if (!tile.visible && (tile.type === "BOUNDARY" || tile.type === "WALL")) {
+            bg = COLORS.DARK_GREY;
+            fg = COLORS.MID_GREY;
+        }
         // if(tile.indestructable) {
         //     fg = COLORS.WHITE;
         //     bg = COLORS.WHITE;
