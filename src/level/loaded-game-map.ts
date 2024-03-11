@@ -65,6 +65,7 @@ export class LoadedGameMap extends GameMap {
                     case "x":
                         const spotTile = new Tile(x, y, "FLOOR");
                         spotTile.symbol = "x";
+                        spotTile.fg = COLORS.LIGHT_GOLD;
                         this.setTile(spotTile);
                         break;
                     case " ":

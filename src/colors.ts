@@ -36,6 +36,7 @@ export const COLORS = {
     RAINBOW_4: "#0000ff",
     RAINBOW_5: "#8b00ff",
 
+    LIGHT_GOLD: "#ffcc00",
     GOLD: "#ffd700",
 
 
