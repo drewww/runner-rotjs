@@ -240,7 +240,7 @@ export class LevelController implements Drawable {
                                     });
                                     setTimeout(() => {
                                         this.overlays?.startLayerFade("path-to-exit", 1000, 10, 0.9);
-                                    }, 1000);
+                                    }, 3000);
                                 }
                             }
 
@@ -308,7 +308,7 @@ export class LevelController implements Drawable {
                 if (!this.overlays) { return; }
 
                 this.overlays.startLayerFade("button-pathing", 1000, 10, 0.9);
-            }, 1000);
+            }, 5000);
 
             button.discovered = true;
             button.visible = true;
@@ -417,6 +417,8 @@ export class LevelController implements Drawable {
         }
 
         if (tile.opaque) {
+            bg = tile.bg;
+        } else if(tile.type === "EXIT") {
             bg = tile.bg;
         }
 
