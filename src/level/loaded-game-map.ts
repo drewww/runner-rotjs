@@ -175,7 +175,7 @@ const levels: { [key: string]: StaticLevel } = {
             "6": `You won't always have time to wait for your moves to cooldown; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) Jump off wall%c{} on this wall to get past these sentries.`,
             "7": `Nominal performance. Let's try your last two moves.`,
             "8": `Dead end? Not for you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{} to dig through the wall south.`,
-            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them.`,
+            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to    jump over them. Be patient.`,
             "A": `Now, meet your antagonist. The %c{${COLORS.LIGHT_LASER_RED}}HUNTER%c{}. It's relentless, and  can sense you from any distance.`,
             "B": `%c{${COLORS.LIGHT_LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
             "C": `Acceptable job, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. Don't embarrass me on the job.`,

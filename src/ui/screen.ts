@@ -37,5 +37,7 @@ export abstract class Screen implements Drawable {
 
     public disable(): void {
         for (const element of this.elements) { element.disable(); }
+
+        this.disabled = true;
     }
 }
