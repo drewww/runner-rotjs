@@ -37,7 +37,7 @@ export class GameScreen extends Screen {
         // careful, the height here relates to the screen height.
         this.overlays = new Overlays(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        this.level = new LevelController(levelType, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
+        this.level = new LevelController(levelType, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, 0, this.overlays);
         this.level.x = 1;
         this.level.y = 1;
         this.x = 0;
@@ -62,13 +62,28 @@ export class GameScreen extends Screen {
          // absolutely heinous but 
          if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
             const hunter = this.level.getBeings().find((being) => being instanceof Hunter) as Hunter;    
-            
+            hunter.resetMoveListeners();
+
             if(hunter && !hunter.active()) { return; }
             if(this.level.type===LevelType.TUTORIAL) { return; }
 
             this.hunterDetect = true;
 
-            const text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR`;
+
+            var text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR`
+            if(this.player!.depth===-1) {
+                hunter.enableJuggernaut();
+                text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR [JUGGERNAUT MODE]`;
+
+            } else {
+                hunter.disableJuggernaut();
+            }
+
+            hunter.addMoveListener((hunter: Hunter) => {
+                this.level.player!.updateVision();
+                this.draw(display, xOffset, yOffset);
+            });
+
             const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, text , COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
             this.elements.push(textBox);
             this.currentTriggerTextBox = textBox;

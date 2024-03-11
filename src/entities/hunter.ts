@@ -4,6 +4,7 @@ import { Enemy } from './enemy';
 import { Point } from '..';
 import { Door } from '../level/door';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
+import { Tile } from '../level/tile';
 
 export class Hunter extends Enemy {
     protected map: GameMap;
@@ -13,6 +14,8 @@ export class Hunter extends Enemy {
 
     protected doorCountdown: number;
     protected pointsInVision: Point[];
+    juggernaut: boolean = false;
+    listeners: Function[] = [];
 
     constructor(x:number, y:number, map: GameMap) {
         super(x, y);
@@ -25,6 +28,22 @@ export class Hunter extends Enemy {
         this.pointsInVision = [];
     }
 
+    resetMoveListeners() {
+        this.listeners = [];
+    }
+
+    addMoveListener(callback: Function) {
+        this.listeners.push(callback);
+    }
+
+    enableJuggernaut(): void {
+        this.juggernaut = true;
+    }
+
+    disableJuggernaut(): void {
+        this.juggernaut = false;
+    }
+
     queueNextMove(): void {
         const playerPoint = this.map.getPlayerLocation();
         console.log(`queueing next move with hunter at : ${this.x},${this.y} and player at ${playerPoint.x},${playerPoint.y}`);
@@ -34,6 +53,14 @@ export class Hunter extends Enemy {
             // console.log(`${x},${y}`);
             if(tile) {
                 // consider doors "passable"
+                if(this.juggernaut) {
+                    if(tile.type==="BOUNDARY") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
                 if(tile.type=="DOOR" || tile.type=="ENTRANCE") {
                     return true;
                 } else {
@@ -88,7 +115,24 @@ export class Hunter extends Enemy {
                 }
             }
 
+            if(this.juggernaut) {
+                // knock down any walls.
+                const nextTile = this.map.getTile(this.x + this.nextMove.x, this.y + this.nextMove.y);
+
+                if(nextTile.type === "WALL" || nextTile.type === "DOOR") {
+                    const newTile = new Tile(nextTile.x, nextTile.y, "FLOOR");
+                    newTile.symbol = "$";
+                    this.map.setTile(newTile);
+                }
+            }
+
             this.move(this.nextMove.x, this.nextMove.y);
+
+            this.listeners.forEach(listener => {
+                listener(this);
+            });
+
+            
             this.updateVision();
             // this is probably wrong idk
             this.queueNextMove();

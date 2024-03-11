@@ -16,7 +16,7 @@ export const COLORS = {
 
     
 
-    LASER_RED: "#a80d02",
+    LASER_RED: "#a81d12",
     LIGHT_LASER_RED: "#fea7a1",
     
     INVISIBLE_TILE: "#333333",

@@ -13,7 +13,7 @@ export class StatusBar extends UIBox {
     }
 
     draw(display: ROT.Display, xOffset:number, yOffset:number): void {
-        console.log("DRAWING STATUS BAR");
+        // console.log("DRAWING STATUS BAR");
         const health = this.player.health;
 
         //fill entire background first
