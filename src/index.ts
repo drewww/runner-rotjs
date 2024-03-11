@@ -18,7 +18,7 @@ export type Rect = {
 
 export type Light = {
     p: Point,
-    intensity: number,
+    distance: number,
     color: string
     being: Being
 }

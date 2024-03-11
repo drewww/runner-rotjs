@@ -246,7 +246,7 @@ export class Player extends Being {
             for (let step of option.moves) {
                 const light: Light = {
                     p: {x: this.x + step.x, y: this.y + step.y},
-                    intensity: 1,
+                    distance: 1,
                     color: COLORS.MOVE_LIGHT_BLUE,
                     being: this
                 };

@@ -562,7 +562,7 @@ export class LevelController implements Drawable {
 
             lightMap[key] = {
                 p: { x: parseInt(key.split(",")[0]), y: parseInt(key.split(",")[1]) },
-                intensity: 10, color: bg, being: firstBeing
+                distance: 10, color: bg, being: firstBeing
             };
         }
 
