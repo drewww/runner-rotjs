@@ -75,7 +75,7 @@ export class GameScreen extends Screen {
             if(this.player!.depth===-1) {
                 hunter.enableJuggernaut();
                 // text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR  //////[%c{${COLORS.MID_LASER_RED}}J%c{${COLORS.LASER_RED}}U%c{${COLORS.MID_LASER_RED}}G%c{${COLORS.LASER_RED}}G%c{${COLORS.MID_LASER_RED}}E%c{${COLORS.LASER_RED}}R%c{${COLORS.MID_LASER_RED}}N%c{${COLORS.LASER_RED}}A%c{${COLORS.MID_LASER_RED}}U%c{${COLORS.LASER_RED}}T%c{${COLORS.LASER_RED}} MODE //////`;
-                text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR   $$$$$%c{${COLORS.MID_LASER_RED}}JUG%c{${COLORS.LASER_RED}}GER%c{${COLORS.MID_LASER_RED}}NAU%c{${COLORS.LASER_RED}}T MODE] $$$$$`;
+                text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR   $$$$$%c{${COLORS.MID_LASER_RED}}JUG%c{${COLORS.LASER_RED}}GER%c{${COLORS.MID_LASER_RED}}NAU%c{${COLORS.LASER_RED}}T MODE $$$$$`;
 
             } else {
                 hunter.disableJuggernaut();
@@ -364,7 +364,7 @@ export class GameScreen extends Screen {
                     this.triggered.push(trigger.trigger);
                     // console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
 
-                    const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
+                    const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, false, 0, 20);
                     this.elements.push(textBox);
                     this.currentTriggerTextBox = textBox;
 
