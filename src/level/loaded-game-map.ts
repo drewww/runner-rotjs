@@ -102,7 +102,7 @@ export class LoadedGameMap extends GameMap {
                         const amuletTile = new Tile(x, y, "FLOOR");
                         amuletTile.symbol = "*";
                         amuletTile.fg = COLORS.GOLD;
-                        amuletTile.bg = COLORS.GOLD;
+                        amuletTile.bg = COLORS.DARK_GREY;
                         amuletTile.triggerMetadata = { trigger: tileChar, text: staticMap.text[tileChar] };
                         this.setTile(amuletTile);
                         break;

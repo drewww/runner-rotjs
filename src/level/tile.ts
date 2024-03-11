@@ -44,7 +44,7 @@ export class Tile {
 
     protected callbacks: {[key:string]: Function[]} = {};
     
-    public triggerMetadata: {trigger: string, text: strin44g} | null;
+    public triggerMetadata: {trigger: string, text: string} | null;
 
     constructor(x:number, y:number, type:string, procGenType:string="unknown") {
         this.x = x;

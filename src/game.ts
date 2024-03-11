@@ -31,8 +31,6 @@ export class Game implements IGame {
     mapExploreScreen!: MapExploreScreen;
     tutorialScreen!: GameScreen; 
 
-    hunterDetect: boolean = false;
-
     constructor() {
         console.log("Game created!");
         

@@ -26,7 +26,7 @@ export class GameScreen extends Screen {
     overlays: Overlays;
     triggered: string[] = [];
     currentTriggerTextBox: TextBox | undefined;
-    hunterDetect: any;
+    hunterDetect: boolean = false;
 
     constructor(game: IGame, levelType: LevelType) {
         super();
@@ -61,6 +61,7 @@ export class GameScreen extends Screen {
 
          // absolutely heinous but 
          if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
+            console.log("HUNTER_CREATED - ALERT")
             const hunter = this.level.getBeings().find((being) => being instanceof Hunter) as Hunter;    
             hunter.resetMoveListeners();
 
@@ -69,11 +70,12 @@ export class GameScreen extends Screen {
 
             this.hunterDetect = true;
 
-
+            console.log("depth: " + this.level.player!.depth + "  " + this.level.type);
             var text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR`
             if(this.player!.depth===-1) {
                 hunter.enableJuggernaut();
-                text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR [JUGGERNAUT MODE]`;
+                // text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR  //////[%c{${COLORS.MID_LASER_RED}}J%c{${COLORS.LASER_RED}}U%c{${COLORS.MID_LASER_RED}}G%c{${COLORS.LASER_RED}}G%c{${COLORS.MID_LASER_RED}}E%c{${COLORS.LASER_RED}}R%c{${COLORS.MID_LASER_RED}}N%c{${COLORS.LASER_RED}}A%c{${COLORS.MID_LASER_RED}}U%c{${COLORS.LASER_RED}}T%c{${COLORS.LASER_RED}} MODE //////`;
+                text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR   $$$$$%c{${COLORS.MID_LASER_RED}}JUG%c{${COLORS.LASER_RED}}GER%c{${COLORS.MID_LASER_RED}}NAU%c{${COLORS.LASER_RED}}T MODE] $$$$$`;
 
             } else {
                 hunter.disableJuggernaut();
@@ -259,6 +261,8 @@ export class GameScreen extends Screen {
     advanceDepth(): void {
         this.triggered = [];
         this.level.player!.depth++;
+        this.hunterDetect = false;
+
         console.log("ADVANCING TO DEPTH: " + this.level.player!.depth);
         if (this.level.player!.depth >= 0) {
             this.game.switchState(GameState.WINSCREEN);

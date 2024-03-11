@@ -16,7 +16,9 @@ export const COLORS = {
 
     
 
+
     LASER_RED: "#a81d12",
+    MID_LASER_RED: "#c3120e",
     LIGHT_LASER_RED: "#fea7a1",
     
     INVISIBLE_TILE: "#333333",
@@ -52,7 +54,8 @@ export const COLORS = {
         "#FAFFFE",
         "#FCFDFA",
         "#FCFAFF",
-        "#FDDFFD",
-        "#DFDFDF"
+        "#F8F8F8",
+        "#FBDFDF",
+        "#D0D0D0",
     ]
 };
