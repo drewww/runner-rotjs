@@ -703,7 +703,42 @@ export class LevelController implements Drawable {
 
                 player.takeDamage(1);
                 player.interruptMoveChain();
+            } else {
+                console.log("no enemy seeing your movement");
+
+                // if they moved more than one space, animate it.
+                const distance = Math.sqrt(Math.pow(Math.abs(player.x - player.lastPosition.x), 2) +
+                    Math.pow(Math.abs(player.y - player.lastPosition.y), 2));
+                
+                    if(distance >= 2) {
+                        this.overlays?.addLayer("player-move");
+                        var timesCalled = 0;
+
+                        const path = new ROT.Path.AStar(player.x, player.y, (x, y) => {
+                            // ignore the actual map, the point is not to show the path just to make an animation
+                            return true;
+                        });
+
+                        path.compute(player.lastPosition.x, player.lastPosition.y, (x, y) => {
+                            timesCalled++;
+                            setTimeout(() => {
+                                if (!this.overlays) { return; }
+
+                                this.overlays.setValueOnLayer("player-move", x, y, COLORS.MOVE_LIGHT_BLUE + "80");
+                                this.overlays.draw();
+                            }, timesCalled * 20);
+                        });
+
+                        setTimeout(() => {
+                            if (!this.overlays) { return; }
+
+                            this.overlays.startLayerFade("player-move", 1000, 10, 0.9);
+                        }, 140);
+                    }
             }
+
+
+
         });
     }
 
