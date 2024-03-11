@@ -67,12 +67,20 @@ export class Overlays {
     setValueOnLayer(name: string, x: number, y: number, color: string) {
         const layer = this.layers[name];
 
+        if(x > this.width || y > this.height || x < 0 || y < 0) {
+            return;
+        }   
+
         if (layer) {
             this.setValue(layer, x, y, color);
         }
     }
 
     setValue(layer: string[], x: number, y: number, color: string) {
+        if(x > this.width || y > this.height || x < 0 || y < 0) {
+            return;
+        }   
+        
         layer[x + y * this.width] = color;
     }
 
