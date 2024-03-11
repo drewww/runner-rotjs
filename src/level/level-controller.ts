@@ -43,7 +43,7 @@ export class LevelController implements Drawable {
     public type: LevelType;
 
     // put the logic for different types of levels in here
-    constructor(type: LevelType, w: number, h: number, overlays: Overlays | null = null) {
+    constructor(type: LevelType, w: number, h: number, difficulty:number=0, overlays: Overlays | null = null) {
         this.beings = [];
 
         this.w = w;
@@ -106,7 +106,7 @@ export class LevelController implements Drawable {
                 break;
 
             case LevelType.EDGE_ROOM:
-                this.map = new EdgeRoomGameMap(this.w, this.h, 0);
+                this.map = new EdgeRoomGameMap(this.w, this.h, difficulty);
                 this.map.getBeings().forEach(being => {
                     this.addBeing(being);
                 });
@@ -591,7 +591,7 @@ export class LevelController implements Drawable {
 
         if (this.type === LevelType.TUTORIAL) {
             this.player.depth = -5;
-        } else {
+        } else if(this.type===LevelType.VAULT) {
             this.player.depth = -4;
         }
 

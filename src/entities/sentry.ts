@@ -1,4 +1,5 @@
 import { Point } from "..";
+import { COLORS } from "../colors";
 import { Enemy } from "./enemy";
 
 
@@ -9,6 +10,7 @@ export class SentryBot extends Enemy {
         this.symbol = "s";
         this.facing = angle;
         this.range = 20;
+        this.bg = COLORS.WHITE;
     }
 
     act() :void {

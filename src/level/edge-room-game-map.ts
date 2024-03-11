@@ -1,5 +1,6 @@
 import { Point, Rect } from "..";
 import { PatrolBot } from "../entities/patrol-bot";
+import { SentryBot } from "../entities/sentry";
 import { Button } from "./button";
 import { Door } from "./door";
 import { GameMap } from "./game-map";
@@ -205,7 +206,7 @@ export class EdgeRoomGameMap extends GameMap {
         var pathingPoints: Point[] = [];
 
         // TODO don't let buttons go on the original procgen walls
-        const wallTiles = this.tiles.filter(tile => tile.type === "WALL" && tile.procGenType !== "PARTITION");
+        let wallTiles = this.tiles.filter(tile => tile.type === "WALL" && tile.procGenType !== "PARTITION");
         // randomly replace 3 of them with buttons
         for (let i = 0; i < 3; i++) {
             const randomIndex = Math.floor(Math.random() * wallTiles.length);
@@ -427,17 +428,33 @@ export class EdgeRoomGameMap extends GameMap {
         // for each junction point, travel in each cardinat direction until we hit a boundary or another junction point or a visited point.
         // first just place enemies randomly
         // compute a* pathing distance to all the tiles and make sure there are no bots immediately near you at the start
-        for (var i = 0; i < 15; i++) {
-            const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" || tile.solid));
+        const roomTiles = this.getAllTiles().filter(tile => !(tile.procGenType == "HALLWAY" || tile.solid));
+
+        console.log("DIFFICULTY: " + difficulty);
+
+        for (var i = 0; i < 10 + (difficulty*5); i++) {
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
+
+            //if enemyCell distance to entrancePoint is less than 5, skip it
+            if (Math.abs(enemyCell.x - entrancePoint.x) + Math.abs(enemyCell.y - entrancePoint.y) < 5) {
+                continue;
+            }
+
+            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
+            roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
+        }
+
+        wallTiles = this.getAllTiles().filter(tile => (tile.solid && tile.type==="WALL"));
+        for (var i = 0; i < ((difficulty> 0) ? 10 : 0); i++) {
+            const enemyCell = wallTiles[Math.floor(Math.random() * wallTiles.length)];
 
             //if enemyCell distance to entrancePoint is less than 5, skip it
             if (Math.abs(enemyCell.x - entrancePoint.x) + Math.abs(enemyCell.y - entrancePoint.y) < 3) {
                 continue;
             }
 
-            this.beings.push(new PatrolBot(enemyCell.x, enemyCell.y));
-            roomTiles.splice(roomTiles.indexOf(enemyCell), 1);
+            this.beings.push(new SentryBot(enemyCell.x, enemyCell.y));
+            wallTiles.splice(wallTiles.indexOf(enemyCell), 1);
         }
     }
 

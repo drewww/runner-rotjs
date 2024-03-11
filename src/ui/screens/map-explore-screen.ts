@@ -12,6 +12,8 @@ export class MapExploreScreen extends Screen {
     levelType: LevelType;
     overlays: Overlays;
 
+    difficulty: number = 1;
+
     constructor(game: IGame) {
         super();
 
@@ -25,7 +27,7 @@ export class MapExploreScreen extends Screen {
         this.level = this.generateLevelType(this.levelType);
     }
 
-    generateLevel(typeString: string) {
+    generateLevel(typeString: string)  {
         const type = LevelType[typeString as keyof typeof LevelType];
         return this.generateLevelType(type);
     }
@@ -40,7 +42,7 @@ export class MapExploreScreen extends Screen {
 
         // careful, the height here relates to the screen height.
         // match the dimensions of the "normal" view which has the menu UI on the right
-        const level = new LevelController(type, SCREEN_WIDTH - 20, SCREEN_HEIGHT);
+        const level = new LevelController(type, SCREEN_WIDTH - 20, SCREEN_HEIGHT, this.difficulty);
         level.map.getAllTiles().forEach((tile: Tile) => {
             tile.discovered = true;
             tile.visible = true;

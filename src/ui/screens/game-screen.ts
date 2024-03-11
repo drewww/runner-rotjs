@@ -244,6 +244,7 @@ export class GameScreen extends Screen {
     advanceDepth(): void {
         this.triggered = [];
         this.level.player!.depth++;
+        console.log("ADVANCING TO DEPTH: " + this.level.player!.depth);
         if (this.level.player!.depth >= 0) {
             this.game.switchState(GameState.WINSCREEN);
         } else {
@@ -251,11 +252,11 @@ export class GameScreen extends Screen {
             // prepare another level.
             var newLevel;
             if(this.level.player!.depth>=-3) {
-                newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
+                newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth+3, this.overlays);
             } else {
-                newLevel = new LevelController(LevelType.VAULT, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.overlays);
+                newLevel = new LevelController(LevelType.VAULT, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth+3, this.overlays);
             }
-            
+
             newLevel.x = 1;
             newLevel.y = 1;
 
