@@ -2,7 +2,6 @@ import { COLORS } from "../../colors";
 import { TextBox } from "../elements/text-box";
 import { Screen } from "../screen";
 import * as ROT from "rot-js"; // Import the 'ROT' module
-import { InstructionBox } from "../elements/instruction-box";
 import { SCREEN_HEIGHT } from "../..";
 
 export class TitleScreen extends Screen {
@@ -15,8 +14,8 @@ export class TitleScreen extends Screen {
         this.elements.push(new TextBox(4, 2, 20, 5, "RUNNER", COLORS.MOVE_LIGHT_BLUE, COLORS.BLACK, true, 0, 50));
         this.elements.push(new TextBox(4, 3, 20, 5, "------", COLORS.WHITE, COLORS.WHITE, true, 0, 50));
 
-        this.elements.push(new TextBox(4, 5, 40, 5, "a cyberpunk escape roguelike", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
-        // this.elements.push(new TextBox(4, 6, 20, 5, "by ", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
+        this.elements.push(new TextBox(5, 5, 40, 5, "a cyberpunk escape roguelike", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
+        this.elements.push(new TextBox(5, 6, 20, 5, "by drew harry", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
 
         this.elements.push(new TextBox(4, this.height - 4, 40, 5, `  press %c{${COLORS.MOVE_LIGHT_BLUE}}any key%c{} to play`, COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
         this.elements.push(new TextBox(4, this.height - 3, 40, 5, "  press [t] to tutorial", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
