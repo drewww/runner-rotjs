@@ -42,7 +42,9 @@ export class Game implements IGame {
             // fontSize: 14,
             forceSquareRatio: true,
         });
-        document.body.appendChild(<Node>this.display.getContainer());
+
+        const displayNode = <Node>this.display.getContainer();
+        document.body.appendChild(displayNode);
         this.display.getContainer()!.id="game"
 
         // const canvas = this.display.getContainer();
@@ -124,13 +126,18 @@ export class Game implements IGame {
                 // this.switchState(GameState.GAME);
                 // nice idea, but need to fully regenerate the game state
                 // to restart. TBD.
+                window.location.reload();
                 break;
             case GameState.WINSCREEN:
-                if(e.keyCode == ROT.KEYS.VK_ESCAPE) {
-                    this.switchState(GameState.TITLE);
-                } else {
-                    this.mapExploreScreen.generateLevel("DEBUG");
-                }
+
+                // if(e.keyCode == ROT.KEYS.VK_ESCAPE) {
+                // } else {
+                //     //wtf is this?
+                //     this.mapExploreScreen.generateLevel("DEBUG");
+                // }
+                window.location.reload();
+
+                break;
         }
 
         // regardless, give the screen a chance to deal with it.
@@ -178,5 +185,5 @@ export class Game implements IGame {
     }
 }
 
-export const G = new Game();
+export var G = new Game();
 G.init();
