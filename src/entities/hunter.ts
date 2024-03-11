@@ -54,6 +54,12 @@ export class Hunter extends Enemy {
             if(tile) {
                 // consider doors "passable"
                 if(this.juggernaut) {
+
+                    // test against beings too
+                    if(this.level?.getBeings().find(being => !(being instanceof Hunter) && being.x == x && being.y == y)) {
+                        return false;
+                    }
+
                     if(tile.type==="BOUNDARY") {
                         return false;
                     } else {
@@ -132,7 +138,7 @@ export class Hunter extends Enemy {
                 listener(this);
             });
 
-            
+
             this.updateVision();
             // this is probably wrong idk
             this.queueNextMove();
