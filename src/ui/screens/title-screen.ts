@@ -3,6 +3,7 @@ import { TextBox } from "../elements/text-box";
 import { Screen } from "../screen";
 import * as ROT from "rot-js"; // Import the 'ROT' module
 import { InstructionBox } from "../elements/instruction-box";
+import { SCREEN_HEIGHT } from "../..";
 
 export class TitleScreen extends Screen {
     player: SimpleEntity;
@@ -11,13 +12,13 @@ export class TitleScreen extends Screen {
     constructor() {
         super();
 
-        this.elements.push(new TextBox(4, 2, 20, 5, "RUNNER", COLORS.WHITE, COLORS.BLACK, true, 0, 50));
+        this.elements.push(new TextBox(4, 2, 20, 5, "RUNNER", COLORS.MOVE_LIGHT_BLUE, COLORS.BLACK, true, 0, 50));
         this.elements.push(new TextBox(4, 3, 20, 5, "------", COLORS.WHITE, COLORS.WHITE, true, 0, 50));
 
         this.elements.push(new TextBox(4, 5, 40, 5, "a cyberpunk escape roguelike", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
         // this.elements.push(new TextBox(4, 6, 20, 5, "by ", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
 
-        this.elements.push(new TextBox(4, this.height - 4, 40, 5, "  press [p] to play", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
+        this.elements.push(new TextBox(4, this.height - 4, 40, 5, `  press %c{${COLORS.MOVE_LIGHT_BLUE}}any key%c{} to play`, COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
         this.elements.push(new TextBox(4, this.height - 3, 40, 5, "  press [t] to tutorial", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
         // this.elements.push(new TextBox(4, this.height -2, 40, 5, "  press [i] for instructions", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
 
@@ -36,6 +37,8 @@ export class TitleScreen extends Screen {
     public draw(display: any, xOffset: number = 0, yOffset: number = 0) {
         display.clear();
         super.draw(display, xOffset, yOffset);
+        this.drawBackground(display, xOffset, yOffset);
+
 
 
         if (this.disabled) { return; }
@@ -63,12 +66,31 @@ export class TitleScreen extends Screen {
             }
         }, 200);
 
+
         if (!this.disabled) {
             setTimeout(() => {
                 if(this.disabled) { return; }
                 this.draw(display, xOffset, yOffset);
             }, 250);
         }
+    }
+
+    drawBackground(display: any, xOffset: number = 0, yOffset: number = 0) {
+        // draw top and button walls
+        for (let x = 0; x < this.width; x++) {
+            display.draw(x + xOffset, yOffset+15, '#', COLORS.MID_GREY, COLORS.WHITE);
+            display.draw(x + xOffset, this.height + yOffset-15, '#', COLORS.MID_GREY, COLORS.WHITE);
+
+            for(let y = 16; y < this.height-15; y++) {
+                display.draw(x + xOffset, y + yOffset, '.', COLORS.WHITE, COLORS.BLACK);
+            }
+        }
+
+        // for (let y = 0; y < this.height; y++) {
+        //     for (let x = 0; x < this.width; x++) {
+        //         display.draw(x + xOffset, y + yOffset, '.', COLORS.DARK_GREY, COLORS.DARK_GREY);
+        //     }
+        // }
     }
 
     drawHunter(dX: number, dY: number, display: any, xOffset: number = 0, yOffset: number = 0) {
@@ -82,7 +104,7 @@ export class TitleScreen extends Screen {
                 if (i == 0 && j == 0) { continue; }
 
                 const distance = Math.sqrt(Math.pow(i, 2) + Math.pow(j, 2));
-                console.log(distance);
+                // console.log(distance);
 
                 const startColor = ROT.Color.fromString(COLORS.LASER_RED);
                 var color = startColor;
@@ -123,7 +145,6 @@ export class TitleScreen extends Screen {
 
     disable() {
         super.disable();
-        this.entities = [];
     }
 }
 
@@ -145,7 +166,7 @@ class SimpleEntity {
 
     move(dx: number, dy: number) {
 
-        if (this.y + dy < 5 || this.y + dy > 35) {
+        if (this.y + dy < 18 || this.y + dy > SCREEN_HEIGHT - 18) {
             return;
         }
 

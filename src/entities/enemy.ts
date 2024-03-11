@@ -23,7 +23,7 @@ export abstract class Enemy extends Being {
             const startColor = ROT.Color.fromString(COLORS.LASER_RED);
             var color = startColor;
             for(var i=1; i<distance; i++) { 
-                color = ROT.Color.multiply(color, ROT.Color.fromString("#DDDDDD"));
+                color = ROT.Color.multiply(color, ROT.Color.fromString("#F0F0F0"));
             }
 
             return {

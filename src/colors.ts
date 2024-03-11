@@ -33,8 +33,8 @@ export const COLORS = {
     RAINBOW_1: "#ff7f00",
     RAINBOW_2: "#ffff00",
     RAINBOW_3: "#00ff00",
-    RAINBOW_4: "#0000ff",
-    RAINBOW_5: "#8b00ff",
+    RAINBOW_4: "#3333ff",
+    RAINBOW_5: "#8b33ff",
 
     LIGHT_GOLD: "#ffcc00",
     GOLD: "#ffd700",
