@@ -38,56 +38,61 @@ export class TitleScreen extends Screen {
         super.draw(display, xOffset, yOffset);
 
 
+        if (this.disabled) { return; }
+        // paint every adjacent tile LASER_RED as well
+
+        var dX = 1;
+        const dY = Math.floor(Math.random() * 3) - 1;
+
+        this.player.move(dX, dY);
+
+        display.draw(this.player.x + xOffset, this.player.y + yOffset, this.player.symbol, this.player.fg, this.player.bg);
+
+        if (this.player.x > this.width) {
+            this.player.x = 0;
+        }
+
+        this.drawHunter(dX, dY, display, xOffset, yOffset);
+
+        setTimeout(() => {
             if(this.disabled) { return; }
-            // paint every adjacent tile LASER_RED as well
-
-            var dX = 1;
-            const dY = Math.floor(Math.random() * 3)-1;
-
-            this.player.move(dX, dY);
-            
-            display.draw(this.player.x + xOffset, this.player.y + yOffset, this.player.symbol, this.player.fg, this.player.bg);
-
-            if(this.player.x > this.width) {
-                this.player.x = 0;
-            }
-
             this.drawHunter(dX, dY, display, xOffset, yOffset);
-           
-            setTimeout( () => {
-                this.drawHunter(dX, dY, display, xOffset, yOffset);
-                this.hunter.move(dX, dY);
-                if(this.hunter.x > this.width) {
-                    this.hunter.x = 0;
-                }
-            }, 200);
+            this.hunter.move(dX, dY);
+            if (this.hunter.x > this.width) {
+                this.hunter.x = 0;
+            }
+        }, 200);
 
         if (!this.disabled) {
             setTimeout(() => {
+                if(this.disabled) { return; }
                 this.draw(display, xOffset, yOffset);
             }, 250);
         }
     }
 
     drawHunter(dX: number, dY: number, display: any, xOffset: number = 0, yOffset: number = 0) {
-            display.draw(this.hunter.x + xOffset, this.hunter.y + yOffset, this.hunter.symbol, COLORS.WHITE, COLORS.LASER_RED);
 
-            for (let i = -2; i < 3; i++) {
-                for (let j = -2; j < 3; j++) {
-                    if(i==0 && j==0) { continue; }
+        if (this.disabled) { return; }
 
-                        const distance = Math.sqrt(Math.pow(i, 2) + Math.pow(j, 2));
-                        console.log(distance);
+        display.draw(this.hunter.x + xOffset, this.hunter.y + yOffset, this.hunter.symbol, COLORS.WHITE, COLORS.LASER_RED);
 
-                        const startColor = ROT.Color.fromString(COLORS.LASER_RED);
-                        var color = startColor;
-                        for(var k=0; k<distance; k++) { 
-                            color = ROT.Color.multiply(color, ROT.Color.fromString("#DDDDDD"));
-                        }
+        for (let i = -2; i < 3; i++) {
+            for (let j = -2; j < 3; j++) {
+                if (i == 0 && j == 0) { continue; }
 
-                        display.draw(this.hunter.x + xOffset + i, this.hunter.y + yOffset + j, "-", ROT.Color.toRGB(color), ROT.Color.toRGB(color));
+                const distance = Math.sqrt(Math.pow(i, 2) + Math.pow(j, 2));
+                console.log(distance);
+
+                const startColor = ROT.Color.fromString(COLORS.LASER_RED);
+                var color = startColor;
+                for (var k = 0; k < distance; k++) {
+                    color = ROT.Color.multiply(color, ROT.Color.fromString("#DDDDDD"));
                 }
+
+                display.draw(this.hunter.x + xOffset + i, this.hunter.y + yOffset + j, "-", ROT.Color.toRGB(color), ROT.Color.toRGB(color));
             }
+        }
     }
 
     handleEvent(event: KeyboardEvent): void {
@@ -139,6 +144,11 @@ class SimpleEntity {
     }
 
     move(dx: number, dy: number) {
+
+        if (this.y + dy < 5 || this.y + dy > 35) {
+            return;
+        }
+
         this.x += dx;
         this.y += dy;
     }
