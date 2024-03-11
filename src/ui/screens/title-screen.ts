@@ -44,10 +44,33 @@ export class TitleScreen extends Screen {
             var dX = 1;
             const dY = Math.floor(Math.random() * 3)-1;
 
-            this.hunter.move(dX, dY);
             this.player.move(dX, dY);
             
             display.draw(this.player.x + xOffset, this.player.y + yOffset, this.player.symbol, this.player.fg, this.player.bg);
+
+            if(this.player.x > this.width) {
+                this.player.x = 0;
+            }
+
+            this.drawHunter(dX, dY, display, xOffset, yOffset);
+           
+            setTimeout( () => {
+                this.drawHunter(dX, dY, display, xOffset, yOffset);
+                this.hunter.move(dX, dY);
+                if(this.hunter.x > this.width) {
+                    this.hunter.x = 0;
+                }
+            }, 200);
+
+        if (!this.disabled) {
+            setTimeout(() => {
+                this.draw(display, xOffset, yOffset);
+            }, 250);
+        }
+    }
+
+    drawHunter(dX: number, dY: number, display: any, xOffset: number = 0, yOffset: number = 0) {
+            display.draw(this.hunter.x + xOffset, this.hunter.y + yOffset, this.hunter.symbol, COLORS.WHITE, COLORS.LASER_RED);
 
             for (let i = -2; i < 3; i++) {
                 for (let j = -2; j < 3; j++) {
@@ -65,21 +88,6 @@ export class TitleScreen extends Screen {
                         display.draw(this.hunter.x + xOffset + i, this.hunter.y + yOffset + j, "-", ROT.Color.toRGB(color), ROT.Color.toRGB(color));
                 }
             }
-            display.draw(this.hunter.x + xOffset, this.hunter.y + yOffset, this.hunter.symbol, COLORS.WHITE, COLORS.LASER_RED);
-
-            if(this.hunter.x > this.width) {
-                this.hunter.x = 0;
-            }
-
-            if(this.player.x > this.width) {
-                this.player.x = 0;
-            }
-
-        if (!this.disabled) {
-            setTimeout(() => {
-                this.draw(display, xOffset, yOffset);
-            }, 250);
-        }
     }
 
     handleEvent(event: KeyboardEvent): void {
