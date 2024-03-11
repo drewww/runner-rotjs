@@ -349,7 +349,7 @@ export class GameScreen extends Screen {
         this.player.addListener("move", (player: Player) => {
             // see if we need to trigger a notice
             const tile = this.level.map.getTile(this.player!.x, this.player!.y);
-            if (tile.triggerMetadata) {
+            if (tile && tile.triggerMetadata) {
                 const trigger: { trigger: string, text: string } = tile.triggerMetadata;
 
                 if (!this.triggered.includes(trigger.trigger)) {

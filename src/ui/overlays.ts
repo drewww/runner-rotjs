@@ -30,6 +30,7 @@ export class Overlays {
 
         // Create buffer canvas
         this.bufferCanvas = document.createElement("canvas");
+        this.bufferCanvas.id = "overlay-buffer";
         this.bufferCanvas.width = gameCanvas.width;
         this.bufferCanvas.height = gameCanvas.height;
 
@@ -39,6 +40,7 @@ export class Overlays {
 
         // Create visible canvas
         this.visibleCanvas = document.createElement("canvas");
+        this.visibleCanvas.id = "overlay-visible";
         this.visibleCanvas.width = gameCanvas.width;
         this.visibleCanvas.height = gameCanvas.height;
         this.visibleCanvas.style.backgroundColor = "rgba(0,0,0,0)";
