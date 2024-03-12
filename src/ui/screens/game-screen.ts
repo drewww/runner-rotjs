@@ -118,6 +118,7 @@ export class GameScreen extends Screen {
         keyMap[ROT.KEYS.VK_D] = 2;
         keyMap[ROT.KEYS.VK_C] = 3;
         keyMap[ROT.KEYS.VK_X] = 4;
+        keyMap[ROT.KEYS.VK_S] = 4;
         keyMap[ROT.KEYS.VK_Z] = 5;
         keyMap[ROT.KEYS.VK_A] = 6;
         keyMap[ROT.KEYS.VK_Q] = 7;
@@ -171,7 +172,7 @@ export class GameScreen extends Screen {
         }
 
 
-        if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
+        if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_SPACE) {
             // wait
             console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] wait`);
 

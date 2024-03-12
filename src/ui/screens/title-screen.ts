@@ -17,8 +17,8 @@ export class TitleScreen extends Screen {
         this.elements.push(new TextBox(5, 5, 40, 5, "a cyberpunk escape roguelike", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
         this.elements.push(new TextBox(5, 6, 20, 5, "by drew harry", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
 
-        this.elements.push(new TextBox(4, this.height - 4, 40, 5, `  press %c{${COLORS.MOVE_LIGHT_BLUE}}any key%c{} to play`, COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
-        this.elements.push(new TextBox(4, this.height - 3, 40, 5, "  press [t] to tutorial", COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
+        this.elements.push(new TextBox(4, this.height - 4, 40, 5, `  press %c{${COLORS.MOVE_LIGHT_BLUE}}any key%c{} to play     `, COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
+        this.elements.push(new TextBox(4, this.height - 3, 40, 5, `  press %c{${COLORS.MOVE_LIGHT_BLUE}}[t]%c{} to begin tutorial          `, COLORS.WHITE, COLORS.BLACK, true, 50 * 6, 25));
         // this.elements.push(new TextBox(4, this.height -2, 40, 5, "  press [i] for instructions", COLORS.WHITE, COLORS.BLACK, true, 50*6, 25));
 
         // this.scheduler = new ROT.Scheduler.Simple();

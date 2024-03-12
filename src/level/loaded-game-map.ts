@@ -167,8 +167,8 @@ const levels: { [key: string]: StaticLevel } = {
 
         text: {
             "0": `Welcome, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. I see you can move, at least.`,
-            "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{} to wait next to the door to open it.`,
-            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5/s)%c{#ffffff} to wait for an opportune moment to run past.`,
+            "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{} to wait next to the door to open it.`,
+            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait for an opportune moment to run past.`,
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
             "4": `This is where your implants come in handy. Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then select the direction.`,
             "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{} to get past them.`,
