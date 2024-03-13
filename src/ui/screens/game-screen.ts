@@ -299,6 +299,7 @@ export class GameScreen extends Screen {
             this.player!.resetCooldowns();
 
             this.level.setPlayer(this.player!);
+            this.setPlayer(this.player!);
             this.player!.updateVision();
 
             this.game.refreshDisplay();
