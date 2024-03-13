@@ -18,7 +18,7 @@ export type MoveOption = {
 export class MoveManager {
 
 
-    public static moveResults(level: LevelController, template: MoveTemplate, keyStyle: string): MoveOption[] {
+    public static moveResults(level: LevelController, move: Move, keyStyle: string): MoveOption[] {
         // this method will a list of points that this moveTemplate would
         // move the player to. expressed in player-relative vector locations.
 
@@ -26,8 +26,9 @@ export class MoveManager {
         // each list is a rotation of the first one
         // and the list of moves in order that the player will pass through
 
+        const template = move.template;
         const stepsInMove: Point[] = MoveManager.getAllPointsInMoves(template);
-        const validRotations: number[] = MoveManager.getValidRotationsForTemplate(level, template);
+        const validRotations: number[] = MoveManager.getValidRotationsForTemplate(level, move);
 
         const output: MoveOption[] = [];
 
@@ -86,7 +87,7 @@ export class MoveManager {
         return points;
     }
 
-    static getValidRotationsForTemplate(level: LevelController, template: MoveTemplate): number[] {
+    static getValidRotationsForTemplate(level: LevelController, move: Move): number[] {
         // for the given template and level return which rotations are valid.
         // (consider a version of this that shows where the templates are failing... people
         // may find it weird not knowing what are the options. or it may be that we end up
@@ -97,7 +98,7 @@ export class MoveManager {
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
 
-            const validRotation = MoveManager.checkValidRotation(level, template, i);  
+            const validRotation = MoveManager.checkValidRotation(level, move, i);  
 
             if (validRotation) {
                 // console.log("VALID ROTATION: " + i + " for template " + curTemplate + " on level " + level);
@@ -107,7 +108,9 @@ export class MoveManager {
         return output;
     }
 
-    static checkValidRotation(level: LevelController, template:MoveTemplate, rotation:number, shorten: number=0): boolean {
+    static checkValidRotation(level: LevelController, move:Move, rotation:number, shorten: number=0): boolean {
+
+        const template = move.template;
 
         var validRotation = false;
         var curTemplate: MoveTemplate = template;
@@ -121,6 +124,10 @@ export class MoveManager {
         const asymmetric = template[0].length > 1 &&
         (template[0].length % 2 == 0 ||
         (template[0].length % 2 == 1 && basePlayerLocation.x != Math.floor(template[0].length / 2)));
+
+        if(shorten > 0) {
+
+        }
 
         for (let flip = 0; flip < (asymmetric ? 2 : 1); flip++) {
             var validFlip = true;
