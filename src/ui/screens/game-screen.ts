@@ -10,6 +10,7 @@ import { Overlays } from "../overlays";
 import { TextBox } from "../elements/text-box";
 import { COLORS } from "../../colors";
 import { Hunter } from "../../entities/hunter";
+import { Door } from "../../level/door";
 
 const RIGHT_MENU_WIDTH: number = 20;
 
@@ -59,20 +60,20 @@ export class GameScreen extends Screen {
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
         super.draw(display, xOffset, yOffset);
 
-         // absolutely heinous but 
-         if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
+        // absolutely heinous but 
+        if (this.level.type !== LevelType.VAULT && !this.hunterDetect && this.level.getBeings().some((being) => being instanceof Hunter)) {
             console.log("HUNTER_CREATED - ALERT")
-            const hunter = this.level.getBeings().find((being) => being instanceof Hunter) as Hunter;    
+            const hunter = this.level.getBeings().find((being) => being instanceof Hunter) as Hunter;
             hunter.resetMoveListeners();
 
-            if(hunter && !hunter.active()) { return; }
-            if(this.level.type===LevelType.TUTORIAL) { return; }
+            if (hunter && !hunter.active()) { return; }
+            if (this.level.type === LevelType.TUTORIAL) { return; }
 
             this.hunterDetect = true;
 
             console.log("depth: " + this.level.player!.depth + "  " + this.level.type);
             var text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR`
-            if(this.player!.depth===-1) {
+            if (this.player!.depth === -1) {
                 hunter.enableJuggernaut();
                 // text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR  //////[%c{${COLORS.MID_LASER_RED}}J%c{${COLORS.LASER_RED}}U%c{${COLORS.MID_LASER_RED}}G%c{${COLORS.LASER_RED}}G%c{${COLORS.MID_LASER_RED}}E%c{${COLORS.LASER_RED}}R%c{${COLORS.MID_LASER_RED}}N%c{${COLORS.LASER_RED}}A%c{${COLORS.MID_LASER_RED}}U%c{${COLORS.LASER_RED}}T%c{${COLORS.LASER_RED}} MODE //////`;
                 text = `ALERT: %c{${COLORS.LASER_RED}}HUNTER ENTERING FLOOR   $$$$$%c{${COLORS.MID_LASER_RED}}JUG%c{${COLORS.LASER_RED}}GER%c{${COLORS.MID_LASER_RED}}NAU%c{${COLORS.LASER_RED}}T MODE $$$$$`;
@@ -86,7 +87,7 @@ export class GameScreen extends Screen {
                 this.draw(display, xOffset, yOffset);
             });
 
-            const textBox = new TextBox(this.player!.x+6, this.player!.y + 8, 30, 5, text , COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
+            const textBox = new TextBox(this.player!.x + 6, this.player!.y + 8, 30, 5, text, COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
             this.elements.push(textBox);
             this.currentTriggerTextBox = textBox;
 
@@ -216,11 +217,32 @@ export class GameScreen extends Screen {
         } else if (code in keyMap) {
 
             var diff = ROT.DIRS[8][keyMap[code]];
-            console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);
-            const didMove = this.level.player!.move(diff[0], diff[1]);
-            
-            if(!didMove) {releaseLockAfterHandling = false;}
-            this.level.player!.deselectMoves();
+            var didMove: boolean = false;
+
+            // check and see if we're bumping into a door. if we are, open it.
+            const targetTile = this.level.map.getTile(this.level.player!.x + diff[0], this.level.player!.y + diff[1]);
+            if (targetTile && targetTile.type === "DOOR") {
+                const door = <Door>targetTile;
+
+                if (!door.activated) {
+                    door.interact();
+                } else {
+                    // move into the open door instead
+                    didMove = this.level.player!.move(diff[0], diff[1]);
+                    if (!didMove) { releaseLockAfterHandling = false; }
+                    this.level.player!.deselectMoves();
+                }
+
+                releaseLockAfterHandling = true;
+            } else {
+
+
+                console.log(`[player @${this.level.player!.getPosition().x},${this.level.player!.getPosition().y}] move: ${diff[0]},${diff[1]}`);
+                const didMove = this.level.player!.move(diff[0], diff[1]);
+
+                if (!didMove) { releaseLockAfterHandling = false; }
+                this.level.player!.deselectMoves();
+            }
 
         } else if (code == ROT.KEYS.VK_ESCAPE) {
             this.level.player!.deselectMoves();
@@ -271,10 +293,10 @@ export class GameScreen extends Screen {
             this.level.disable();
             // prepare another level.
             var newLevel;
-            if(this.level.player!.depth>=-3) {
-                newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth+3, this.overlays);
+            if (this.level.player!.depth >= -3) {
+                newLevel = new LevelController(LevelType.EDGE_ROOM, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth + 3, this.overlays);
             } else {
-                newLevel = new LevelController(LevelType.VAULT, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth+3, this.overlays);
+                newLevel = new LevelController(LevelType.VAULT, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth + 3, this.overlays);
             }
 
             newLevel.x = 1;
@@ -347,13 +369,13 @@ export class GameScreen extends Screen {
         }
 
         this.resetPlayerListeners();
-       
+
     }
 
-    resetPlayerListeners() : void {
+    resetPlayerListeners(): void {
 
 
-        if(!this.player!.callbacks["act"] || this.player!.callbacks["act"].length === 0) {
+        if (!this.player!.callbacks["act"] || this.player!.callbacks["act"].length === 0) {
             this.player!.addListener("act", (player: Player) => {
                 this.engine.lock();
             });
@@ -389,11 +411,11 @@ export class GameScreen extends Screen {
 
                     // hack! but check and see if there's a stunned hunter and if the player has triggered A.
                     // if they have, activate it.
-                    if(trigger.trigger==="A") {
+                    if (trigger.trigger === "A") {
                         this.level.activateHunter();
                     }
 
-                    if(trigger.trigger==="B") {
+                    if (trigger.trigger === "B") {
                         // trigger the objective lines
                         this.level.showObjectivePathOverlays();
                     }
