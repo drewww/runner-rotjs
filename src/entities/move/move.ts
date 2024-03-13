@@ -4,6 +4,7 @@ import { LevelController } from "../../level/level-controller";
 export type Move = {
     name: string;
     template: MoveTemplate;
+    variants?: MoveTemplate[];
     cooldownOnUse: number;
     cooldown: number;
     selected: boolean;
@@ -106,7 +107,7 @@ export class MoveManager {
         return output;
     }
 
-    static checkValidRotation(level: LevelController, template:MoveTemplate, rotation:number): boolean {
+    static checkValidRotation(level: LevelController, template:MoveTemplate, rotation:number, shorten: number=0): boolean {
 
         var validRotation = false;
         var curTemplate: MoveTemplate = template;
@@ -272,6 +273,23 @@ export const WALL_RUN_R: MoveTemplate = [
     '0W',
     '@W'
 ]
+
+export const WALL_RUN_SHORTEN: MoveTemplate[] = [
+    [
+    '1W',
+    '0W',
+    '0W',
+    '@W'
+    ],
+    [
+        '1W',
+        '0W',
+        '@W'
+    ]
+]
+
+
+
 
 export const LONG_WALL_JUMP: MoveTemplate = [
     '1',

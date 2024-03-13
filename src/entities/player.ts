@@ -2,7 +2,7 @@
 import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
-import { BURROW, ENEMY_JUMP, JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R } from './move/move.ts';
+import { BURROW, ENEMY_JUMP, JUMP, LONG_WALL_JUMP, Move, MoveManager, MoveOption, RUNNING_JUMP, WALL_RUN_R, WALL_RUN_SHORTEN } from './move/move.ts';
 import { Light, Point } from '../index.ts';
 
 export class Player extends Being {
@@ -28,7 +28,7 @@ export class Player extends Being {
         super(-1, -1, "@", COLORS.YELLOW, COLORS.WHITE);
 
         this.moves.push({name: "(1) Jump----------", template:JUMP, cooldown: 0, selected:false, cooldownOnUse: 20});
-        this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 0, selected:false, cooldownOnUse: 10});
+        this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 0, selected:false, cooldownOnUse: 10, variants: WALL_RUN_SHORTEN});
         this.moves.push({name: "(3) Jump off wall-", template:LONG_WALL_JUMP, cooldown: 0, selected:false, cooldownOnUse: 5});
         this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30});
         this.moves.push({name: "(5) Enemy Jump----", template:ENEMY_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30});
