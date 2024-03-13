@@ -15,6 +15,11 @@ export type MoveOption = {
     moves: Point[]
 }
 
+export type MoveSignature = {
+    rotation: number;
+    shorten: number;
+}
+
 export class MoveManager {
 
 
@@ -27,8 +32,8 @@ export class MoveManager {
         // and the list of moves in order that the player will pass through
 
         const template = move.template;
-        const stepsInMove: Point[] = MoveManager.getAllPointsInMoves(template);
-        const validRotations: number[] = MoveManager.getValidRotationsForTemplate(level, move);
+        const validRotations: MoveSignature[] = MoveManager.getValidRotationsForTemplate(level, move);
+        const stepsInMove: Point[] = MoveManager.getAllPointsInMoves(move, validRotations);
 
         const output: MoveOption[] = [];
 
@@ -38,7 +43,9 @@ export class MoveManager {
         symbol_map["letters"] = ["W", "D", "X", "A"];
         symbol_map["keypad"] = ["8", "6", "2", "4"];
 
-        for (let i of validRotations) {
+        for (let validRotation of validRotations) {
+            const i = validRotation.rotation;
+
             let thisRotation = [];
             for (let step of stepsInMove) {
 
@@ -68,17 +75,26 @@ export class MoveManager {
     // currently, this returns only the "move" points in the current template
     // this is useful for the player to know where they can move to, but not all
     // these moves are valid.
-    static getAllPointsInMoves(template: MoveTemplate): Point[] {
-        const steps = MoveManager.getMaxDigitInTemplate(template);
-        const playerLocation = MoveManager.getLocationInTemplate(template, '@');
+    static getAllPointsInMoves(move: Move, moveSignatures: MoveSignature[]): Point[] {
 
         let points: Point[] = [];
 
-        for (let step = 1; step <= steps; step++) {
-            for (let y = 0; y < template.length; y++) {
-                for (let x = 0; x < template[y].length; x++) {
-                    if (template[y][x] === step.toString()) {
-                        points.push({ x: x - playerLocation.x, y: y - playerLocation.y });
+        for(let moveSignature of moveSignatures) {
+            var template = move.template;
+
+            if(move.variants && moveSignature.shorten > 0) {
+                template = move.variants![moveSignature.shorten-1];
+            }
+
+            const steps = MoveManager.getMaxDigitInTemplate(template);
+            const playerLocation = MoveManager.getLocationInTemplate(template, '@');
+
+            for (let step = 1; step <= steps; step++) {
+                for (let y = 0; y < template.length; y++) {
+                    for (let x = 0; x < template[y].length; x++) {
+                        if (template[y][x] === step.toString()) {
+                            points.push({ x: x - playerLocation.x, y: y - playerLocation.y });
+                        }
                     }
                 }
             }
@@ -87,13 +103,15 @@ export class MoveManager {
         return points;
     }
 
-    static getValidRotationsForTemplate(level: LevelController, move: Move): number[] {
+    // returns an array that contains only valid rotations, with the associated variant id
+    // that makes that rotation work. 
+    static getValidRotationsForTemplate(level: LevelController, move: Move): MoveSignature[] {
         // for the given template and level return which rotations are valid.
         // (consider a version of this that shows where the templates are failing... people
         // may find it weird not knowing what are the options. or it may be that we end up
         // showing all valid moves all at once, rather than having to pick the move style first.
 
-        let output = [];
+        let output: MoveSignature[] = [];
 
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
@@ -104,14 +122,14 @@ export class MoveManager {
                     const validRotation = MoveManager.checkValidRotation(level, move, i, shorten);  
                     console.log("rotation: " + i + " shorten: " + shorten + " valid? " + validRotation);
                     if(validRotation) {
-                        output.push(i);
+                        output.push({rotation: i, shorten: shorten});
                         break;
                     }
                 }
             } else {
                 const validRotation = MoveManager.checkValidRotation(level, move, i);  
                     if(validRotation) {
-                        output.push(i);
+                        output.push({rotation: i, shorten: 0});
                     }
             }
         }
