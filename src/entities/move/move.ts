@@ -98,11 +98,19 @@ export class MoveManager {
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
 
-            const validRotation = MoveManager.checkValidRotation(level, move, i);  
-
-            if (validRotation) {
-                // console.log("VALID ROTATION: " + i + " for template " + curTemplate + " on level " + level);
-                output.push(i);
+            if(move.variants) {
+                for(let shorten = 0; shorten < (move.variants ? move.variants.length : 0); shorten++) {
+                    const validRotation = MoveManager.checkValidRotation(level, move, i, shorten);  
+                    if(validRotation) {
+                        output.push(i);
+                        break;
+                    }
+                }
+            } else {
+                const validRotation = MoveManager.checkValidRotation(level, move, i);  
+                    if(validRotation) {
+                        output.push(i);
+                    }
             }
         }
         return output;
@@ -125,8 +133,8 @@ export class MoveManager {
         (template[0].length % 2 == 0 ||
         (template[0].length % 2 == 1 && basePlayerLocation.x != Math.floor(template[0].length / 2)));
 
-        if(shorten > 0) {
-
+        if(shorten > 0 && move.variants && move.variants.length > shorten) {
+            curTemplate = move.variants[shorten];
         }
 
         for (let flip = 0; flip < (asymmetric ? 2 : 1); flip++) {
@@ -227,7 +235,6 @@ export class MoveManager {
 
         return validRotation;
     }
-
 
     static getMaxDigitInTemplate(template: MoveTemplate): number {
         let max = 0;
