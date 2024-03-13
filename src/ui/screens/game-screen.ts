@@ -86,7 +86,7 @@ export class GameScreen extends Screen {
                 this.draw(display, xOffset, yOffset);
             });
 
-            const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, text , COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
+            const textBox = new TextBox(this.player!.x+6, this.player!.y + 8, 30, 5, text , COLORS.WHITE, COLORS.DARK_GREY, true, 0, 20);
             this.elements.push(textBox);
             this.currentTriggerTextBox = textBox;
 
@@ -376,7 +376,7 @@ export class GameScreen extends Screen {
                     this.triggered.push(trigger.trigger);
                     // console.log("triggered: " + "(" + trigger.trigger + ") " + trigger.text);
 
-                    const textBox = new TextBox(this.player!.x, this.player!.y + 8, 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, false, 0, 20);
+                    const textBox = new TextBox(this.player!.x + 5, this.player!.y + 8, 30, 5, trigger.text, COLORS.WHITE, COLORS.DARK_GREY, false, 0, 20);
                     this.elements.push(textBox);
                     this.currentTriggerTextBox = textBox;
 

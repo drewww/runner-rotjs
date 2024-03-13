@@ -29,7 +29,7 @@ export class Player extends Being {
 
         this.moves.push({name: "(1) Jump----------", template:JUMP, cooldown: 0, selected:false, cooldownOnUse: 20});
         this.moves.push({name: "(2) Wall Run------", template:WALL_RUN_R, cooldown: 0, selected:false, cooldownOnUse: 12, variants: WALL_RUN_SHORTEN});
-        this.moves.push({name: "(3) Jump off wall-", template:LONG_WALL_JUMP, cooldown: 0, selected:false, cooldownOnUse: 12, variants: LONG_WALL_JUMP_SHORTEN});
+        this.moves.push({name: "(3) Jump Off Wall-", template:LONG_WALL_JUMP, cooldown: 0, selected:false, cooldownOnUse: 12, variants: LONG_WALL_JUMP_SHORTEN});
         this.moves.push({name: "(4) Running Jump--", template:RUNNING_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30, variants: RUNNING_JUMP_SHORTEN});
         this.moves.push({name: "(5) Enemy Jump----", template:ENEMY_JUMP, cooldown: 0, selected:false, cooldownOnUse: 30, variants: ENEMY_JUMP_SHORTEN});
         this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 0, selected:false, cooldownOnUse: 100});
