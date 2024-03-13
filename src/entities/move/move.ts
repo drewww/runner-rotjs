@@ -31,7 +31,6 @@ export class MoveManager {
         // each list is a rotation of the first one
         // and the list of moves in order that the player will pass through
 
-        const template = move.template;
         const validRotations: MoveSignature[] = MoveManager.getValidRotationsForTemplate(level, move);
 
         const output: MoveOption[] = [];
@@ -327,8 +326,6 @@ export const WALL_RUN_SHORTEN: MoveTemplate[] = [
 ]
 
 
-
-
 export const LONG_WALL_JUMP: MoveTemplate = [
     '1',
     '0',
@@ -337,6 +334,30 @@ export const LONG_WALL_JUMP: MoveTemplate = [
     '0',
     '@',
     'W'
+]
+
+export const LONG_WALL_JUMP_SHORTEN: MoveTemplate[] = [
+    [
+        '1',
+        '0',
+        '0',
+        '0',
+        '@',
+        'W'
+    ],
+    [
+        '1',
+        '0',
+        '0',
+        '@',
+        'W'
+    ]
+    ,[
+        '1',
+        '0',
+        '@',
+        'W'
+    ]
 ]
 
 export const RUNNING_JUMP: MoveTemplate = [
@@ -348,6 +369,36 @@ export const RUNNING_JUMP: MoveTemplate = [
     '2',
     '1',
     '@'
+]
+
+export const RUNNING_JUMP_SHORTEN: MoveTemplate[] = [
+    [
+        '4',
+        '0',
+        '0',
+        '3',
+        '2',
+        '1',
+        '@'
+    ],
+
+    [
+        '4',
+        '0',
+        '3',
+        '2',
+        '1',
+        '@'
+    ],
+
+    [
+        '4',
+        '3',
+        '2',
+        '1',
+        '@'
+    ]
+
 ]
 
 export const BURROW: MoveTemplate = [
@@ -365,3 +416,11 @@ export const ENEMY_JUMP: MoveTemplate = [
     '0',
     '@'
 ]
+
+export const ENEMY_JUMP_SHORTEN: MoveTemplate[] = [[
+    '1',
+    '0',
+    'E',
+    '0',
+    '@'
+]]
