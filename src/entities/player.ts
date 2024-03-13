@@ -10,7 +10,7 @@ export class Player extends Being {
     public health: number = 10 ;
 
     public depth: number = -3;
-    private callbacks: {
+    public callbacks: {
         [key:string]: Function[]
     } = {};
     
@@ -45,6 +45,7 @@ export class Player extends Being {
     resetLevelCallbacks() {
         this.callbacks["move"] = [];
         this.callbacks["damage"] = [];
+        // this.callbacks["act"] = [];
     }
 
 

@@ -298,8 +298,10 @@ export class GameScreen extends Screen {
             this.player!.setPosition(tile!);
             this.player!.resetCooldowns();
 
-            this.level.setPlayer(this.player!);
             // this.setPlayer(this.player!);
+
+            this.level.setPlayer(this.player!);
+            this.resetPlayerListeners();
             this.player!.updateVision();
 
             this.game.refreshDisplay();
@@ -344,15 +346,23 @@ export class GameScreen extends Screen {
             this.moveMenu.setPlayer(player);
         }
 
-        this.player.addListener("act", (player: Player) => {
-            this.engine.lock();
-        });
+        this.resetPlayerListeners();
+       
+    }
 
-        this.player.addListener("death", (player: Player) => {
+    resetPlayerListeners() : void {
+
+
+        if(!this.player!.callbacks["act"] || this.player!.callbacks["act"].length === 0) {
+            this.player!.addListener("act", (player: Player) => {
+                this.engine.lock();
+            });
+        }
+        this.player!.addListener("death", (player: Player) => {
             this.game.switchState(GameState.KILLSCREEN);
         });
 
-        this.player.addListener("move", (player: Player) => {
+        this.player!.addListener("move", (player: Player) => {
             // see if we need to trigger a notice
             const tile = this.level.map.getTile(this.player!.x, this.player!.y);
             if (tile && tile.triggerMetadata) {
