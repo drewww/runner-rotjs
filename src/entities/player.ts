@@ -114,7 +114,14 @@ export class Player extends Being {
 
             if(!selectedMoveOption) {
                 console.log ("Not a valid move option symbol. Resetting move selection.");
+
+
                 this.deselectMoves();
+                // if(symbol in ["1","2","3","4","5","6"]) {
+                //     console.log("valid move option symbol, but not the selected option. Re-select.");
+                //     this.selectMove(symbol);
+                // }
+
                 return false;
             }
 

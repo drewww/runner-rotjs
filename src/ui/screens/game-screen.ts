@@ -145,8 +145,8 @@ export class GameScreen extends Screen {
                 return;
 
             } else if (code >= ROT.KEYS.VK_1 && code <= ROT.KEYS.VK_9) {
-
                 this.level.player!.deselectMoves();
+                this.level.player!.selectMove((code - ROT.KEYS.VK_1).toString());
                 return;
             } else if (code in keyMap) {
                 // call select move again, but we need to pass the string version of the key character.
