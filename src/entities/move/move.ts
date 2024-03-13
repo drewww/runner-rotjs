@@ -33,22 +33,23 @@ export class MoveManager {
 
         const template = move.template;
         const validRotations: MoveSignature[] = MoveManager.getValidRotationsForTemplate(level, move);
-        const stepsInMove: Point[] = MoveManager.getAllPointsInMoves(move, validRotations);
 
         const output: MoveOption[] = [];
 
         // TODO swap between keypad and keyboard symbols dynamically based
         // on what player used last. For now, just use keyboard.
-        const symbol_map: {[key:string] : string[]} = {};
+        const symbol_map: { [key: string]: string[] } = {};
         symbol_map["letters"] = ["W", "D", "X", "A"];
         symbol_map["keypad"] = ["8", "6", "2", "4"];
 
+        // ahhh the assumption here is that the steps in the move are always the same for each rotation.
+        // we need to break that now.
+
         for (let validRotation of validRotations) {
             const i = validRotation.rotation;
-
+            const stepsInMove: Point[] = MoveManager.getAllPointsInMoves(move, validRotation);
             let thisRotation = [];
             for (let step of stepsInMove) {
-
                 // refactored this into index
                 step = rotateVector(step, i);
                 thisRotation.push(step);
@@ -75,26 +76,24 @@ export class MoveManager {
     // currently, this returns only the "move" points in the current template
     // this is useful for the player to know where they can move to, but not all
     // these moves are valid.
-    static getAllPointsInMoves(move: Move, moveSignatures: MoveSignature[]): Point[] {
+    static getAllPointsInMoves(move: Move, moveSignature: MoveSignature): Point[] {
 
         let points: Point[] = [];
 
-        for(let moveSignature of moveSignatures) {
-            var template = move.template;
+        var template = move.template;
 
-            if(move.variants && moveSignature.shorten > 0) {
-                template = move.variants![moveSignature.shorten-1];
-            }
+        if (move.variants && moveSignature.shorten > 0) {
+            template = move.variants![moveSignature.shorten - 1];
+        }
 
-            const steps = MoveManager.getMaxDigitInTemplate(template);
-            const playerLocation = MoveManager.getLocationInTemplate(template, '@');
+        const steps = MoveManager.getMaxDigitInTemplate(template);
+        const playerLocation = MoveManager.getLocationInTemplate(template, '@');
 
-            for (let step = 1; step <= steps; step++) {
-                for (let y = 0; y < template.length; y++) {
-                    for (let x = 0; x < template[y].length; x++) {
-                        if (template[y][x] === step.toString()) {
-                            points.push({ x: x - playerLocation.x, y: y - playerLocation.y });
-                        }
+        for (let step = 1; step <= steps; step++) {
+            for (let y = 0; y < template.length; y++) {
+                for (let x = 0; x < template[y].length; x++) {
+                    if (template[y][x] === step.toString()) {
+                        points.push({ x: x - playerLocation.x, y: y - playerLocation.y });
                     }
                 }
             }
@@ -117,26 +116,26 @@ export class MoveManager {
         for (let i = 0; i < 4; i++) {
             console.log("----starting rotation: " + i + "----");
 
-            if(move.variants) {
-                for(let shorten = 0; shorten < move.variants.length+1; shorten++) {
-                    const validRotation = MoveManager.checkValidRotation(level, move, i, shorten);  
+            if (move.variants) {
+                for (let shorten = 0; shorten < move.variants.length + 1; shorten++) {
+                    const validRotation = MoveManager.checkValidRotation(level, move, i, shorten);
                     console.log("rotation: " + i + " shorten: " + shorten + " valid? " + validRotation);
-                    if(validRotation) {
-                        output.push({rotation: i, shorten: shorten});
+                    if (validRotation) {
+                        output.push({ rotation: i, shorten: shorten });
                         break;
                     }
                 }
             } else {
-                const validRotation = MoveManager.checkValidRotation(level, move, i);  
-                    if(validRotation) {
-                        output.push({rotation: i, shorten: 0});
-                    }
+                const validRotation = MoveManager.checkValidRotation(level, move, i);
+                if (validRotation) {
+                    output.push({ rotation: i, shorten: 0 });
+                }
             }
         }
         return output;
     }
 
-    static checkValidRotation(level: LevelController, move:Move, rotation:number, shorten: number=0): boolean {
+    static checkValidRotation(level: LevelController, move: Move, rotation: number, shorten: number = 0): boolean {
 
         var template = move.template;
 
@@ -149,11 +148,11 @@ export class MoveManager {
         var basePlayerLocation = MoveManager.getLocationInTemplate(template, '@');
 
         const asymmetric = template[0].length > 1 &&
-        (template[0].length % 2 == 0 ||
-        (template[0].length % 2 == 1 && basePlayerLocation.x != Math.floor(template[0].length / 2)));
+            (template[0].length % 2 == 0 ||
+                (template[0].length % 2 == 1 && basePlayerLocation.x != Math.floor(template[0].length / 2)));
 
-        if(shorten > 0 && move.variants && move.variants.length+1 > shorten) {
-            template = move.variants[shorten-1];
+        if (shorten > 0 && move.variants && move.variants.length + 1 > shorten) {
+            template = move.variants[shorten - 1];
         } else {
             template = move.template;
         }
@@ -167,7 +166,7 @@ export class MoveManager {
 
             // console.log(`Evaluating rotation: ${i} and flip: ${flip} (validRotation: false, validFlip: true)`);
 
-            if(flip===1) {
+            if (flip === 1) {
                 curTemplate = MoveManager.flipTemplate(template);
             }
 
@@ -220,7 +219,7 @@ export class MoveManager {
                             // through a wall.
 
                             // make sure there is not a being on the other side
-                            if(enemy) { validFlip = false; break; }
+                            if (enemy) { validFlip = false; break; }
 
                             // check that it's passable
                             if (!tile.solid) { break; }
@@ -246,7 +245,7 @@ export class MoveManager {
                     }
 
                 }
-               
+
             }
             // console.log(`CHECK ${symbol} against ${tile}: ${valid}`);
             // if both loops through are not valid, this will (false || false) || false = false
@@ -315,10 +314,10 @@ export const WALL_RUN_R: MoveTemplate = [
 
 export const WALL_RUN_SHORTEN: MoveTemplate[] = [
     [
-    '1W',
-    '0W',
-    '0W',
-    '@W'
+        '1W',
+        '0W',
+        '0W',
+        '@W'
     ],
     [
         '1W',
