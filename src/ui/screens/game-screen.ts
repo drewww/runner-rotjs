@@ -299,6 +299,12 @@ export class GameScreen extends Screen {
                 newLevel = new LevelController(LevelType.VAULT, SCREEN_WIDTH - RIGHT_MENU_WIDTH - 2, SCREEN_HEIGHT - 2, this.level.player!.depth + 3, this.overlays);
             }
 
+            // refill health after tutorial
+            if(this.level.player!.depth === -4) {
+                this.level.player!.health = 10;
+            }
+
+
             newLevel.x = 1;
             newLevel.y = 1;
 
