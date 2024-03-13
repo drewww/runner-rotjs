@@ -97,10 +97,12 @@ export class MoveManager {
 
         // so, for each rotation check every template square against the world and its constraint. 
         for (let i = 0; i < 4; i++) {
+            console.log("----starting rotation: " + i + "----");
 
             if(move.variants) {
-                for(let shorten = 0; shorten < (move.variants ? move.variants.length : 0); shorten++) {
+                for(let shorten = 0; shorten < move.variants.length+1; shorten++) {
                     const validRotation = MoveManager.checkValidRotation(level, move, i, shorten);  
+                    console.log("rotation: " + i + " shorten: " + shorten + " valid? " + validRotation);
                     if(validRotation) {
                         output.push(i);
                         break;
@@ -118,10 +120,9 @@ export class MoveManager {
 
     static checkValidRotation(level: LevelController, move:Move, rotation:number, shorten: number=0): boolean {
 
-        const template = move.template;
+        var template = move.template;
 
         var validRotation = false;
-        var curTemplate: MoveTemplate = template;
 
         // for a given rotation, if it is asymmetric, then test the flip.
         // asymmetric means -- there is greater than one column AND
@@ -133,9 +134,15 @@ export class MoveManager {
         (template[0].length % 2 == 0 ||
         (template[0].length % 2 == 1 && basePlayerLocation.x != Math.floor(template[0].length / 2)));
 
-        if(shorten > 0 && move.variants && move.variants.length > shorten) {
-            curTemplate = move.variants[shorten];
+        if(shorten > 0 && move.variants && move.variants.length+1 > shorten) {
+            template = move.variants[shorten-1];
+        } else {
+            template = move.template;
         }
+
+        console.log("checking template: " + template);
+
+        var curTemplate: MoveTemplate = template;
 
         for (let flip = 0; flip < (asymmetric ? 2 : 1); flip++) {
             var validFlip = true;
