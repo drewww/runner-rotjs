@@ -166,23 +166,23 @@ const levels: { [key: string]: StaticLevel } = {
             ],
 
         text: {
-            "0": `Welcome, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. I see you can move, at least.`,
-            "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{} to wait next to the door to open it.`,
-            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait for an opportune moment to run past.`,
+            "0": `Welcome, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{#ffffff}. I see you can move, at least.`,
+            "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait next to the door to open it. Or bump into it if you prefer.`,
+            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait for an opportune moment to run past. It's okay if your tile is red; you just can't move INTO a red tile on your turn or you'll take damage.`,
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
-            "4": `Walk up to the sentry vision and jump over it with %c{${COLORS.MOVE_LIGHT_BLUE}}(1)%c{}, then select the direction.`,
-            "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{} to get past them.`,
-            "6": `VArying moves gives you maximum mobility; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) Jump off wall%c{} on this wall to get past these sentries.`,
+            "4": `Walk up to the sentry vision and stand on an 'x'. Press "1" then select a direction to jump.`,
+            "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{#ffffff} to get past them.`,
+            "6": `Use all your moves for maximum mobility; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) Jump off wall%c{#ffffff} on this wall to get past these sentries.`,
             "7": `Nominal performance. Let's try your moves for getting out of a jam.`,
-            "8": `Chased into a dead end? Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{} to dig through the wall south.`,
-            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}2 or 3 spaces from the enemy%c{}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{} to jump over them. Wait a few turns with  %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} if they're not in the middle of the hallway.`,
+            "8": `Chased into a dead end? Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{#ffffff} to dig through the wall south.`,
+            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}2 or 3 spaces from the enemy%c{#ffffff}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{#ffffff} to jump over them. Wait a few turns with %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} if they're not in the middle of the hallway.`,
         
-            "F": `This next move requires some space to get moving; if the %c{${COLORS.MOVE_LIGHT_BLUE}}first three spaces%c{} enter enemy vision, they'll hit you and cancel the move. Try it here, with %c{${COLORS.MOVE_LIGHT_BLUE}}(4) Running Jump%c{}.`,
+            "F": `This next move requires some space to get moving; if the %c{${COLORS.MOVE_LIGHT_BLUE}}first three spaces%c{#ffffff} enter enemy vision, they'll hit you and cancel the move. Try it here, with %c{${COLORS.MOVE_LIGHT_BLUE}}(4) Running Jump%c{#ffffff}.`,
             "E": `Getting hit like that isn't fatal, and it causes the attacking bot to power down for a few turns. You can use that to your advantage. Sometimes you have to just walk through enemy vision to keep up your speed.`,
             
-            "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}HUNTER%c{}. It's relentless, and can sense you from any distance.`,
-            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
-            "C": `Acceptable job, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{}. Don't embarrass me on the job.`,
+            "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}HUNTER%c{#ffffff}. It's relentless, and can sense you from any distance.`,
+            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{#ffffff}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{#ffffff} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
+            "C": `Acceptable job, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{#ffffff}. Don't embarrass me on the job.`,
     
         }
     },

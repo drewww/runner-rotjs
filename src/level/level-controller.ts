@@ -670,6 +670,7 @@ export class LevelController implements Drawable {
             if (this.getEnemyVisiblePoints().includes(`${player.x},${player.y}`)) {
                 // find the nearest enemy that is doing the shooting
 
+
                 // search through the beings to find the one closest to this location
                 // (a bit wasteful to run merge lightmaps again here ... TODO cache it)
                 let sourceBeing: Being = this.mergeLightMaps()[`${player.x},${player.y}`].being!;
@@ -709,7 +710,12 @@ export class LevelController implements Drawable {
                 // disable the enemy so it doesn't contribution vision for 3 turns
                 // or move for 3 turns
 
-                player.takeDamage(1);
+                if(this.type === LevelType.TUTORIAL) {
+                    return;
+                } else {
+                    player.takeDamage(1);
+                }
+
                 player.interruptMoveChain();
             } else {
                 console.log("no enemy seeing your movement");
