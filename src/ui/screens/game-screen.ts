@@ -141,7 +141,7 @@ export class GameScreen extends Screen {
 
         // first, short circuit other detection. if we have a move selected, there are different options.
         if (this.player?.getSelectedMove()) {
-            if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_S) {
+            if (e.keyCode == ROT.KEYS.VK_NUMPAD5 || e.keyCode == ROT.KEYS.VK_SPACE) {
                 this.level.player!.deselectMoves();
                 return;
 

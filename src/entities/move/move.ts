@@ -38,7 +38,7 @@ export class MoveManager {
         // TODO swap between keypad and keyboard symbols dynamically based
         // on what player used last. For now, just use keyboard.
         const symbol_map: { [key: string]: string[] } = {};
-        symbol_map["letters"] = ["W", "D", "X", "A"];
+        symbol_map["letters"] = ["W", "D", "S", "A"];
         symbol_map["keypad"] = ["8", "6", "2", "4"];
 
         // ahhh the assumption here is that the steps in the move are always the same for each rotation.
