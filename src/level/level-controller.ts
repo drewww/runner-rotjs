@@ -347,7 +347,7 @@ export class LevelController implements Drawable {
                 // kick off an animation pulse of circles
                 // for big distances this is .. a lot. do a max of 5 circles
                 // start at 5 less than the max, or 1.
-                for (let r = Math.max(distance - 3, 1); r <= distance; r++) {
+                for (let r = distance; r >= Math.max(distance-3, 1); r--) {
                     // calculate the points for the radius.
                     // let r = distance;
                     let points: Point[] = [];
@@ -369,7 +369,7 @@ export class LevelController implements Drawable {
                         }
                         this.overlays!.draw();
 
-                    }, (3 - (distance - r)) * 50);
+                    }, (distance-r) * 50);
 
                 }
 
