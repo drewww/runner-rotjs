@@ -16,12 +16,12 @@ export class Door extends Tile implements Interactable {
         this.solid = !this.solid;
 
         if(this.activated) {
-            this.bg = COLORS.FAINT_GREEN;
+            this.bg = COLORS.MOVE_LIGHT_BLUE;
             this.fg = COLORS.BLACK;
             
             this.symbol = "_";
         } else {
-            this.bg = COLORS.FAINT_GREEN;
+            this.bg = COLORS.MOVE_LIGHT_BLUE;
             this.fg = COLORS.BLACK;
             this.symbol = "-";
         }
