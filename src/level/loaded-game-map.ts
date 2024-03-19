@@ -86,6 +86,12 @@ export class LoadedGameMap extends GameMap {
                         p.facing = Math.PI / 2;
                         this.beings.push(p);
                         break;
+                    case "d":
+                        this.setTile(new Tile(x, y, "FLOOR"));
+                        const d = new PatrolBot(x, y, "flip");
+                        d.facing = 0;
+                        this.beings.push(d);
+                        break;
                     case "-":
                         this.setTile(new Door(x, y));
                         break;
@@ -147,41 +153,46 @@ const levels: { [key: string]: StaticLevel } = {
                 "#...#####2......#4.x...###...#-##",
                 "#-#######.......####s#####sss#6##",
                 "#11...0@#....p..######7777....x##",
-                "#11...00#.......######.##.......#",
-                "######################-##########",
-                "#....H#EEEE.######..##8##......##",
-                "#.#####EE##...s##...##x##......##",
-                "#........##...s#....#############",
-                "#AAAAAAAA##F######..##.##......##",
-                "#AAAAAAAA##F##########.##......##",
-                "#AAAAAAAA##F....p.xx9-.##......##",
-                "#AAAAAAAA################......##",
-                "#######x##.....#####b############",
-                "#....##.#...#..............######",
+                "#11...00#.......######-##.......#",
+                "######################.##########",
+                "#....H#.....######..##8x#...999##",
+                "#.#####..##.#####...##########x##",
+                "#.#......##.####....##########x##",
+                "#A#AAAAAA##.######..##s..#####.##",
+                "#AAAAAAAA#b.##b#######..#G####d##",
+                "#AAAAAAAA##........EEEE##G#.##.##",
+                "#AAAAAAAA#########b######..#F#.##",
+                "#######x##.....#############F#.##",
+                "#....##.#...#..............#...##",
                 "#....##.#BBB###########....######",
                 "#....##.-BBB###########....C..%##",
                 "#....####BBB#..............######",
-                "#.....###........#b#.....#b#...##",
+                "#.....###........###.....###...##",
                 "#################################",
             ],
 
         text: {
             "0": `Welcome, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{#ffffff}. I see you can move, at least.`,
             "1": `Proceed through the door. Press %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait next to the door to open it. Or bump into it if you prefer.`,
-            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait for an opportune moment to run past. It's okay if your tile is red; you just can't move INTO a red tile on your turn or you'll take damage.`,
+            "2": `Patrol bot ahead. If you move into its vision, it'll shoot you. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to wait for an opportune moment to run past.`,
             "3": `Close that door behind you! What kind of runner leaves open doors behind them?`,
             "4": `Walk up to the sentry vision and stand on an 'x'. Press "1" then select a direction to jump.`,
             "5": `One sentry is nothing. This is more common in the field. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(2) wall run%c{#ffffff} to get past them.`,
             "6": `Use all your moves for maximum mobility; use %c{${COLORS.MOVE_LIGHT_BLUE}}(3) Jump off wall%c{#ffffff} on this wall to get past these sentries.`,
             "7": `Nominal performance. Let's try your moves for getting out of a jam.`,
-            "8": `Chased into a dead end? Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{#ffffff} to dig through the wall south.`,
-            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}2 or 3 spaces from the enemy%c{#ffffff}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{#ffffff} to jump over them. Wait a few turns with %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} if they're not in the middle of the hallway.`,
+            "8": `Chased into a dead end? Use %c{${COLORS.MOVE_LIGHT_BLUE}}(6) burrow%c{#ffffff} to dig through the wall east.`,
+            "9": `Stand %c{${COLORS.MOVE_LIGHT_BLUE}}2 or 3 spaces from the enemy%c{#ffffff}. Then use %c{${COLORS.MOVE_LIGHT_BLUE}}(5) enemy jump%c{#ffffff} to jump over them.`,
         
-            "F": `This next move requires some space to get moving; if the %c{${COLORS.MOVE_LIGHT_BLUE}}first three spaces%c{#ffffff} enter enemy vision, they'll hit you and cancel the move. Try it here, with %c{${COLORS.MOVE_LIGHT_BLUE}}(4) Running Jump%c{#ffffff}.`,
-            "E": `Getting hit like that isn't fatal, and it causes the attacking bot to power down for a few turns. You can use that to your advantage. Sometimes you have to just walk through enemy vision to keep up your speed.`,
+
+            "F": `You can squeeze through tight spaces. Use your diagonal movement keys %c{${COLORS.MOVE_LIGHT_BLUE}}(QEZC or NUM 7913)%c{#fff} to get through these narrow passages.`,
+            "G": `There's no avoiding this sentry. When you move into its vision, it will shoot you and then spend 2 turns reloading. Use diagonal movement properly and you'll only get hit once.`,
+            "E": `In the field, you need to unlock the elevator before you can escape that level. Press each of these three buttons by moving into them or use %c{${COLORS.MOVE_LIGHT_BLUE}}(NUM 5 or spacebar)%c{#ffffff} to activate them.`,
+
+
+            // "F": `This next move requires some space to get moving; if the %c{${COLORS.MOVE_LIGHT_BLUE}}first three spaces%c{#ffffff} enter enemy vision, they'll hit you and cancel the move. Try it here, with %c{${COLORS.MOVE_LIGHT_BLUE}}(4) Running Jump%c{#ffffff}.`,
             
             "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}HUNTER%c{#ffffff}. It's relentless, and can sense you from any distance.`,
-            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{#ffffff}. Hit the %c{${COLORS.LIGHT_GREEN}}buttons%c{#ffffff} (wait next to them) and then run to the %c{${COLORS.LIGHT_GREEN}}exit.`,
+            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{#ffffff}. Run towards the %c{${COLORS.LIGHT_GREEN}}exit.`,
             "C": `Acceptable job, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{#ffffff}. Don't embarrass me on the job.`,
     
         }
