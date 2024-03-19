@@ -107,7 +107,7 @@ export class Hunter extends Enemy {
 
             if(tile && tile.type=="DOOR") {
                 if(this.doorCountdown==-1) {
-                    this.doorCountdown = 2;
+                    this.doorCountdown = 4;
                     return;
                 }
                 const doorTile : Door = <Door>tile;

@@ -653,7 +653,9 @@ export class LevelController implements Drawable {
             console.log("add damage overlay");
             this.overlays?.addLayer("player-damage", COLORS.LASER_RED + "80");
             this.overlays?.draw();
+            setTimeout(() => {
             this.overlays?.startLayerFade("player-damage", 1000, 10, 0.9);
+            }, 500);
         });
 
         this.player.addListener("move", (player: Player) => {
@@ -699,7 +701,7 @@ export class LevelController implements Drawable {
                         if (!this.overlays) { return; }
 
                         this.overlays.startLayerFade("shot-line", 1000, 10, 0.9);
-                    }, 140);
+                    }, 340);
 
                     sourceBeing.stun(4);
                 }
