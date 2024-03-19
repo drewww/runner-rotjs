@@ -11,6 +11,7 @@ import { TextBox } from "../elements/text-box";
 import { COLORS } from "../../colors";
 import { Hunter } from "../../entities/hunter";
 import { Door } from "../../level/door";
+import { Button } from "../../level/button";
 
 const RIGHT_MENU_WIDTH: number = 20;
 
@@ -234,6 +235,15 @@ export class GameScreen extends Screen {
                 }
 
                 releaseLockAfterHandling = true;
+            } else if (targetTile&& targetTile.type==="BUTTON") {
+                const button = <Button>targetTile;
+
+                if(!button.activated) {
+                    button.interact(this.level.player!);
+                }
+
+                releaseLockAfterHandling = true;
+
             } else {
 
 

@@ -749,7 +749,7 @@ export class LevelController implements Drawable {
                             if (!this.overlays) { return; }
 
                             this.overlays.startLayerFade("player-move", 1000, 10, 0.9);
-                        }, 140);
+                        }, 240);
                     }
             }
 
