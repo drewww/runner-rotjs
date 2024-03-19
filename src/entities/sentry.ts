@@ -9,7 +9,7 @@ export class SentryBot extends Enemy {
         super(x, y);
         this.symbol = "s";
         this.facing = angle;
-        this.range = 20;
+        this.range = 10;
         this.bg = COLORS.WHITE;
     }
 
