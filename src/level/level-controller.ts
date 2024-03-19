@@ -739,7 +739,10 @@ export class LevelController implements Drawable {
                 // or move for 3 turns
 
                 if(this.type === LevelType.TUTORIAL) {
-                    return;
+                    player.takeDamage(1);
+                    player.health++;
+                    
+                    // don't let them lose health but trigger the UI effects
                 } else {
                     player.takeDamage(1);
                 }

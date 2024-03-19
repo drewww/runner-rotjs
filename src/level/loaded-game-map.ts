@@ -163,11 +163,11 @@ const levels: { [key: string]: StaticLevel } = {
                 "#AAAAAAAA##........EEEE##G#.##.##",
                 "#AAAAAAAA#########b######..#F#.##",
                 "#######x##.....#############F#.##",
-                "#....##.#...#..............#...##",
+                "#....##.#####.........#....#...##",
                 "#....##.#BBB###########....######",
-                "#....##.-BBB###########....C..%##",
-                "#....####BBB#..............######",
-                "#.....###........###.....###...##",
+                "#....##.-BBBBB.............C..%##",
+                "#....####BBBBB...#.........######",
+                "#.....##############.....###...##",
                 "#################################",
             ],
 
@@ -192,7 +192,7 @@ const levels: { [key: string]: StaticLevel } = {
             // "F": `This next move requires some space to get moving; if the %c{${COLORS.MOVE_LIGHT_BLUE}}first three spaces%c{#ffffff} enter enemy vision, they'll hit you and cancel the move. Try it here, with %c{${COLORS.MOVE_LIGHT_BLUE}}(4) Running Jump%c{#ffffff}.`,
             
             "A": `Now, meet your antagonist. The %c{${COLORS.LASER_RED}}HUNTER%c{#ffffff}. It's relentless, and can sense you from any distance.`,
-            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{#ffffff}. Run towards the %c{${COLORS.LIGHT_GREEN}}exit.`,
+            "B": `%c{${COLORS.LASER_RED}}You can't fight it%c{#ffffff}. Run towards the %c{${COLORS.LIGHT_GREEN}}exit%c{#fff}. Use %c{${COLORS.MOVE_LIGHT_BLUE}}(4) running jump%c{#ffffff} to gain a lead.`,
             "C": `Acceptable job, %c{${COLORS.MOVE_LIGHT_BLUE}}runner%c{#ffffff}. Don't embarrass me on the job.`,
     
         }
