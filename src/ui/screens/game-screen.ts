@@ -347,6 +347,18 @@ export class GameScreen extends Screen {
             this.engine = new ROT.Engine(this.level.scheduler);
             this.engine.start();
             this.engine.lock();
+
+            if(this.player!.depth === -3) {
+            const textBox = new TextBox(this.player!.x + 5, this.player!.y + 8, 30, 5, `%c{${COLORS.MOVE_LIGHT_BLUE}}RUNNER%c{${COLORS.WHITE}}: Hit the three %c{${COLORS.LIGHT_GREEN}}buttons%c{${COLORS.WHITE}} to unlock the elevator and escape.`, COLORS.WHITE, COLORS.DARK_GREY, false, 0, 20);
+            this.elements.push(textBox);
+
+            setTimeout(() => {
+                if (this.elements.includes(textBox)) {
+                    this.elements.splice(this.elements.indexOf(textBox), 1);
+                }
+            }, 10000);
+            }
+
         }
     }
 
