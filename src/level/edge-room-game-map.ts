@@ -435,6 +435,15 @@ export class EdgeRoomGameMap extends GameMap {
         for (var i = 0; i < 10 + (difficulty*5); i++) {
             const enemyCell = roomTiles[Math.floor(Math.random() * roomTiles.length)];
 
+            // don't let there be another sentry without 2 spaces either directions
+            for(var being of this.beings) {
+                if(Math.abs(being.x - enemyCell.x) < 3 && Math.abs(being.y - enemyCell.y) < 3) {
+                    // don't count this as a succesful placement; decrement.
+                    i--;
+                    continue;
+                }
+            }
+
             //if enemyCell distance to entrancePoint is less than 5, skip it
             if (Math.abs(enemyCell.x - entrancePoint.x) + Math.abs(enemyCell.y - entrancePoint.y) < 5) {
                 continue;
@@ -451,6 +460,16 @@ export class EdgeRoomGameMap extends GameMap {
             //if enemyCell distance to entrancePoint is less than 5, skip it
             if (Math.abs(enemyCell.x - entrancePoint.x) + Math.abs(enemyCell.y - entrancePoint.y) < 3) {
                 continue;
+            }
+
+
+            // don't let there be another sentry without 2 spaces either directions
+            for(var being of this.beings) {
+                if(Math.abs(being.x - enemyCell.x) < 2 && Math.abs(being.y - enemyCell.y) < 2) {
+                    // don't count this as a succesful placement; decrement.
+                    i--;
+                    continue;
+                }
             }
 
             this.beings.push(new SentryBot(enemyCell.x, enemyCell.y));
