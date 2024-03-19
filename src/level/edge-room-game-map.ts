@@ -482,6 +482,7 @@ export class EdgeRoomGameMap extends GameMap {
         const path = new ROT.Path.AStar(entrance!.x, entrance!.y, (x, y) => {
             const tile = this.getTile(x, y);
             if (tile) {
+
                 if (tile.type == "DOOR" || tile.type == "ENTRANCE" || tile.type == "EXIT" || tile.type == "BUTTON") {
                     return true;
                 } else {
@@ -490,7 +491,7 @@ export class EdgeRoomGameMap extends GameMap {
             } else {
                 return false;
             }
-        });
+        }, { topology: 4 });
 
 
         var validDesign = true;
