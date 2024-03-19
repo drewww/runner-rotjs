@@ -41,6 +41,7 @@ export class LevelController implements Drawable {
 
     public suppressObjectives: boolean = false;
     public type: LevelType;
+    buttonPathingActive: boolean = false;
 
     // put the logic for different types of levels in here
     constructor(type: LevelType, w: number, h: number, difficulty:number=0, overlays: Overlays | null = null) {
@@ -283,9 +284,18 @@ export class LevelController implements Drawable {
 
         const buttons = this.map.getAllTiles().filter(tile => tile.type === "BUTTON");
 
+        // if the layer is already visible, don't do it again. this means the animation is in flight already.
+        if(this.buttonPathingActive) { return; }
+
         this.overlays.addLayer("button-pathing");
-        for (var button of buttons) {
+        this.buttonPathingActive = true;
+        for (const tile of buttons) {
             // kick off a pathing animation
+            const button = <Button>tile;
+            // this should skip already pressed buttons. 
+            if(button.activated) {
+                continue;
+            }
 
             // this is the DESTINATION that we pass in here
             const path = new ROT.Path.AStar(button.x, button.y, (x, y) => {
@@ -308,6 +318,9 @@ export class LevelController implements Drawable {
                 if (!this.overlays) { return; }
 
                 this.overlays.startLayerFade("button-pathing", 1000, 10, 0.9);
+
+                // a little off; should wait a second for the animation to fade but this is close enough
+                this.buttonPathingActive = false;
             }, 5000);
 
             button.discovered = true;
@@ -646,7 +659,20 @@ export class LevelController implements Drawable {
                     this.hunter = hunter;
                     this.addBeing(hunter);
                 }
+            }8
+
+
+            // if the player is adjacent to the exit and the exit is not "open" then show the objective overlay.
+            const exitTile = this.map.getAllTiles().find(tile => tile.type === "EXIT");
+            if(exitTile) {
+                const distanceToExit = Math.floor(Math.sqrt(Math.pow(Math.abs(exitTile.x - this.player!.x), 2) +
+                Math.pow(Math.abs(exitTile.y - this.player!.y), 2)));
+
+                if(distanceToExit <= 1.5 && exitTile.power > 0) {
+                    this.showObjectivePathOverlays();
+                }
             }
+
         });
 
         this.player.addListener("damage", (player: Player) => {
