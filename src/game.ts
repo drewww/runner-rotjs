@@ -31,6 +31,8 @@ export class Game implements IGame {
     mapExploreScreen!: MapExploreScreen;
     tutorialScreen!: GameScreen; 
 
+    endScreenShowTime: number = 0;
+    
     constructor() {
         console.log("Game created!");
         
@@ -121,20 +123,10 @@ export class Game implements IGame {
             case GameState.GAME:
                 break;
             case GameState.KILLSCREEN:
-                // this.switchState(GameState.GAME);
-                // nice idea, but need to fully regenerate the game state
-                // to restart. TBD.
-                window.location.reload();
-                break;
             case GameState.WINSCREEN:
-
-                // if(e.keyCode == ROT.KEYS.VK_ESCAPE) {
-                // } else {
-                //     //wtf is this?
-                //     this.mapExploreScreen.generateLevel("DEBUG");
-                // }
-                window.location.reload();
-
+                if(Date.now() - this.endScreenShowTime > 1000) {
+                    window.location.reload();
+                }
                 break;
         }
 
@@ -164,9 +156,11 @@ export class Game implements IGame {
                 break;
             case GameState.KILLSCREEN:
                 this.screen = this.killScreen;
+                this.endScreenShowTime = Date.now();
                 break;
             case GameState.WINSCREEN:
                 this.screen = this.winScreen;
+                this.endScreenShowTime = Date.now();
                 break;
             case GameState.MAP_EXPLORE:
                 this.screen = this.mapExploreScreen;
