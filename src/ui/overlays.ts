@@ -51,6 +51,19 @@ export class Overlays {
         document.body.appendChild(this.visibleCanvas);
     }
 
+    resize():void {
+        const gameCanvas = document.getElementById("game") as HTMLCanvasElement;
+
+        this.bufferCanvas.width = gameCanvas.width;
+        this.bufferCanvas.height = gameCanvas.height;
+
+        this.tileX = gameCanvas.width / SCREEN_WIDTH;
+        this.tileY = gameCanvas.height / SCREEN_HEIGHT;
+
+        this.visibleCanvas.width = gameCanvas.width;
+        this.visibleCanvas.height = gameCanvas.height;
+    }
+
     addLayer(name: string, defaultColor: string = "#00000000") {
         if(this.layers[name]) { return; }
         

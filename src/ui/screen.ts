@@ -6,6 +6,7 @@
 import { Drawable, SCREEN_HEIGHT, SCREEN_WIDTH } from "..";
 import * as ROT from 'rot-js'; // Import the 'rot-js' module
 import { COLORS } from "../colors";
+import { Overlays } from "./overlays";
 
 export abstract class Screen implements Drawable {
     protected elements: Drawable[];
@@ -17,6 +18,8 @@ export abstract class Screen implements Drawable {
     public y: number = 0;
 
     public disabled: boolean = false;
+
+    public overlays: Overlays | undefined
 
     constructor(width: number = SCREEN_WIDTH, height: number = SCREEN_HEIGHT) {
         this.elements = [];

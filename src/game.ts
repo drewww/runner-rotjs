@@ -36,10 +36,14 @@ export class Game implements IGame {
     constructor() {
         console.log("Game created!");
         
+        // on load figure out the width of the screen and then calculate a font size that will use that full width.
+        const screenWidth = window.innerWidth;
+        const fontSize = Math.floor(screenWidth / (this.w+1)); 
+
         this.display = new ROT.Display({ width: this.w, height: this.h, 
             layout: "rect",
             // fontFamily: "squaremodern",
-            // fontSize: 14,
+            fontSize: fontSize,
             forceSquareRatio: true,
         });
 
@@ -56,6 +60,13 @@ export class Game implements IGame {
         // will need to bring that back OR sync up the handleEvent logic
         // to reject events when it's not expecting them
         window.addEventListener("keydown", this);
+        window.addEventListener("resize", () => {
+            console.log("Resizing window.");
+
+            this.display.setOptions({ fontSize: Math.floor(window.innerWidth / (this.w+1)) });
+
+            this.screen.overlays!.resize();
+        });
     }
 
     init() {
