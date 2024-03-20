@@ -2,6 +2,7 @@ import { COLORS } from '../../colors';
 import ROT from 'rot-js'; // Import the 'rot-js' package
 import { UIBox } from './ui-box';
 import { Player } from '../../entities/player';
+import { MAX_HEALTH } from '../..';
 
 
 export class StatusBar extends UIBox {
@@ -30,5 +31,7 @@ export class StatusBar extends UIBox {
         }
 
         display.drawText(this.w-3 + xOffset + this.x, 0 + yOffset + this.y, `%c{${COLORS.WHITE}}%b{${COLORS.DARK_GREY}}L${this.player.depth}`)
+
+        display.draw(xOffset + this.x + MAX_HEALTH, yOffset + this.y, "|", COLORS.WHITE, COLORS.WHITE);
     }
 }

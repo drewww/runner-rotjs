@@ -3,6 +3,7 @@ import { Being } from './entities/being';
 
 export const SCREEN_WIDTH: number = 70;
 export const SCREEN_HEIGHT: number = 40;
+export const MAX_HEALTH: number=8;
 
 export type Point = {
     x:number,

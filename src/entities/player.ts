@@ -3,11 +3,11 @@ import { COLORS } from '../colors.ts';
 import * as ROT from 'rot-js'; // Import the 'rot-js' package
 import { Being } from './being.ts';
 import { BURROW, ENEMY_JUMP, ENEMY_JUMP_SHORTEN, JUMP, LONG_WALL_JUMP, LONG_WALL_JUMP_SHORTEN, Move, MoveManager, MoveOption, RUNNING_JUMP, RUNNING_JUMP_SHORTEN, WALL_RUN_R, WALL_RUN_SHORTEN } from './move/move.ts';
-import { Light, Point } from '../index.ts';
+import { Light, MAX_HEALTH, Point } from '../index.ts';
 
 export class Player extends Being {
 
-    public health: number = 10 ;
+    public health: number = MAX_HEALTH;
 
     public depth: number = -3;
     public callbacks: {
