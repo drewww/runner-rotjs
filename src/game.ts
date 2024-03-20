@@ -63,9 +63,14 @@ export class Game implements IGame {
         window.addEventListener("resize", () => {
             console.log("Resizing window.");
 
+            console.log("calculated font size: " + Math.floor(window.innerWidth / (this.w+1)));
+
             this.display.setOptions({ fontSize: Math.floor(window.innerWidth / (this.w+1)) });
 
-            this.screen.overlays!.resize();
+            setTimeout(() => {
+                this.gameScreen.overlays!.resize();
+            }, 100);
+
         });
     }
 

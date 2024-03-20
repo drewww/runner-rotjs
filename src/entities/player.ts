@@ -32,7 +32,7 @@ export class Player extends Being {
         this.moves.push({name: "(3) Jump off wall-", template:LONG_WALL_JUMP, cooldown: 0, selected:false, cooldownOnUse: 15, variants: LONG_WALL_JUMP_SHORTEN});
         this.moves.push({name: "(4) Running jump--", template:RUNNING_JUMP, cooldown: 0, selected:false, cooldownOnUse: 20, variants: RUNNING_JUMP_SHORTEN});
         this.moves.push({name: "(5) Enemy jump----", template:ENEMY_JUMP, cooldown: 0, selected:false, cooldownOnUse: 20, variants: ENEMY_JUMP_SHORTEN});
-        this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 0, selected:false, cooldownOnUse: 80});
+        this.moves.push({name: "(6) Burrow--------", template:BURROW, cooldown: 0, selected:false, cooldownOnUse: 100});
 
         this.selectedMoveOptions = [];
         this.triggerPulse = false;

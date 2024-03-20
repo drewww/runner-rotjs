@@ -349,7 +349,7 @@ export class GameScreen extends Screen {
             this.engine.lock();
 
             if(this.player!.depth === -3) {
-            const textBox = new TextBox(this.player!.x + 5, this.player!.y + 8, 30, 5, `%c{${COLORS.MOVE_LIGHT_BLUE}}RUNNER%c{${COLORS.WHITE}}: Hit the three %c{${COLORS.LIGHT_GREEN}}buttons%c{${COLORS.WHITE}} to unlock the elevator and escape.`, COLORS.WHITE, COLORS.DARK_GREY, false, 0, 20);
+            const textBox = new TextBox(this.player!.x + 5, this.player!.y + 8, 30, 5, `%c{${COLORS.MOVE_LIGHT_BLUE}}RUNNER%c{${COLORS.WHITE}}: Hit the three %c{${COLORS.LIGHT_GREEN}}buttons%c{${COLORS.WHITE}} to unlock the elevator.`, COLORS.WHITE, COLORS.DARK_GREY, false, 0, 20);
             this.elements.push(textBox);
 
             setTimeout(() => {

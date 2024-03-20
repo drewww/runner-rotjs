@@ -49,10 +49,14 @@ export class Overlays {
         this.visibleCanvas.style.left = "0px";
 
         document.body.appendChild(this.visibleCanvas);
+
+        console.log("overlay created!");
     }
 
     resize():void {
         const gameCanvas = document.getElementById("game") as HTMLCanvasElement;
+        console.log("RESIZING CANVAS: " + gameCanvas.width + "x" + gameCanvas.height);
+
 
         this.bufferCanvas.width = gameCanvas.width;
         this.bufferCanvas.height = gameCanvas.height;

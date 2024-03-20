@@ -3,14 +3,13 @@ import { IGame, LevelType, SCREEN_HEIGHT, SCREEN_WIDTH } from "../..";
 import { LevelController } from "../../level/level-controller";
 import { Tile } from "../../level/tile";
 import { Screen } from "../screen";
-import { Overlays } from "../overlays";
 
 export class MapExploreScreen extends Screen {
 
     private game: IGame;
     level: LevelController;
     levelType: LevelType;
-    overlays: Overlays;
+    // overlays: Overlays;
 
     difficulty: number = 1;
 
@@ -21,8 +20,8 @@ export class MapExploreScreen extends Screen {
         this.game = game;
 
         this.levelType = LevelType.EDGE_ROOM;
-        this.overlays = new Overlays(0, 0, this.width, this.height);
-        this.overlays.hide();
+        // this.overlays = new Overlays(0, 0, this.width, this.height);
+        // this.overlays.hide();
 
         this.level = this.generateLevelType(this.levelType);
     }
@@ -38,7 +37,7 @@ export class MapExploreScreen extends Screen {
         });
         this.elements = [];
 
-        this.overlays.clear();
+        // this.overlays.clear();
 
         // careful, the height here relates to the screen height.
         // match the dimensions of the "normal" view which has the menu UI on the right
@@ -85,7 +84,7 @@ export class MapExploreScreen extends Screen {
             //     }
             // });
 
-            this.overlays.draw();
+            // this.overlays.draw();
         }
         this.level = level;
         return level;
@@ -93,7 +92,7 @@ export class MapExploreScreen extends Screen {
 
     draw(display: ROT.Display, xOffset: number = 0, yOffset: number = 0) {
         super.draw(display, xOffset, yOffset);
-        this.overlays.show();
+        // this.overlays.show();
     }
 
     handleEvent(e: KeyboardEvent): void {
@@ -104,8 +103,8 @@ export class MapExploreScreen extends Screen {
     }
 
     public disable(): void {
-        this.overlays.hide();
+        // this.overlays.hide();
 
-        this.overlays.disable();
+        // this.overlays.disable();
     }
 }
